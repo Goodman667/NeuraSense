@@ -62,11 +62,11 @@ class AuthService:
     def _init_files(self):
         """初始化数据文件"""
         if not USERS_FILE.exists():
-            USERS_FILE.write_text("[]")
+            USERS_FILE.write_text("[]", encoding='utf-8')
         if not SESSIONS_FILE.exists():
-            SESSIONS_FILE.write_text("[]")
+            SESSIONS_FILE.write_text("[]", encoding='utf-8')
         if not HISTORY_FILE.exists():
-            HISTORY_FILE.write_text("[]")
+            HISTORY_FILE.write_text("[]", encoding='utf-8')
 
     def _hash_password(self, password: str) -> str:
         """密码哈希"""
@@ -82,27 +82,27 @@ class AuthService:
 
     def _load_users(self) -> list[dict]:
         """加载用户数据"""
-        return json.loads(USERS_FILE.read_text())
+        return json.loads(USERS_FILE.read_text(encoding='utf-8'))
 
     def _save_users(self, users: list[dict]):
         """保存用户数据"""
-        USERS_FILE.write_text(json.dumps(users, ensure_ascii=False, indent=2))
+        USERS_FILE.write_text(json.dumps(users, ensure_ascii=False, indent=2), encoding='utf-8')
 
     def _load_sessions(self) -> list[dict]:
         """加载会话数据"""
-        return json.loads(SESSIONS_FILE.read_text())
+        return json.loads(SESSIONS_FILE.read_text(encoding='utf-8'))
 
     def _save_sessions(self, sessions: list[dict]):
         """保存会话数据"""
-        SESSIONS_FILE.write_text(json.dumps(sessions, ensure_ascii=False, indent=2))
+        SESSIONS_FILE.write_text(json.dumps(sessions, ensure_ascii=False, indent=2), encoding='utf-8')
 
     def _load_history(self) -> list[dict]:
         """加载评估历史"""
-        return json.loads(HISTORY_FILE.read_text())
+        return json.loads(HISTORY_FILE.read_text(encoding='utf-8'))
 
     def _save_history(self, history: list[dict]):
         """保存评估历史"""
-        HISTORY_FILE.write_text(json.dumps(history, ensure_ascii=False, indent=2))
+        HISTORY_FILE.write_text(json.dumps(history, ensure_ascii=False, indent=2), encoding='utf-8')
 
     def register(self, username: str, password: str, nickname: str = None) -> dict:
         """用户注册"""
