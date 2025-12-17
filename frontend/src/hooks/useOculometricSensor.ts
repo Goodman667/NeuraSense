@@ -426,21 +426,19 @@ export const useOculometricSensor = (
 
         try {
             // Dynamic import of MediaPipe modules
-            let FaceMesh: any;
-            let Camera: any;
+            // Handle both default and named exports for production build compatibility
+            const faceMeshModule = await import('@mediapipe/face_mesh');
+            const cameraModule = await import('@mediapipe/camera_utils');
 
-            try {
-                const faceMeshModule = await import('@mediapipe/face_mesh');
-                const cameraModule = await import('@mediapipe/camera_utils');
-                FaceMesh = faceMeshModule.FaceMesh;
-                Camera = cameraModule.Camera;
-            } catch (importError) {
-                console.error('MediaPipe import failed:', importError);
-                throw new Error('眼动追踪模块加载失败，此功能暂时不可用。请在本地开发环境中使用此功能。');
+            // Use named export or default export depending on how module is bundled
+            const FaceMesh = faceMeshModule.FaceMesh || (faceMeshModule as any).default?.FaceMesh || (faceMeshModule as any).default;
+            const Camera = cameraModule.Camera || (cameraModule as any).default?.Camera || (cameraModule as any).default;
+
+            if (!FaceMesh || typeof FaceMesh !== 'function') {
+                throw new Error('MediaPipe FaceMesh 模块加载失败');
             }
-
-            if (!FaceMesh || !Camera) {
-                throw new Error('MediaPipe 模块未正确加载');
+            if (!Camera || typeof Camera !== 'function') {
+                throw new Error('MediaPipe Camera 模块加载失败');
             }
 
             // Initialize FaceMesh
