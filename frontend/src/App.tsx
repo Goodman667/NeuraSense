@@ -465,20 +465,85 @@ const TrendPredictionView = () => {
                             </div>
                         </div>
 
-                        {/* Prediction Chart Placeholder */}
+                        {/* Prediction Line Chart */}
                         <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-6 mb-6">
                             <h4 className="font-medium text-indigo-800 mb-4">未来7天 PHQ-9 预测走势</h4>
-                            <div className="flex items-end space-x-2 h-32">
-                                {predictionData.predicted_scores.map((score, idx) => (
-                                    <div key={idx} className="flex-1 flex flex-col items-center">
-                                        <div
-                                            className="w-full bg-indigo-400 rounded-t-lg transition-all"
-                                            style={{ height: `${(score / 27) * 100}%` }}
-                                        />
-                                        <div className="text-xs text-indigo-600 mt-1">{score.toFixed(1)}</div>
-                                        <div className="text-xs text-indigo-400">{predictionData.dates[idx].slice(5)}</div>
+                            <div className="relative h-48">
+                                {/* Y-axis labels */}
+                                <div className="absolute left-0 top-0 bottom-8 w-8 flex flex-col justify-between text-xs text-gray-400">
+                                    <span>27</span>
+                                    <span>20</span>
+                                    <span>15</span>
+                                    <span>10</span>
+                                    <span>5</span>
+                                    <span>0</span>
+                                </div>
+                                {/* Chart area */}
+                                <div className="ml-10 h-40 relative border-l border-b border-gray-200">
+                                    {/* Reference lines */}
+                                    <div className="absolute left-0 right-0 top-[44%] border-t border-dashed border-orange-300" style={{ top: `${100 - (15 / 27) * 100}%` }}>
+                                        <span className="absolute -left-2 -top-2 text-[10px] text-orange-400 bg-white px-1">中度</span>
                                     </div>
-                                ))}
+                                    <div className="absolute left-0 right-0 border-t border-dashed border-yellow-300" style={{ top: `${100 - (10 / 27) * 100}%` }}>
+                                        <span className="absolute -left-2 -top-2 text-[10px] text-yellow-500 bg-white px-1">轻度</span>
+                                    </div>
+                                    <div className="absolute left-0 right-0 border-t border-dashed border-green-300" style={{ top: `${100 - (5 / 27) * 100}%` }}>
+                                        <span className="absolute -left-2 -top-2 text-[10px] text-green-500 bg-white px-1">正常</span>
+                                    </div>
+                                    {/* SVG Line Chart */}
+                                    <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
+                                        <defs>
+                                            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                <stop offset="0%" stopColor="#8B5CF6" stopOpacity="0.3" />
+                                                <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0" />
+                                            </linearGradient>
+                                        </defs>
+                                        {/* Area fill */}
+                                        <path
+                                            d={`M ${predictionData.predicted_scores.map((score, i) => {
+                                                const x = (i / (predictionData.predicted_scores.length - 1)) * 100;
+                                                const y = 100 - (score / 27) * 100;
+                                                return `${x}%,${y}%`;
+                                            }).join(' L ')} L 100%,100% L 0%,100% Z`}
+                                            fill="url(#lineGradient)"
+                                        />
+                                        {/* Line */}
+                                        <polyline
+                                            points={predictionData.predicted_scores.map((score, i) => {
+                                                const x = (i / (predictionData.predicted_scores.length - 1)) * 100;
+                                                const y = 100 - (score / 27) * 100;
+                                                return `${x}%,${y}%`;
+                                            }).join(' ')}
+                                            fill="none"
+                                            stroke="#8B5CF6"
+                                            strokeWidth="3"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                        />
+                                        {/* Data points */}
+                                        {predictionData.predicted_scores.map((score, i) => {
+                                            const x = (i / (predictionData.predicted_scores.length - 1)) * 100;
+                                            const y = 100 - (score / 27) * 100;
+                                            return (
+                                                <circle
+                                                    key={i}
+                                                    cx={`${x}%`}
+                                                    cy={`${y}%`}
+                                                    r="6"
+                                                    fill="white"
+                                                    stroke="#8B5CF6"
+                                                    strokeWidth="2"
+                                                />
+                                            );
+                                        })}
+                                    </svg>
+                                </div>
+                                {/* X-axis labels */}
+                                <div className="ml-10 flex justify-between text-xs text-gray-500 mt-2">
+                                    {predictionData.dates.map((date, idx) => (
+                                        <span key={idx}>{date.slice(5)}</span>
+                                    ))}
+                                </div>
                             </div>
                         </div>
 

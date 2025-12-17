@@ -89,15 +89,15 @@ def _generate_interpretation(result: PredictionResult) -> str:
     """Generate human-readable interpretation of prediction results"""
     
     trend_messages = {
-        'improving': 'Based on the analysis, your mental health trajectory shows signs of improvement.',
-        'stable': 'Your mental health indicators appear to be stable over the forecast period.',
-        'worsening': 'The model detects a potential decline in mental health indicators. Consider seeking support.',
+        'improving': '根据分析，您的心理健康状况呈现改善趋势。',
+        'stable': '您的心理健康指标在预测期内保持稳定。',
+        'worsening': '模型检测到心理健康指标可能有所下降，建议关注自身状态。',
     }
     
     risk_messages = {
-        'low': 'Current risk level is low. Continue with your positive practices.',
-        'moderate': 'Moderate risk detected. Consider implementing stress-reduction techniques.',
-        'high': 'Elevated risk indicators. Professional consultation is recommended.',
+        'low': '当前风险等级较低，请继续保持积极的生活习惯。',
+        'moderate': '检测到中等风险，建议尝试一些减压技巧。',
+        'high': '风险指标较高，建议寻求专业心理咨询支持。',
     }
     
     base_msg = trend_messages.get(result.trend_direction, '')
@@ -105,7 +105,7 @@ def _generate_interpretation(result: PredictionResult) -> str:
     
     confidence_note = ''
     if result.model_confidence < 0.5:
-        confidence_note = ' Note: Limited historical data affects prediction accuracy.'
+        confidence_note = ' 注意：历史数据较少可能影响预测准确性。'
     
     return f"{base_msg} {risk_msg}{confidence_note}"
 

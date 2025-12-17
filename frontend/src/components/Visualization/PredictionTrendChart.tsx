@@ -145,10 +145,10 @@ export const PredictionTrendChart = ({
                 <div>
                     <h3 className="text-lg font-bold text-warm-800 flex items-center space-x-2">
                         <span>📈</span>
-                        <span>Mental Health Trend Prediction</span>
+                        <span>心理健康趋势预测</span>
                     </h3>
                     <p className="text-sm text-warm-500 mt-1">
-                        AI-powered 7-day forecast based on historical data
+                        基于历史数据的 AI 智能 7 天趋势预测
                     </p>
                 </div>
                 <button
@@ -159,7 +159,7 @@ export const PredictionTrendChart = ({
                     disabled={isLoading}
                     className="px-4 py-2 bg-indigo-100 text-indigo-600 rounded-lg text-sm font-medium hover:bg-indigo-200 transition-all disabled:opacity-50"
                 >
-                    {isLoading ? 'Loading...' : 'Refresh'}
+                    {isLoading ? '加载中...' : '刷新'}
                 </button>
             </div>
 
@@ -206,8 +206,8 @@ export const PredictionTrendChart = ({
                             }}
                             formatter={(value: number, name: string) => {
                                 const labels: Record<string, string> = {
-                                    historical: 'Historical',
-                                    predicted: 'Predicted',
+                                    historical: '历史数据',
+                                    predicted: '预测值',
                                 };
                                 return [value.toFixed(1), labels[name] || name];
                             }}
@@ -215,9 +215,9 @@ export const PredictionTrendChart = ({
                         <Legend />
 
                         {/* Severity reference lines */}
-                        <ReferenceLine y={5} stroke="#22C55E" strokeDasharray="5 5" label={{ value: 'Minimal', fill: '#22C55E', fontSize: 10 }} />
-                        <ReferenceLine y={10} stroke="#EAB308" strokeDasharray="5 5" label={{ value: 'Mild', fill: '#EAB308', fontSize: 10 }} />
-                        <ReferenceLine y={15} stroke="#F97316" strokeDasharray="5 5" label={{ value: 'Moderate', fill: '#F97316', fontSize: 10 }} />
+                        <ReferenceLine y={5} stroke="#22C55E" strokeDasharray="5 5" label={{ value: '正常', fill: '#22C55E', fontSize: 10 }} />
+                        <ReferenceLine y={10} stroke="#EAB308" strokeDasharray="5 5" label={{ value: '轻度', fill: '#EAB308', fontSize: 10 }} />
+                        <ReferenceLine y={15} stroke="#F97316" strokeDasharray="5 5" label={{ value: '中度', fill: '#F97316', fontSize: 10 }} />
 
                         {/* Confidence interval area */}
                         <Area
@@ -235,7 +235,7 @@ export const PredictionTrendChart = ({
                             strokeWidth={3}
                             dot={{ fill: '#3B82F6', strokeWidth: 2, r: 4 }}
                             activeDot={{ r: 6, fill: '#3B82F6' }}
-                            name="Historical"
+                            name="历史数据"
                         />
 
                         {/* Prediction line (dashed) */}
@@ -247,7 +247,7 @@ export const PredictionTrendChart = ({
                             strokeDasharray="8 4"
                             dot={{ fill: '#8B5CF6', strokeWidth: 2, r: 4 }}
                             activeDot={{ r: 6, fill: '#8B5CF6' }}
-                            name="Predicted"
+                            name="预测值"
                         />
                     </ComposedChart>
                 </ResponsiveContainer>
@@ -258,24 +258,24 @@ export const PredictionTrendChart = ({
                 <div className="grid grid-cols-3 gap-4">
                     <div className="text-center p-3 bg-warm-50 rounded-xl">
                         <div className={`text-lg font-bold ${getTrendColor(predictionData.trend_direction)}`}>
-                            {predictionData.trend_direction === 'improving' ? '↗️ Improving' :
-                                predictionData.trend_direction === 'worsening' ? '↘️ Declining' : '→ Stable'}
+                            {predictionData.trend_direction === 'improving' ? '↗️ 趋势改善' :
+                                predictionData.trend_direction === 'worsening' ? '↘️ 需关注' : '→ 稳定'}
                         </div>
-                        <div className="text-xs text-warm-500 mt-1">Trend Direction</div>
+                        <div className="text-xs text-warm-500 mt-1">趋势方向</div>
                     </div>
 
                     <div className="text-center p-3 bg-warm-50 rounded-xl">
                         <div className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getRiskColor(predictionData.risk_level)}`}>
-                            {predictionData.risk_level.charAt(0).toUpperCase() + predictionData.risk_level.slice(1)}
+                            {predictionData.risk_level === 'low' ? '低风险' : predictionData.risk_level === 'moderate' ? '中风险' : '高风险'}
                         </div>
-                        <div className="text-xs text-warm-500 mt-1">Risk Level</div>
+                        <div className="text-xs text-warm-500 mt-1">风险等级</div>
                     </div>
 
                     <div className="text-center p-3 bg-warm-50 rounded-xl">
                         <div className="text-lg font-bold text-indigo-600">
                             {Math.round(predictionData.model_confidence * 100)}%
                         </div>
-                        <div className="text-xs text-warm-500 mt-1">Model Confidence</div>
+                        <div className="text-xs text-warm-500 mt-1">模型置信度</div>
                     </div>
                 </div>
             )}
@@ -284,7 +284,7 @@ export const PredictionTrendChart = ({
             {predictionData?.interpretation && (
                 <div className="mt-4 p-4 bg-indigo-50 rounded-xl">
                     <p className="text-sm text-indigo-700">
-                        🤖 <strong>AI Insight:</strong> {predictionData.interpretation}
+                        🤖 <strong>AI解读：</strong> {predictionData.interpretation}
                     </p>
                 </div>
             )}
