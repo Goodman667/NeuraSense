@@ -54,7 +54,7 @@ export const VirtualAvatar = forwardRef<VirtualAvatarRef, VirtualAvatarProps>(
         const [isModelLoaded, setIsModelLoaded] = useState(false);
         const [isSpeaking, setIsSpeaking] = useState(false);
         const [loadError, setLoadError] = useState<string | null>(null);
-        const [loadingStatus, setLoadingStatus] = useState('正在初始�?..');
+        const [loadingStatus, setLoadingStatus] = useState('正在初始化...');
 
         // Eye tracking state
         const [eyeAngles, setEyeAngles] = useState({ x: 0, y: 0 });
@@ -84,7 +84,7 @@ export const VirtualAvatar = forwardRef<VirtualAvatarRef, VirtualAvatarProps>(
 
                     if (isDestroyed) return;
 
-                    setLoadingStatus('加载 Live2D �?..');
+                    setLoadingStatus('加载 Live2D 库...');
 
                     // Import Live2D display - explicitly use cubism4 module
                     // This requires the Cubism 4 SDK to be loaded in index.html
@@ -95,7 +95,7 @@ export const VirtualAvatar = forwardRef<VirtualAvatarRef, VirtualAvatarProps>(
 
                     if (isDestroyed) return;
 
-                    setLoadingStatus('创建渲染�?..');
+                    setLoadingStatus('创建渲染器...');
 
                     // Create PIXI application
                     app = new PIXI.Application({
@@ -147,7 +147,7 @@ export const VirtualAvatar = forwardRef<VirtualAvatarRef, VirtualAvatarProps>(
                     setLoadingStatus('');
                     onModelLoaded?.();
 
-                    console.log('�?Live2D model loaded successfully');
+                    console.log('✅ Live2D model loaded successfully');
 
                 } catch (error: any) {
                     console.error('Failed to load Live2D:', error);
@@ -155,9 +155,9 @@ export const VirtualAvatar = forwardRef<VirtualAvatarRef, VirtualAvatarProps>(
 
                     // Provide more helpful error messages
                     if (errorMsg.includes('Cubism') || errorMsg.includes('cubism')) {
-                        setLoadError('Cubism SDK 加载失败，请检�?index.html');
+                        setLoadError('Cubism SDK 加载失败，请检查 index.html');
                     } else if (errorMsg.includes('404') || errorMsg.includes('not found')) {
-                        setLoadError('模型文件未找�?);
+                        setLoadError('模型文件未找到');
                     } else {
                         setLoadError(`${errorMsg.substring(0, 80)}`);
                     }
