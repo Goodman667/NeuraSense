@@ -426,8 +426,22 @@ export const useOculometricSensor = (
 
         try {
             // Dynamic import of MediaPipe modules
-            const { FaceMesh } = await import('@mediapipe/face_mesh');
-            const { Camera } = await import('@mediapipe/camera_utils');
+            let FaceMesh: any;
+            let Camera: any;
+
+            try {
+                const faceMeshModule = await import('@mediapipe/face_mesh');
+                const cameraModule = await import('@mediapipe/camera_utils');
+                FaceMesh = faceMeshModule.FaceMesh;
+                Camera = cameraModule.Camera;
+            } catch (importError) {
+                console.error('MediaPipe import failed:', importError);
+                throw new Error('眼动追踪模块加载失败，此功能暂时不可用。请在本地开发环境中使用此功能。');
+            }
+
+            if (!FaceMesh || !Camera) {
+                throw new Error('MediaPipe 模块未正确加载');
+            }
 
             // Initialize FaceMesh
             const faceMesh = new FaceMesh({
