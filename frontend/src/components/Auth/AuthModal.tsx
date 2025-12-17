@@ -60,12 +60,12 @@ export const AuthModal = ({ onLoginSuccess, onClose }: AuthProps) => {
             if (mode === 'register') {
                 // 验证密码
                 if (password !== confirmPassword) {
-                    setError('两次输入的密码不一�?);
+                    setError('两次输入的密码不一致');
                     setIsLoading(false);
                     return;
                 }
                 if (password.length < 6) {
-                    setError('密码至少需�?�?);
+                    setError('密码至少需要6位');
                     setIsLoading(false);
                     return;
                 }
@@ -86,7 +86,7 @@ export const AuthModal = ({ onLoginSuccess, onClose }: AuthProps) => {
                     throw new Error(data.detail || '注册失败');
                 }
 
-                // 注册成功后自动登�?
+                // 注册成功后自动登录
                 setMode('login');
                 setError(null);
                 alert('注册成功！请登录');
@@ -105,7 +105,7 @@ export const AuthModal = ({ onLoginSuccess, onClose }: AuthProps) => {
 
                 const data = await response.json();
 
-                // 保存登录状�?
+                // 保存登录状态
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
 
@@ -241,7 +241,7 @@ export const AuthModal = ({ onLoginSuccess, onClose }: AuthProps) => {
                                 disabled={isLoading}
                                 className="w-full py-3 bg-green-500 text-white rounded-xl font-semibold hover:bg-green-600 transition-all disabled:opacity-50"
                             >
-                                🆕 直接创建新账�?
+                                🆕 直接创建新账户
                             </button>
 
                             <div className="relative">
@@ -249,7 +249,7 @@ export const AuthModal = ({ onLoginSuccess, onClose }: AuthProps) => {
                                     <div className="w-full border-t border-warm-200" />
                                 </div>
                                 <div className="relative flex justify-center text-sm">
-                                    <span className="px-2 bg-white text-warm-500">或绑定已有账�?/span>
+                                    <span className="px-2 bg-white text-warm-500">或绑定已有账户</span>
                                 </div>
                             </div>
 
@@ -257,7 +257,7 @@ export const AuthModal = ({ onLoginSuccess, onClose }: AuthProps) => {
                                 type="text"
                                 value={bindUsername}
                                 onChange={(e) => setBindUsername(e.target.value)}
-                                placeholder="已有账户用户�?
+                                placeholder="已有账户用户名"
                                 className="w-full px-4 py-3 border border-warm-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
                             />
                             <input
@@ -298,7 +298,7 @@ export const AuthModal = ({ onLoginSuccess, onClose }: AuthProps) => {
                 <div className="h-2 bg-gradient-to-r from-primary-500 via-accent-500 to-calm-500" />
 
                 <div className="p-8">
-                    {/* Logo 和标�?*/}
+                    {/* Logo 和标题 */}
                     <div className="text-center mb-8">
                         <div className="w-16 h-16 bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl mx-auto flex items-center justify-center mb-4">
                             <span className="text-3xl">🧠</span>
@@ -307,7 +307,7 @@ export const AuthModal = ({ onLoginSuccess, onClose }: AuthProps) => {
                             {mode === 'login' ? '欢迎回来' : '创建账户'}
                         </h2>
                         <p className="text-warm-500 text-sm mt-1">
-                            {mode === 'login' ? '登录以保存你的评估记�? : '注册开始你的心理健康之�?}
+                            {mode === 'login' ? '登录以保存你的评估记录' : '注册开始你的心理健康之旅'}
                         </p>
                     </div>
 
@@ -335,7 +335,7 @@ export const AuthModal = ({ onLoginSuccess, onClose }: AuthProps) => {
                             <div className="w-full border-t border-warm-200" />
                         </div>
                         <div className="relative flex justify-center text-sm">
-                            <span className="px-2 bg-white text-warm-400">或使用账号密�?/span>
+                            <span className="px-2 bg-white text-warm-400">或使用账号密码</span>
                         </div>
                     </div>
 
@@ -343,7 +343,7 @@ export const AuthModal = ({ onLoginSuccess, onClose }: AuthProps) => {
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
                             <label className="block text-sm font-medium text-warm-700 mb-1">
-                                用户�?
+                                用户名
                             </label>
                             <input
                                 type="text"
@@ -364,7 +364,7 @@ export const AuthModal = ({ onLoginSuccess, onClose }: AuthProps) => {
                                     type="text"
                                     value={nickname}
                                     onChange={(e) => setNickname(e.target.value)}
-                                    placeholder="你希望被怎么称呼�?
+                                    placeholder="你希望被怎么称呼？"
                                     className="w-full px-4 py-3 border border-warm-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                                 />
                             </div>
@@ -378,7 +378,7 @@ export const AuthModal = ({ onLoginSuccess, onClose }: AuthProps) => {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                placeholder={mode === 'register' ? '至少6位密�? : '请输入密�?}
+                                placeholder={mode === 'register' ? '至少6位密码' : '请输入密码'}
                                 required
                                 className="w-full px-4 py-3 border border-warm-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             />
@@ -405,7 +405,7 @@ export const AuthModal = ({ onLoginSuccess, onClose }: AuthProps) => {
                             disabled={isLoading}
                             className="w-full py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl font-semibold hover:from-primary-600 hover:to-primary-700 transition-all disabled:opacity-50"
                         >
-                            {isLoading ? '处理�?..' : (mode === 'login' ? '登录' : '注册')}
+                            {isLoading ? '处理中...' : (mode === 'login' ? '登录' : '注册')}
                         </button>
                     </form>
 
@@ -418,7 +418,7 @@ export const AuthModal = ({ onLoginSuccess, onClose }: AuthProps) => {
                             }}
                             className="text-primary-600 hover:text-primary-700 text-sm"
                         >
-                            {mode === 'login' ? '还没有账户？立即注册' : '已有账户？立即登�?}
+                            {mode === 'login' ? '还没有账户？立即注册' : '已有账户？立即登录'}
                         </button>
                     </div>
 
