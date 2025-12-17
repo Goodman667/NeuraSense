@@ -33,7 +33,7 @@ const CATEGORY_INFO = {
     achievement: { label: '成就', icon: '🎉', color: 'amber' },
 };
 
-import { API_BASE } from '../../config/api';
+const API_BASE = 'https://neurasense-m409.onrender.com/api/v1';
 
 // Format time ago
 const timeAgo = (dateStr: string): string => {
@@ -198,8 +198,8 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false }: CommunityFeed
                             key={key}
                             onClick={() => setFilter(key)}
                             className={`px-3 py-1 rounded-full text-sm whitespace-nowrap transition-colors ${filter === key
-                                ? 'bg-white text-purple-600'
-                                : 'bg-white/20 text-white hover:bg-white/30'
+                                    ? 'bg-white text-purple-600'
+                                    : 'bg-white/20 text-white hover:bg-white/30'
                                 }`}
                         >
                             {info.icon} {info.label}
@@ -226,8 +226,8 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false }: CommunityFeed
                                     key={cat}
                                     onClick={() => setNewCategory(cat)}
                                     className={`px-3 py-1.5 rounded-full text-sm transition-all ${newCategory === cat
-                                        ? 'bg-purple-500 text-white shadow-md'
-                                        : 'bg-white text-warm-600 border border-warm-200 hover:border-purple-300'
+                                            ? 'bg-purple-500 text-white shadow-md'
+                                            : 'bg-white text-warm-600 border border-warm-200 hover:border-purple-300'
                                         }`}
                                 >
                                     {CATEGORY_INFO[cat].icon} {CATEGORY_INFO[cat].label}

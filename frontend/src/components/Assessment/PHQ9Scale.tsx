@@ -15,27 +15,27 @@ const PHQ9_QUESTIONS = [
     "入睡困难、睡不安稳或睡眠过多",
     "感觉疲倦或没有活力",
     "食欲不振或吃太多",
-    "觉得自己很糟——或觉得自己很失败，或让自己或家人失�?,
+    "觉得自己很糟——或觉得自己很失败，或让自己或家人失望",
     "对事物专注有困难，例如阅读报纸或看电视时",
-    "动作或说话速度缓慢到别人已经觉察？或正好相反——Loss得无法静坐，动来动去的情况比平常更严�?,
+    "动作或说话速度缓慢到别人已经觉察？或正好相反——Loss得无法静坐，动来动去的情况比平常更严重",
     "有不如死掉或用某种方式伤害自己的念头"
 ];
 
 // 选项定义
 const OPTIONS = [
     { value: 0, label: "完全不会", description: "过去2周内完全没有发生" },
-    { value: 1, label: "好几�?, description: "一周内有几�? },
+    { value: 1, label: "好几天", description: "一周内有几天" },
     { value: 2, label: "一半以上的天数", description: "超过一半的日子" },
-    { value: 3, label: "几乎每天", description: "每天或几乎每�? },
+    { value: 3, label: "几乎每天", description: "每天或几乎每天" },
 ];
 
 // 严重程度解读
 const getSeverity = (score: number) => {
-    if (score <= 4) return { level: '正常', color: 'green', description: '您目前的情绪状态良�? };
+    if (score <= 4) return { level: '正常', color: 'green', description: '您目前的情绪状态良好' };
     if (score <= 9) return { level: '轻度', color: 'yellow', description: '可能存在轻微的抑郁倾向' };
     if (score <= 14) return { level: '中度', color: 'orange', description: '建议寻求专业心理咨询' };
-    if (score <= 19) return { level: '中重�?, color: 'red', description: '强烈建议接受专业帮助' };
-    return { level: '重度', color: 'red', description: '请尽快寻求专业医疗帮�? };
+    if (score <= 19) return { level: '中重度', color: 'red', description: '强烈建议接受专业帮助' };
+    return { level: '重度', color: 'red', description: '请尽快寻求专业医疗帮助' };
 };
 
 interface PHQ9ScaleProps {
@@ -68,15 +68,15 @@ export const PHQ9Scale = ({ onComplete, onClose }: PHQ9ScaleProps) => {
         newAnswers[currentQuestion] = value;
         setAnswers(newAnswers);
 
-        // 自动跳转到下一�?
+        // 自动跳转到下一题
         if (currentQuestion < 8) {
             setTimeout(() => setCurrentQuestion(currentQuestion + 1), 300);
         }
     }, [currentQuestion, answers]);
 
-    // 完成评估并获�?AI 解读
+    // 完成评估并获取 AI 解读
     const handleComplete = useCallback(async () => {
-        // 检查是否所有问题都已回�?
+        // 检查是否所有问题都已回答
         if (answers.some(a => a === null)) {
             return;
         }
@@ -119,18 +119,18 @@ export const PHQ9Scale = ({ onComplete, onClose }: PHQ9ScaleProps) => {
     // 默认解读
     const getDefaultInterpretation = (score: number): string => {
         if (score <= 4) {
-            return "您的评估结果显示目前情绪状态良好！这是很棒的消息。记得继续保持良好的生活习惯，有任何困扰都可以来找我聊聊�?;
+            return "您的评估结果显示目前情绪状态良好！这是很棒的消息。记得继续保持良好的生活习惯，有任何困扰都可以来找我聊聊。";
         }
         if (score <= 9) {
-            return "您的评估结果显示可能有轻微的情绪困扰。这很常见，不必过于担心。建议您多关注自己的感受，适当运动、保持规律作息会有帮助。如果持续不适，可以考虑和专业人士聊聊�?;
+            return "您的评估结果显示可能有轻微的情绪困扰。这很常见，不必过于担心。建议您多关注自己的感受，适当运动、保持规律作息会有帮助。如果持续不适，可以考虑和专业人士聊聊。";
         }
         if (score <= 14) {
-            return "您的评估结果显示可能存在中度的情绪困扰。我理解这段时间对您来说可能不太容易。建议您认真考虑寻求专业的心理咨询服务，他们可以提供更有针对性的帮助�?;
+            return "您的评估结果显示可能存在中度的情绪困扰。我理解这段时间对您来说可能不太容易。建议您认真考虑寻求专业的心理咨询服务，他们可以提供更有针对性的帮助。";
         }
-        return "您的评估结果显示您可能正在经历较大的情绪困扰。请知道，您并不孤单，寻求帮助是勇敢的表现。强烈建议您尽快联系专业的心理健康服务机构。如有紧急情况，请拨打心理援助热线：400-161-9995�?;
+        return "您的评估结果显示您可能正在经历较大的情绪困扰。请知道，您并不孤单，寻求帮助是勇敢的表现。强烈建议您尽快联系专业的心理健康服务机构。如有紧急情况，请拨打心理援助热线：400-161-9995。";
     };
 
-    // 进度百分�?
+    // 进度百分比
     const progress = ((currentQuestion + 1) / 9) * 100;
 
     return (
@@ -139,13 +139,13 @@ export const PHQ9Scale = ({ onComplete, onClose }: PHQ9ScaleProps) => {
             <div className="text-center mb-8">
                 <h2 className="text-2xl font-bold text-warm-800 mb-2">PHQ-9 抑郁筛查量表</h2>
                 <p className="text-warm-600">
-                    过去 <span className="font-semibold text-primary-600">2 �?/span> 内，您有多少时间受到以下问题的困扰？
+                    过去 <span className="font-semibold text-primary-600">2 周</span> 内，您有多少时间受到以下问题的困扰？
                 </p>
             </div>
 
             {!isComplete ? (
                 <>
-                    {/* 进度�?*/}
+                    {/* 进度条 */}
                     <div className="mb-8">
                         <div className="flex justify-between text-sm text-warm-500 mb-2">
                             <span>问题 {currentQuestion + 1} / 9</span>
@@ -204,7 +204,7 @@ export const PHQ9Scale = ({ onComplete, onClose }: PHQ9ScaleProps) => {
                             disabled={currentQuestion === 0}
                             className="px-6 py-3 text-warm-600 hover:text-warm-800 disabled:opacity-50"
                         >
-                            �?上一�?
+                            ← 上一题
                         </button>
 
                         {currentQuestion === 8 ? (
@@ -213,7 +213,7 @@ export const PHQ9Scale = ({ onComplete, onClose }: PHQ9ScaleProps) => {
                                 disabled={answers.some(a => a === null) || isLoading}
                                 className="px-8 py-3 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl font-semibold hover:from-primary-600 hover:to-primary-700 transition-all disabled:opacity-50"
                             >
-                                {isLoading ? '分析�?..' : '完成评估'}
+                                {isLoading ? '分析中...' : '完成评估'}
                             </button>
                         ) : (
                             <button
@@ -221,23 +221,23 @@ export const PHQ9Scale = ({ onComplete, onClose }: PHQ9ScaleProps) => {
                                 disabled={answers[currentQuestion] === null}
                                 className="px-6 py-3 text-primary-600 hover:text-primary-700 disabled:opacity-50"
                             >
-                                下一�?�?
+                                下一题 →
                             </button>
                         )}
                     </div>
 
-                    {/* �?题特殊提�?*/}
+                    {/* 第9题特殊提示 */}
                     {currentQuestion === 8 && (
                         <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
                             <p className="text-amber-800 text-sm">
-                                ⚠️ 如果您正在经历困难时刻，请记住您并不孤单�?br />
-                                24小时心理援助热线�?span className="font-bold">400-161-9995</span>
+                                ⚠️ 如果您正在经历困难时刻，请记住您并不孤单。<br />
+                                24小时心理援助热线：<span className="font-bold">400-161-9995</span>
                             </p>
                         </div>
                     )}
                 </>
             ) : (
-                /* 结果页面 - 增强�?*/
+                /* 结果页面 - 增强版 */
                 <div className="space-y-6">
                     {/* 顶部得分卡片 */}
                     <div className="bg-white rounded-2xl shadow-lg p-8 border border-warm-100">
@@ -252,13 +252,13 @@ export const PHQ9Scale = ({ onComplete, onClose }: PHQ9ScaleProps) => {
                             </div>
                         </div>
 
-                        {/* 得分仪表�?*/}
+                        {/* 得分仪表盘 */}
                         <div className="mb-8">
                             <div className="flex justify-between text-xs text-warm-500 mb-2">
                                 <span>正常 (0-4)</span>
                                 <span>轻度 (5-9)</span>
                                 <span>中度 (10-14)</span>
-                                <span>中重�?(15-19)</span>
+                                <span>中重度 (15-19)</span>
                                 <span>重度 (20+)</span>
                             </div>
                             <div className="h-4 bg-gradient-to-r from-green-400 via-yellow-400 via-orange-400 to-red-500 rounded-full relative">
@@ -289,18 +289,18 @@ export const PHQ9Scale = ({ onComplete, onClose }: PHQ9ScaleProps) => {
                                     <span className="text-2xl">💬</span>
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-lg mb-2">小心的专业建�?/h3>
+                                    <h3 className="font-bold text-lg mb-2">小心的专业建议</h3>
                                     <p className="leading-relaxed opacity-95">{aiInterpretation}</p>
                                 </div>
                             </div>
                         </div>
                     )}
 
-                    {/* 各维度得分图�?*/}
+                    {/* 各维度得分图表 */}
                     <div className="bg-white rounded-2xl shadow-lg p-6 border border-warm-100">
                         <h3 className="font-bold text-warm-800 mb-4 flex items-center">
                             <span className="text-xl mr-2">📊</span>
-                            各维度得分分�?
+                            各维度得分分析
                         </h3>
 
                         <div className="space-y-4">
@@ -355,7 +355,7 @@ export const PHQ9Scale = ({ onComplete, onClose }: PHQ9ScaleProps) => {
                                 <span className="text-xl">🏃</span>
                             </div>
                             <h4 className="font-semibold text-green-800 mb-1">规律运动</h4>
-                            <p className="text-sm text-green-600">每周3�?0分钟中等强度运动</p>
+                            <p className="text-sm text-green-600">每周3次30分钟中等强度运动</p>
                         </div>
 
                         <div className="bg-purple-50 rounded-xl p-5 border border-purple-100">
@@ -382,7 +382,7 @@ export const PHQ9Scale = ({ onComplete, onClose }: PHQ9ScaleProps) => {
                             onClick={onClose}
                             className="flex-1 py-4 bg-warm-100 text-warm-700 rounded-xl font-medium hover:bg-warm-200 transition-all"
                         >
-                            �?返回首页
+                            ← 返回首页
                         </button>
                         <button
                             onClick={() => {

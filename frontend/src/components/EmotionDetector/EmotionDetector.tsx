@@ -29,10 +29,10 @@ interface EmotionDetectorProps {
 
 // Emotion labels in Chinese
 const EMOTION_LABELS: Record<EmotionType, string> = {
-    neutral: '中�?,
-    happy: '开�?,
+    neutral: '中性',
+    happy: '开心',
     sad: '悲伤',
-    angry: '愤�?,
+    angry: '愤怒',
     fearful: '恐惧',
     disgusted: '厌恶',
     surprised: '惊讶',
@@ -156,7 +156,7 @@ export const EmotionDetector = ({
 
         } catch (err: any) {
             console.error('Failed to start emotion detection:', err);
-            setError(err.message || '启动摄像头失�?);
+            setError(err.message || '启动摄像头失败');
         }
     }, [detectEmotion, onEmotionUpdate]);
 
@@ -336,7 +336,7 @@ export const EmotionDetector = ({
                             className="flex-1 py-2.5 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-xl font-medium hover:from-pink-600 hover:to-rose-600 transition-all flex items-center justify-center space-x-2"
                         >
                             <span>😊</span>
-                            <span>开始识�?/span>
+                            <span>开始识别</span>
                         </button>
                     ) : (
                         <button
@@ -362,7 +362,7 @@ export const EmotionDetector = ({
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                                 </svg>
-                                <span>分析�?..</span>
+                                <span>分析中...</span>
                             </>
                         ) : (
                             <>
@@ -375,7 +375,7 @@ export const EmotionDetector = ({
 
                 {/* Info */}
                 <p className="text-xs text-warm-400 text-center">
-                    基于面部表情识别的实时情绪检�?
+                    基于面部表情识别的实时情绪检测
                 </p>
             </div>
 
@@ -394,11 +394,11 @@ export const EmotionDetector = ({
                             <div className="grid grid-cols-2 gap-3">
                                 <div className="bg-rose-50 rounded-xl p-3 text-center">
                                     <div className="text-2xl font-bold text-rose-600">{aiResult.overall_state || '良好'}</div>
-                                    <div className="text-xs text-rose-400">整体状�?/div>
+                                    <div className="text-xs text-rose-400">整体状态</div>
                                 </div>
                                 <div className="bg-orange-50 rounded-xl p-3 text-center">
                                     <div className="text-2xl font-bold text-orange-600">{aiResult.emotional_state || '平稳'}</div>
-                                    <div className="text-xs text-orange-400">情绪状�?/div>
+                                    <div className="text-xs text-orange-400">情绪状态</div>
                                 </div>
                             </div>
 
@@ -417,7 +417,7 @@ export const EmotionDetector = ({
                                     <ul className="space-y-1">
                                         {aiResult.recommendations.map((rec, i) => (
                                             <li key={i} className="text-sm text-green-600 flex items-start">
-                                                <span className="mr-2">�?/span>
+                                                <span className="mr-2">•</span>
                                                 <span>{rec}</span>
                                             </li>
                                         ))}

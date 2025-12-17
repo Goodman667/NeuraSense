@@ -64,7 +64,7 @@ const getEyeStateLabel = (state: EyeState): string => {
         case EyeState.OPEN:
             return '睁眼';
         case EyeState.BLINKING:
-            return '眨眼�?;
+            return '眨眼中';
         case EyeState.CLOSED:
             return '闭眼';
         default:
@@ -190,7 +190,7 @@ export const OculometricMonitor = ({
                 {/* Overlay status */}
                 {!isRunning && (
                     <div className="absolute inset-0 flex items-center justify-center bg-warm-100/80">
-                        <p className="text-warm-600">点击"开始监�?启动摄像�?/p>
+                        <p className="text-warm-600">点击"开始监测"启动摄像头</p>
                     </div>
                 )}
             </div>
@@ -223,7 +223,7 @@ export const OculometricMonitor = ({
                                 <p className={`text-xl font-bold ${metrics.isBlinkRateAbnormal ? 'text-orange-500' : 'text-warm-800'}`}>
                                     {metrics.blinkRate}
                                 </p>
-                                <p className="text-xs text-warm-400">�?分钟</p>
+                                <p className="text-xs text-warm-400">次/分钟</p>
                             </div>
 
                             {/* PERCLOS */}
@@ -242,14 +242,14 @@ export const OculometricMonitor = ({
                                     {formatTime(metrics.sessionDuration)}
                                 </p>
                                 <p className="text-xs text-warm-400">
-                                    �?{metrics.blinkCount} 次眨�?
+                                    共 {metrics.blinkCount} 次眨眼
                                 </p>
                             </div>
                         </div>
 
                         {/* Eye State Indicator */}
                         <div className="flex items-center justify-between px-3 py-2 bg-warm-50 rounded-lg">
-                            <span className="text-sm text-warm-600">眼睛状�?/span>
+                            <span className="text-sm text-warm-600">眼睛状态</span>
                             <span className={`text-sm font-medium ${metrics.eyeState === EyeState.OPEN ? 'text-green-500' :
                                 metrics.eyeState === EyeState.BLINKING ? 'text-yellow-500' :
                                     'text-red-500'
@@ -265,15 +265,15 @@ export const OculometricMonitor = ({
                                 {metrics.fatigueLevel === FatigueLevel.NORMAL &&
                                     "您的状态很好！眼部活动正常，注意力集中。继续保持~"}
                                 {metrics.fatigueLevel === FatigueLevel.MILD &&
-                                    "检测到轻微疲劳迹象。建议看看远处，让眼睛休息一下�?}
+                                    "检测到轻微疲劳迹象。建议看看远处，让眼睛休息一下。"}
                                 {metrics.fatigueLevel === FatigueLevel.MODERATE &&
-                                    "您可能有些累了。建议起来走动一下，喝杯水，做几次深呼吸�?}
+                                    "您可能有些累了。建议起来走动一下，喝杯水，做几次深呼吸。"}
                                 {metrics.fatigueLevel === FatigueLevel.SEVERE &&
-                                    "疲劳程度较高，建议尽快休息。如果持续感到疲惫，请考虑进行呼吸放松训练�?}
+                                    "疲劳程度较高，建议尽快休息。如果持续感到疲惫，请考虑进行呼吸放松训练。"}
                             </p>
                             {metrics.drowsinessIndex > 15 && (
                                 <p className="text-xs text-orange-600 mt-2">
-                                    ⚠️ 闭眼时间偏长（PERCLOS {metrics.drowsinessIndex.toFixed(0)}%），请注意休�?
+                                    ⚠️ 闭眼时间偏长（PERCLOS {metrics.drowsinessIndex.toFixed(0)}%），请注意休息
                                 </p>
                             )}
                         </div>
@@ -291,7 +291,7 @@ export const OculometricMonitor = ({
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <span>开始监�?/span>
+                            <span>开始监测</span>
                         </button>
                     ) : (
                         <button
@@ -320,7 +320,7 @@ export const OculometricMonitor = ({
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                                 </svg>
-                                <span>分析�?..</span>
+                                <span>分析中...</span>
                             </>
                         ) : (
                             <>
@@ -333,7 +333,7 @@ export const OculometricMonitor = ({
 
                 {/* Info text */}
                 <p className="text-xs text-warm-400 text-center">
-                    基于 MediaPipe Face Mesh 的非接触式眼动追�?
+                    基于 MediaPipe Face Mesh 的非接触式眼动追踪
                 </p>
             </div>
 
@@ -352,7 +352,7 @@ export const OculometricMonitor = ({
                             <div className="grid grid-cols-2 gap-3">
                                 <div className="bg-indigo-50 rounded-xl p-3 text-center">
                                     <div className="text-2xl font-bold text-indigo-600">{aiResult.overall_state || '良好'}</div>
-                                    <div className="text-xs text-indigo-400">整体状�?/div>
+                                    <div className="text-xs text-indigo-400">整体状态</div>
                                 </div>
                                 <div className="bg-purple-50 rounded-xl p-3 text-center">
                                     <div className="text-2xl font-bold text-purple-600">{aiResult.fatigue_index || 25}%</div>
@@ -364,7 +364,7 @@ export const OculometricMonitor = ({
                                 </div>
                                 <div className="bg-green-50 rounded-xl p-3 text-center">
                                     <div className="text-2xl font-bold text-green-600">{aiResult.attention_score || 75}</div>
-                                    <div className="text-xs text-green-400">注意力评�?/div>
+                                    <div className="text-xs text-green-400">注意力评分</div>
                                 </div>
                             </div>
 
@@ -383,7 +383,7 @@ export const OculometricMonitor = ({
                                     <ul className="space-y-1">
                                         {aiResult.recommendations.map((rec, i) => (
                                             <li key={i} className="text-sm text-green-600 flex items-start">
-                                                <span className="mr-2">�?/span>
+                                                <span className="mr-2">•</span>
                                                 <span>{rec}</span>
                                             </li>
                                         ))}

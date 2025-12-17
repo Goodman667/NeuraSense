@@ -6,7 +6,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 
-import { API_BASE } from '../config/api';
+const API_BASE = 'https://neurasense-m409.onrender.com/api/v1';
 
 export type RiskLevel = 'low' | 'medium' | 'high';
 export type InterventionType = 'breathing' | 'cbt' | 'gratitude' | 'community';

@@ -41,7 +41,7 @@ interface PredictionTrendChartProps {
     className?: string;
 }
 
-import { API_BASE } from '../../config/api';
+const API_BASE = 'https://neurasense-m409.onrender.com/api/v1';
 
 export const PredictionTrendChart = ({
     historicalData,

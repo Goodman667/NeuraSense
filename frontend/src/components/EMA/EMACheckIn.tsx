@@ -25,17 +25,17 @@ const STRESS_SOURCES = [
     { id: 'relationships', label: '人际关系', icon: '👥' },
     { id: 'health', label: '健康问题', icon: '🏥' },
     { id: 'finance', label: '经济压力', icon: '💰' },
-    { id: 'none', label: '没有特别�?, icon: '�? },
+    { id: 'none', label: '没有特别的', icon: '✨' },
     { id: 'other', label: '其他', icon: '📝' },
 ];
 
 const ACTIVITIES = [
-    { id: 'working', label: '工作/学习�?, icon: '💻' },
-    { id: 'resting', label: '休息�?, icon: '🛋�? },
-    { id: 'commuting', label: '通勤�?, icon: '🚌' },
-    { id: 'eating', label: '吃饭�?, icon: '🍜' },
-    { id: 'exercising', label: '运动�?, icon: '🏃' },
-    { id: 'socializing', label: '社交�?, icon: '🗣�? },
+    { id: 'working', label: '工作/学习中', icon: '💻' },
+    { id: 'resting', label: '休息中', icon: '🛋️' },
+    { id: 'commuting', label: '通勤中', icon: '🚌' },
+    { id: 'eating', label: '吃饭中', icon: '🍜' },
+    { id: 'exercising', label: '运动中', icon: '🏃' },
+    { id: 'socializing', label: '社交中', icon: '🗣️' },
 ];
 
 const MOOD_EMOJIS = ['😫', '😔', '😕', '😐', '🙂', '😊', '😄', '🥰', '🤩', '🌟'];
@@ -53,19 +53,19 @@ export const EMACheckIn = ({ onComplete, onClose }: EMACheckInProps) => {
         if (mood <= 3) {
             return {
                 message: '看起来现在不太好受。来试试深呼吸放松一下？',
-                action: '🧘 开始呼吸练�?,
+                action: '🧘 开始呼吸练习',
                 type: 'breathing',
             };
         } else if (stress !== 'none' && mood <= 6) {
             return {
-                message: '有些压力是正常的。写下你的想法可能会有帮助�?,
-                action: '📝 写点什�?,
+                message: '有些压力是正常的。写下你的想法可能会有帮助。',
+                action: '📝 写点什么',
                 type: 'journal',
             };
         } else {
             return {
-                message: '很高兴你感觉不错！继续保持这份好心情 �?,
-                action: '😊 太好�?,
+                message: '很高兴你感觉不错！继续保持这份好心情 ✨',
+                action: '😊 太好了',
                 type: 'positive',
             };
         }
@@ -108,12 +108,12 @@ export const EMACheckIn = ({ onComplete, onClose }: EMACheckInProps) => {
                 {/* Header with progress */}
                 <div className="bg-gradient-to-r from-cyan-500 to-blue-500 p-6 text-white">
                     <div className="flex items-center justify-between mb-3">
-                        <h2 className="text-xl font-bold">快速心情检�?/h2>
+                        <h2 className="text-xl font-bold">快速心情检查</h2>
                         <button
                             onClick={onClose}
                             className="p-2 hover:bg-white/20 rounded-full transition-colors"
                         >
-                            �?
+                            ✕
                         </button>
                     </div>
 
@@ -133,7 +133,7 @@ export const EMACheckIn = ({ onComplete, onClose }: EMACheckInProps) => {
                     {/* Step 1: Mood Score */}
                     {step === 1 && (
                         <div className="text-center">
-                            <p className="text-warm-600 mb-4">此刻你的心情如何�?/p>
+                            <p className="text-warm-600 mb-4">此刻你的心情如何？</p>
                             <div className="text-6xl mb-4">{MOOD_EMOJIS[moodScore - 1]}</div>
                             <input
                                 type="range"
@@ -147,14 +147,14 @@ export const EMACheckIn = ({ onComplete, onClose }: EMACheckInProps) => {
                                 }}
                             />
                             <div className="flex justify-between text-sm text-warm-400 mt-2">
-                                <span>很糟�?/span>
-                                <span>非常�?/span>
+                                <span>很糟糕</span>
+                                <span>非常棒</span>
                             </div>
                             <button
                                 onClick={() => setStep(2)}
                                 className="mt-6 w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl font-semibold hover:shadow-lg transition-all"
                             >
-                                下一�?
+                                下一步
                             </button>
                         </div>
                     )}
@@ -162,7 +162,7 @@ export const EMACheckIn = ({ onComplete, onClose }: EMACheckInProps) => {
                     {/* Step 2: Stress Source */}
                     {step === 2 && (
                         <div>
-                            <p className="text-warm-600 mb-4 text-center">有什么事情让你感到压力吗�?/p>
+                            <p className="text-warm-600 mb-4 text-center">有什么事情让你感到压力吗？</p>
                             <div className="grid grid-cols-2 gap-3">
                                 {STRESS_SOURCES.map(source => (
                                     <button
@@ -190,7 +190,7 @@ export const EMACheckIn = ({ onComplete, onClose }: EMACheckInProps) => {
                                     disabled={!stressSource}
                                     className="flex-1 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl font-semibold disabled:opacity-50"
                                 >
-                                    下一�?
+                                    下一步
                                 </button>
                             </div>
                         </div>
@@ -237,16 +237,16 @@ export const EMACheckIn = ({ onComplete, onClose }: EMACheckInProps) => {
                     {step === 4 && (
                         <div className="text-center py-4">
                             <div className="w-16 h-16 bg-green-100 rounded-full mx-auto flex items-center justify-center mb-4">
-                                <span className="text-3xl">�?/span>
+                                <span className="text-3xl">✓</span>
                             </div>
-                            <h3 className="text-lg font-bold text-warm-800 mb-2">记录完成�?/h3>
+                            <h3 className="text-lg font-bold text-warm-800 mb-2">记录完成！</h3>
                             <p className="text-warm-600 mb-4">{intervention}</p>
-                            <div className="text-amber-600 font-medium mb-4">�?+3 积分</div>
+                            <div className="text-amber-600 font-medium mb-4">⭐ +3 积分</div>
                             <button
                                 onClick={onClose}
                                 className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl font-semibold"
                             >
-                                知道�?
+                                知道了
                             </button>
                         </div>
                     )}

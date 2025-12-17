@@ -12,27 +12,27 @@ const PSS_QUESTIONS = [
     { id: 1, text: "在过去一个月里，您有多少次因为发生了意想不到的事情而感到心烦意乱？", reverse: false },
     { id: 2, text: "在过去一个月里，您有多少次感到无法控制生活中重要的事情？", reverse: false },
     { id: 3, text: "在过去一个月里，您有多少次感到紧张和有压力？", reverse: false },
-    { id: 4, text: "在过去一个月里，您有多少次成功地处理了日常烦人的琐事�?, reverse: true },
+    { id: 4, text: "在过去一个月里，您有多少次成功地处理了日常烦人的琐事？", reverse: true },
     { id: 5, text: "在过去一个月里，您有多少次感到有效地应对了生活中重要的变化？", reverse: true },
     { id: 6, text: "在过去一个月里，您有多少次对自己处理个人问题的能力感到自信？", reverse: true },
     { id: 7, text: "在过去一个月里，您有多少次感到事情正朝着有利于您的方向发展？", reverse: true },
     { id: 8, text: "在过去一个月里，您有多少次发现自己无法处理所有必须做的事情？", reverse: false },
-    { id: 9, text: "在过去一个月里，您有多少次能够控制生活中的烦心事�?, reverse: true },
+    { id: 9, text: "在过去一个月里，您有多少次能够控制生活中的烦心事？", reverse: true },
     { id: 10, text: "在过去一个月里，您有多少次感到困难积累太多而无法克服？", reverse: false },
 ];
 
 const OPTIONS = [
     { value: 0, label: "从不" },
-    { value: 1, label: "几乎�? },
+    { value: 1, label: "几乎不" },
     { value: 2, label: "有时" },
     { value: 3, label: "较多" },
     { value: 4, label: "很多" },
 ];
 
 const getSeverity = (score: number) => {
-    if (score <= 13) return { level: '低压�?, color: 'green', description: '压力水平良好' };
+    if (score <= 13) return { level: '低压力', color: 'green', description: '压力水平良好' };
     if (score <= 26) return { level: '中等压力', color: 'yellow', description: '存在一定压力，建议调节' };
-    return { level: '高压�?, color: 'red', description: '压力较大，建议寻求帮�? };
+    return { level: '高压力', color: 'red', description: '压力较大，建议寻求帮助' };
 };
 
 interface PSSScaleProps {
@@ -172,13 +172,13 @@ export const PSSScale = ({ onComplete, onClose }: PSSScaleProps) => {
                     </div>
 
                     <div className="flex justify-between">
-                        <button onClick={() => setCurrentQuestion(Math.max(0, currentQuestion - 1))} disabled={currentQuestion === 0} className="px-6 py-3 text-warm-600 disabled:opacity-50">�?上一�?/button>
+                        <button onClick={() => setCurrentQuestion(Math.max(0, currentQuestion - 1))} disabled={currentQuestion === 0} className="px-6 py-3 text-warm-600 disabled:opacity-50">← 上一题</button>
                         {currentQuestion === 9 ? (
                             <button onClick={handleComplete} disabled={answers.some(a => a === null) || isLoading} className="px-8 py-3 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-xl font-semibold disabled:opacity-50">
-                                {isLoading ? '分析�?..' : '完成评估'}
+                                {isLoading ? '分析中...' : '完成评估'}
                             </button>
                         ) : (
-                            <button onClick={() => setCurrentQuestion(Math.min(9, currentQuestion + 1))} disabled={answers[currentQuestion] === null} className="px-6 py-3 text-indigo-600 disabled:opacity-50">下一�?�?/button>
+                            <button onClick={() => setCurrentQuestion(Math.min(9, currentQuestion + 1))} disabled={answers[currentQuestion] === null} className="px-6 py-3 text-indigo-600 disabled:opacity-50">下一题 →</button>
                         )}
                     </div>
                 </>
@@ -204,7 +204,7 @@ export const PSSScale = ({ onComplete, onClose }: PSSScaleProps) => {
 
                     {aiInterpretation && (
                         <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-lg p-6 text-white">
-                            <h3 className="font-bold text-lg mb-2">💬 小心的建�?/h3>
+                            <h3 className="font-bold text-lg mb-2">💬 小心的建议</h3>
                             <p className="leading-relaxed opacity-95">{aiInterpretation}</p>
                         </div>
                     )}
@@ -219,7 +219,7 @@ export const PSSScale = ({ onComplete, onClose }: PSSScaleProps) => {
                     />
 
                     <div className="flex space-x-4">
-                        <button onClick={onClose} className="flex-1 py-4 bg-warm-100 text-warm-700 rounded-xl font-medium">�?返回</button>
+                        <button onClick={onClose} className="flex-1 py-4 bg-warm-100 text-warm-700 rounded-xl font-medium">← 返回</button>
                         <button onClick={() => { setCurrentQuestion(0); setAnswers(new Array(10).fill(null)); setIsComplete(false); setAiInterpretation(null); }} className="flex-1 py-4 bg-indigo-500 text-white rounded-xl font-medium">重新评估</button>
                     </div>
                 </div>
