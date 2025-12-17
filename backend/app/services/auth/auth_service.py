@@ -81,24 +81,39 @@ class AuthService:
         return secrets.token_hex(8)
 
     def _load_users(self) -> list[dict]:
-        """加载用户数据"""
-        return json.loads(USERS_FILE.read_text(encoding='utf-8'))
+        """加载用户数据 (with recovery from corruption)"""
+        try:
+            return json.loads(USERS_FILE.read_text(encoding='utf-8'))
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            # File corrupted, reset it
+            USERS_FILE.write_text("[]", encoding='utf-8')
+            return []
 
     def _save_users(self, users: list[dict]):
         """保存用户数据"""
         USERS_FILE.write_text(json.dumps(users, ensure_ascii=False, indent=2), encoding='utf-8')
 
     def _load_sessions(self) -> list[dict]:
-        """加载会话数据"""
-        return json.loads(SESSIONS_FILE.read_text(encoding='utf-8'))
+        """加载会话数据 (with recovery from corruption)"""
+        try:
+            return json.loads(SESSIONS_FILE.read_text(encoding='utf-8'))
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            # File corrupted, reset it
+            SESSIONS_FILE.write_text("[]", encoding='utf-8')
+            return []
 
     def _save_sessions(self, sessions: list[dict]):
         """保存会话数据"""
         SESSIONS_FILE.write_text(json.dumps(sessions, ensure_ascii=False, indent=2), encoding='utf-8')
 
     def _load_history(self) -> list[dict]:
-        """加载评估历史"""
-        return json.loads(HISTORY_FILE.read_text(encoding='utf-8'))
+        """加载评估历史 (with recovery from corruption)"""
+        try:
+            return json.loads(HISTORY_FILE.read_text(encoding='utf-8'))
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            # File corrupted, reset it
+            HISTORY_FILE.write_text("[]", encoding='utf-8')
+            return []
 
     def _save_history(self, history: list[dict]):
         """保存评估历史"""
