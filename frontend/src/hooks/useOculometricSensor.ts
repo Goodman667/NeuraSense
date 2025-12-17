@@ -425,20 +425,36 @@ export const useOculometricSensor = (
         setError(null);
 
         try {
-            // Dynamic import of MediaPipe modules
-            // Handle both default and named exports for production build compatibility
-            const faceMeshModule = await import('@mediapipe/face_mesh');
-            const cameraModule = await import('@mediapipe/camera_utils');
+            // Load MediaPipe from CDN instead of npm packages
+            // This bypasses bundler issues entirely
+            const loadScript = (src: string): Promise<void> => {
+                return new Promise((resolve, reject) => {
+                    if (document.querySelector(`script[src="${src}"]`)) {
+                        resolve();
+                        return;
+                    }
+                    const script = document.createElement('script');
+                    script.src = src;
+                    script.crossOrigin = 'anonymous';
+                    script.onload = () => resolve();
+                    script.onerror = () => reject(new Error(`Failed to load ${src}`));
+                    document.head.appendChild(script);
+                });
+            };
 
-            // Use named export or default export depending on how module is bundled
-            const FaceMesh = faceMeshModule.FaceMesh || (faceMeshModule as any).default?.FaceMesh || (faceMeshModule as any).default;
-            const Camera = cameraModule.Camera || (cameraModule as any).default?.Camera || (cameraModule as any).default;
+            // Load MediaPipe scripts from CDN
+            await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js');
+            await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js');
+
+            // Get constructors from global window object
+            const FaceMesh = (window as any).FaceMesh;
+            const Camera = (window as any).Camera;
 
             if (!FaceMesh || typeof FaceMesh !== 'function') {
-                throw new Error('MediaPipe FaceMesh 模块加载失败');
+                throw new Error('MediaPipe FaceMesh 模块加载失败，请刷新页面重试');
             }
             if (!Camera || typeof Camera !== 'function') {
-                throw new Error('MediaPipe Camera 模块加载失败');
+                throw new Error('MediaPipe Camera 模块加载失败，请刷新页面重试');
             }
 
             // Initialize FaceMesh
