@@ -33,16 +33,11 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Configure CORS for frontend access
+# Configure CORS for frontend access (allow all for demo)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://frontend:3000",
-        "https://neura-sense-iota.vercel.app",
-        "https://*.vercel.app",
-    ],
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
