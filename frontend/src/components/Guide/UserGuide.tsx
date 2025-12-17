@@ -5,7 +5,7 @@
  * Uses a darkened overlay with highlighted elements and tooltips.
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Step {
     target: string; // CSS selector of target element
