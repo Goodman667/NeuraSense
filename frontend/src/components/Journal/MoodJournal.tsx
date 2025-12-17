@@ -21,7 +21,7 @@ interface MoodOption {
 }
 
 const MOOD_OPTIONS: MoodOption[] = [
-    { id: 'happy', name: '开心', emoji: '😊', color: '#FCD34D', gradient: 'from-yellow-400 to-amber-500' },
+    { id: 'happy', name: '开�?, emoji: '😊', color: '#FCD34D', gradient: 'from-yellow-400 to-amber-500' },
     { id: 'calm', name: '平静', emoji: '😌', color: '#34D399', gradient: 'from-emerald-400 to-teal-500' },
     { id: 'grateful', name: '感恩', emoji: '🥰', color: '#F472B6', gradient: 'from-pink-400 to-rose-500' },
     { id: 'excited', name: '兴奋', emoji: '🤩', color: '#FB923C', gradient: 'from-orange-400 to-red-500' },
@@ -59,7 +59,7 @@ export const MoodJournal = ({ onComplete, onClose }: MoodJournalProps) => {
 
         try {
             // Save to backend
-            const response = await fetch('http://localhost:8000/api/v1/journal/daily', {
+            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/journal/daily', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -87,13 +87,13 @@ export const MoodJournal = ({ onComplete, onClose }: MoodJournalProps) => {
                 setStep('done');
             } else {
                 // Fallback response
-                setAiResponse('今天的心情已记录！每天关注自己的感受，是非常温暖的习惯。💜');
+                setAiResponse('今天的心情已记录！每天关注自己的感受，是非常温暖的习惯。�?);
                 setStep('done');
             }
         } catch (err) {
             console.error('Journal save failed:', err);
             // Still show success with local storage fallback
-            setAiResponse('日记已保存在本地！感谢你愿意记录今天的感受。💜');
+            setAiResponse('日记已保存在本地！感谢你愿意记录今天的感受。�?);
             setStep('done');
 
             // Save to localStorage as backup
@@ -121,7 +121,7 @@ export const MoodJournal = ({ onComplete, onClose }: MoodJournalProps) => {
                     <div className="flex items-center justify-between">
                         <div>
                             <h2 className="text-2xl font-bold">
-                                {step === 'mood' && '今天心情如何？'}
+                                {step === 'mood' && '今天心情如何�?}
                                 {step === 'journal' && '写下你的感受'}
                                 {step === 'gratitude' && '感恩时刻'}
                                 {step === 'done' && '太棒了！'}
@@ -162,7 +162,7 @@ export const MoodJournal = ({ onComplete, onClose }: MoodJournalProps) => {
                             <textarea
                                 value={journalText}
                                 onChange={(e) => setJournalText(e.target.value)}
-                                placeholder="今天发生了什么？你在想什么？随便写点什么都好..."
+                                placeholder="今天发生了什么？你在想什么？随便写点什么都�?.."
                                 className="w-full h-40 p-4 border border-warm-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-primary-500"
                             />
                             <div className="flex justify-between">
@@ -170,13 +170,13 @@ export const MoodJournal = ({ onComplete, onClose }: MoodJournalProps) => {
                                     onClick={() => setStep('mood')}
                                     className="text-warm-500 hover:text-warm-700"
                                 >
-                                    ← 返回
+                                    �?返回
                                 </button>
                                 <button
                                     onClick={() => setStep('gratitude')}
                                     className="px-6 py-2 bg-gradient-to-r from-primary-500 to-accent-500 text-white rounded-xl font-semibold hover:shadow-lg transition-all"
                                 >
-                                    下一步 →
+                                    下一�?�?
                                 </button>
                             </div>
                         </div>
@@ -186,7 +186,7 @@ export const MoodJournal = ({ onComplete, onClose }: MoodJournalProps) => {
                     {step === 'gratitude' && (
                         <div className="space-y-4">
                             <p className="text-warm-600 text-sm mb-4">
-                                研究表明，每天记录感恩的事可以显著提升幸福感 ✨
+                                研究表明，每天记录感恩的事可以显著提升幸福感 �?
                             </p>
                             {gratitudeItems.map((item, idx) => (
                                 <div key={idx} className="flex items-center space-x-3">
@@ -205,14 +205,14 @@ export const MoodJournal = ({ onComplete, onClose }: MoodJournalProps) => {
                                     onClick={() => setStep('journal')}
                                     className="text-warm-500 hover:text-warm-700"
                                 >
-                                    ← 返回
+                                    �?返回
                                 </button>
                                 <button
                                     onClick={handleSubmit}
                                     disabled={isSubmitting}
                                     className="px-6 py-2 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-50"
                                 >
-                                    {isSubmitting ? '保存中...' : '完成打卡 ✨'}
+                                    {isSubmitting ? '保存�?..' : '完成打卡 �?}
                                 </button>
                             </div>
                         </div>
@@ -228,7 +228,7 @@ export const MoodJournal = ({ onComplete, onClose }: MoodJournalProps) => {
                                 <p className="text-warm-700">{aiResponse}</p>
                             </div>
                             <div className="flex items-center justify-center space-x-2 text-amber-600 font-semibold mb-6">
-                                <span>⭐</span>
+                                <span>�?/span>
                                 <span>+15 积分</span>
                             </div>
                             <button

@@ -42,7 +42,7 @@ import {
 } from './hooks';
 
 // API base URL
-const API_BASE = 'http://localhost:8000/api/v1';
+import { API_BASE } from './config/api';
 
 // ====== INLINE STROOP TEST VIEW ======
 interface StroopTestViewProps {
@@ -403,7 +403,7 @@ const TrendPredictionView = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        fetch('http://localhost:8000/api/v1/prediction/demo')
+        fetch(`${API_BASE}/prediction/demo`)
             .then(res => res.json())
             .then(data => {
                 setPredictionData(data);

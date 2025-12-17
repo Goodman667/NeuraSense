@@ -55,7 +55,7 @@ export const VoiceAnalyzerMonitor = ({
 
         setIsAnalyzing(true);
         try {
-            const response = await fetch('http://localhost:8000/api/v1/biosignal/analyze', {
+            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/biosignal/analyze', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -128,7 +128,7 @@ export const VoiceAnalyzerMonitor = ({
                 {/* Permission denied message */}
                 {permissionStatus === 'denied' && (
                     <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-700 text-sm">
-                        请在浏览器设置中允许麦克风权限
+                        请在浏览器设置中允许麦克风权�?
                     </div>
                 )}
 
@@ -141,7 +141,7 @@ export const VoiceAnalyzerMonitor = ({
                             <p className="text-3xl font-bold text-warm-800">
                                 {metrics.features.pitch !== null
                                     ? `${metrics.features.pitch.toFixed(0)} Hz`
-                                    : '—'
+                                    : '�?
                                 }
                             </p>
                             <p className="text-xs text-warm-400">
@@ -186,7 +186,7 @@ export const VoiceAnalyzerMonitor = ({
                             {/* Speech Activity */}
                             <div>
                                 <div className="flex justify-between text-sm mb-1">
-                                    <span className="text-warm-600">语音活跃度</span>
+                                    <span className="text-warm-600">语音活跃�?/span>
                                     <span className="font-medium text-warm-800">
                                         {metrics.speechActivityLevel.toFixed(0)}%
                                     </span>
@@ -218,8 +218,8 @@ export const VoiceAnalyzerMonitor = ({
 
                         {/* Technical Info */}
                         <div className="text-xs text-warm-400 text-center">
-                            采样率: {sampleRate} Hz |
-                            RMS: {metrics.features.rmsDb?.toFixed(1) ?? '—'} dB
+                            采样�? {sampleRate} Hz |
+                            RMS: {metrics.features.rmsDb?.toFixed(1) ?? '�?} dB
                         </div>
 
                         {/* Human-readable Voice Analysis Interpretation */}
@@ -227,25 +227,25 @@ export const VoiceAnalyzerMonitor = ({
                             <p className="text-sm font-medium text-warm-800 mb-1">🎤 语音分析解读</p>
                             <p className="text-sm text-warm-600">
                                 {metrics.jitterPercent < 30 && metrics.shimmerPercent < 30 &&
-                                    "您的语音状态稳定，情绪平稳。语音特征显示放松状态。"
+                                    "您的语音状态稳定，情绪平稳。语音特征显示放松状态�?
                                 }
                                 {metrics.jitterPercent >= 30 && metrics.jitterPercent < 60 &&
-                                    "语音略有波动，可能有轻微紧张或疲劳。建议放松肩膀，做几次深呼吸。"
+                                    "语音略有波动，可能有轻微紧张或疲劳。建议放松肩膀，做几次深呼吸�?
                                 }
                                 {metrics.jitterPercent >= 60 &&
-                                    "语音波动较大，可能感到紧张或焦虑。建议尝试呼吸放松：吸气4秒、屏住4秒、呼气6秒。"
+                                    "语音波动较大，可能感到紧张或焦虑。建议尝试呼吸放松：吸气4秒、屏�?秒、呼�?秒�?
                                 }
                             </p>
                             {metrics.jitterPercent >= 50 && (
                                 <div className="mt-2 p-2 bg-white/60 rounded-lg">
                                     <p className="text-xs text-warm-700">
-                                        💡 <strong>放松技巧：</strong>试着用腹式呼吸，说话时放慢语速，会让声音更稳定哦。
+                                        💡 <strong>放松技巧：</strong>试着用腹式呼吸，说话时放慢语速，会让声音更稳定哦�?
                                     </p>
                                 </div>
                             )}
                             {metrics.speechActivityLevel < 20 && metrics.silenceDuration > 30 && (
                                 <p className="text-xs text-primary-600 mt-2">
-                                    💬 您已经沉默了一会儿，如果想聊聊什么，我随时都在。
+                                    💬 您已经沉默了一会儿，如果想聊聊什么，我随时都在�?
                                 </p>
                             )}
                         </div>
@@ -262,7 +262,7 @@ export const VoiceAnalyzerMonitor = ({
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                             </svg>
-                            <span>开始分析</span>
+                            <span>开始分�?/span>
                         </button>
                     ) : (
                         <button
@@ -291,7 +291,7 @@ export const VoiceAnalyzerMonitor = ({
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                                 </svg>
-                                <span>分析中...</span>
+                                <span>分析�?..</span>
                             </>
                         ) : (
                             <>
@@ -304,7 +304,7 @@ export const VoiceAnalyzerMonitor = ({
 
                 {/* Info text */}
                 <p className="text-xs text-warm-400 text-center">
-                    基于 Web Audio API 和 AudioWorklet 的实时语音分析
+                    基于 Web Audio API �?AudioWorklet 的实时语音分�?
                 </p>
             </div>
 
@@ -323,11 +323,11 @@ export const VoiceAnalyzerMonitor = ({
                             <div className="grid grid-cols-2 gap-3">
                                 <div className="bg-purple-50 rounded-xl p-3 text-center">
                                     <div className="text-2xl font-bold text-purple-600">{aiResult.overall_state || '良好'}</div>
-                                    <div className="text-xs text-purple-400">整体状态</div>
+                                    <div className="text-xs text-purple-400">整体状�?/div>
                                 </div>
                                 <div className="bg-pink-50 rounded-xl p-3 text-center">
                                     <div className="text-2xl font-bold text-pink-600">{aiResult.emotional_state || '平静'}</div>
-                                    <div className="text-xs text-pink-400">情绪状态</div>
+                                    <div className="text-xs text-pink-400">情绪状�?/div>
                                 </div>
                                 <div className="bg-blue-50 rounded-xl p-3 text-center">
                                     <div className="text-2xl font-bold text-blue-600">{aiResult.stress_level || 30}%</div>
@@ -335,7 +335,7 @@ export const VoiceAnalyzerMonitor = ({
                                 </div>
                                 <div className="bg-green-50 rounded-xl p-3 text-center">
                                     <div className="text-2xl font-bold text-green-600">{aiResult.attention_score || 75}</div>
-                                    <div className="text-xs text-green-400">活跃度评分</div>
+                                    <div className="text-xs text-green-400">活跃度评�?/div>
                                 </div>
                             </div>
 
@@ -354,7 +354,7 @@ export const VoiceAnalyzerMonitor = ({
                                     <ul className="space-y-1">
                                         {aiResult.recommendations.map((rec, i) => (
                                             <li key={i} className="text-sm text-green-600 flex items-start">
-                                                <span className="mr-2">•</span>
+                                                <span className="mr-2">�?/span>
                                                 <span>{rec}</span>
                                             </li>
                                         ))}

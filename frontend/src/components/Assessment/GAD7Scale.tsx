@@ -11,20 +11,20 @@ import { PDFDownloadButton } from './PDFDownloadButton';
 // GAD-7 问题定义
 const GAD7_QUESTIONS = [
     "感到紧张、焦虑或急切",
-    "不能停止或控制担忧",
-    "对各种事情担忧过多",
+    "不能停止或控制担�?,
+    "对各种事情担忧过�?,
     "很难放松下来",
-    "由于不安而无法静坐",
+    "由于不安而无法静�?,
     "变得容易烦恼或急躁",
     "感到似乎将有可怕的事情发生"
 ];
 
-// 选项定义（与PHQ-9相同）
+// 选项定义（与PHQ-9相同�?
 const OPTIONS = [
     { value: 0, label: "完全不会", description: "过去2周内完全没有" },
-    { value: 1, label: "好几天", description: "少于一半的天数" },
+    { value: 1, label: "好几�?, description: "少于一半的天数" },
     { value: 2, label: "一半以上的天数", description: "超过一半的天数" },
-    { value: 3, label: "几乎每天", description: "每天或几乎每天" },
+    { value: 3, label: "几乎每天", description: "每天或几乎每�? },
 ];
 
 // 严重程度解读
@@ -70,7 +70,7 @@ export const GAD7Scale = ({ onComplete, onClose }: GAD7ScaleProps) => {
         }
     }, [currentQuestion, answers]);
 
-    // 完成评估并获取 AI 解读
+    // 完成评估并获�?AI 解读
     const handleComplete = useCallback(async () => {
         if (answers.some(a => a === null)) return;
 
@@ -78,12 +78,12 @@ export const GAD7Scale = ({ onComplete, onClose }: GAD7ScaleProps) => {
 
         try {
             // 调用后端 API 获取 AI 解读
-            const response = await fetch('http://localhost:8000/api/v1/chat', {
+            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     user_id: 'scale_user',
-                    message: `我完成了 GAD-7 焦虑量表测评，得分是 ${totalScore} 分（${severity.level}）。我最高分的维度包括：${GAD7_QUESTIONS.filter((_, i) => (answers[i] ?? 0) >= 2).join('、') || '无明显突出项'
+                    message: `我完成了 GAD-7 焦虑量表测评，得分是 ${totalScore} 分（${severity.level}）。我最高分的维度包括：${GAD7_QUESTIONS.filter((_, i) => (answers[i] ?? 0) >= 2).join('�?) || '无明显突出项'
                         }。请根据这个结果给我一些针对焦虑的温暖建议和放松技巧。`,
                 }),
             });
@@ -112,15 +112,15 @@ export const GAD7Scale = ({ onComplete, onClose }: GAD7ScaleProps) => {
     // 默认解读
     const getDefaultInterpretation = (score: number): string => {
         if (score <= 4) {
-            return "您的焦虑水平在正常范围内，继续保持积极乐观的心态！适度的担忧是正常的，记得劳逸结合。";
+            return "您的焦虑水平在正常范围内，继续保持积极乐观的心态！适度的担忧是正常的，记得劳逸结合�?;
         }
         if (score <= 9) {
-            return "您可能正经历轻度焦虑。建议尝试一些放松技巧，如深呼吸、冥想或规律运动。保持良好的睡眠习惯也很重要。";
+            return "您可能正经历轻度焦虑。建议尝试一些放松技巧，如深呼吸、冥想或规律运动。保持良好的睡眠习惯也很重要�?;
         }
         if (score <= 14) {
-            return "您的焦虑水平较高，建议认真考虑寻求专业帮助。同时可以尝试减少咖啡因摄入、规律运动、学习放松技巧。如需帮助，请拨打：400-161-9995。";
+            return "您的焦虑水平较高，建议认真考虑寻求专业帮助。同时可以尝试减少咖啡因摄入、规律运动、学习放松技巧。如需帮助，请拨打�?00-161-9995�?;
         }
-        return "您可能正在经历严重焦虑，这会影响日常生活。请尽快寻求专业心理咨询或医疗帮助。记住，焦虑是可以治疗的。紧急热线：400-161-9995。";
+        return "您可能正在经历严重焦虑，这会影响日常生活。请尽快寻求专业心理咨询或医疗帮助。记住，焦虑是可以治疗的。紧急热线：400-161-9995�?;
     };
 
     const progress = ((currentQuestion + 1) / 7) * 100;
@@ -131,13 +131,13 @@ export const GAD7Scale = ({ onComplete, onClose }: GAD7ScaleProps) => {
             <div className="text-center mb-8">
                 <h2 className="text-2xl font-bold text-warm-800 mb-2">GAD-7 焦虑筛查量表</h2>
                 <p className="text-warm-600">
-                    过去 <span className="font-semibold text-blue-600">2 周</span> 内，您有多少时间受到以下问题的困扰？
+                    过去 <span className="font-semibold text-blue-600">2 �?/span> 内，您有多少时间受到以下问题的困扰？
                 </p>
             </div>
 
             {!isComplete ? (
                 <>
-                    {/* 进度条 */}
+                    {/* 进度�?*/}
                     <div className="mb-8">
                         <div className="flex justify-between text-sm text-warm-500 mb-2">
                             <span>问题 {currentQuestion + 1} / 7</span>
@@ -196,7 +196,7 @@ export const GAD7Scale = ({ onComplete, onClose }: GAD7ScaleProps) => {
                             disabled={currentQuestion === 0}
                             className="px-6 py-3 text-warm-600 hover:text-warm-800 disabled:opacity-50"
                         >
-                            ← 上一题
+                            �?上一�?
                         </button>
 
                         {currentQuestion === 6 ? (
@@ -205,7 +205,7 @@ export const GAD7Scale = ({ onComplete, onClose }: GAD7ScaleProps) => {
                                 disabled={answers.some(a => a === null) || isLoading}
                                 className="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-semibold hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50"
                             >
-                                {isLoading ? '分析中...' : '完成评估'}
+                                {isLoading ? '分析�?..' : '完成评估'}
                             </button>
                         ) : (
                             <button
@@ -213,7 +213,7 @@ export const GAD7Scale = ({ onComplete, onClose }: GAD7ScaleProps) => {
                                 disabled={answers[currentQuestion] === null}
                                 className="px-6 py-3 text-blue-600 hover:text-blue-700 disabled:opacity-50"
                             >
-                                下一题 →
+                                下一�?�?
                             </button>
                         )}
                     </div>
@@ -234,7 +234,7 @@ export const GAD7Scale = ({ onComplete, onClose }: GAD7ScaleProps) => {
                             </div>
                         </div>
 
-                        {/* 得分仪表盘 */}
+                        {/* 得分仪表�?*/}
                         <div className="mb-8">
                             <div className="flex justify-between text-xs text-warm-500 mb-2">
                                 <span>正常 (0-4)</span>
@@ -270,25 +270,25 @@ export const GAD7Scale = ({ onComplete, onClose }: GAD7ScaleProps) => {
                                     <span className="text-2xl">💬</span>
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-lg mb-2">小心的专业建议</h3>
+                                    <h3 className="font-bold text-lg mb-2">小心的专业建�?/h3>
                                     <p className="leading-relaxed opacity-95">{aiInterpretation}</p>
                                 </div>
                             </div>
                         </div>
                     )}
 
-                    {/* 各维度得分图表 */}
+                    {/* 各维度得分图�?*/}
                     <div className="bg-white rounded-2xl shadow-lg p-6 border border-blue-100">
                         <h3 className="font-bold text-warm-800 mb-4 flex items-center">
                             <span className="text-xl mr-2">📊</span>
-                            各维度得分分析
+                            各维度得分分�?
                         </h3>
 
                         <div className="space-y-4">
                             {GAD7_QUESTIONS.map((q, i) => {
                                 const score = answers[i] ?? 0;
                                 const percentage = (score / 3) * 100;
-                                const labels = ['紧张焦虑', '控制担忧', '过度担忧', '难以放松', '坐立不安', '易烦躁', '恐惧预感'];
+                                const labels = ['紧张焦虑', '控制担忧', '过度担忧', '难以放松', '坐立不安', '易烦�?, '恐惧预感'];
 
                                 return (
                                     <div key={i} className="group">
@@ -321,14 +321,14 @@ export const GAD7Scale = ({ onComplete, onClose }: GAD7ScaleProps) => {
                         </div>
                     </div>
 
-                    {/* 放松技巧卡片 */}
+                    {/* 放松技巧卡�?*/}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="bg-cyan-50 rounded-xl p-5 border border-cyan-100">
                             <div className="w-10 h-10 bg-cyan-100 rounded-lg flex items-center justify-center mb-3">
-                                <span className="text-xl">🌬️</span>
+                                <span className="text-xl">🌬�?/span>
                             </div>
                             <h4 className="font-semibold text-cyan-800 mb-1">深呼吸法</h4>
-                            <p className="text-sm text-cyan-600">4秒吸气-7秒屏息-8秒呼气</p>
+                            <p className="text-sm text-cyan-600">4秒吸�?7秒屏�?8秒呼�?/p>
                         </div>
 
                         <div className="bg-indigo-50 rounded-xl p-5 border border-indigo-100">
@@ -363,7 +363,7 @@ export const GAD7Scale = ({ onComplete, onClose }: GAD7ScaleProps) => {
                             onClick={onClose}
                             className="flex-1 py-4 bg-warm-100 text-warm-700 rounded-xl font-medium hover:bg-warm-200 transition-all"
                         >
-                            ← 返回首页
+                            �?返回首页
                         </button>
                         <button
                             onClick={() => {

@@ -9,25 +9,25 @@
 import { useState, useCallback } from 'react';
 import { PDFDownloadButton } from './PDFDownloadButton';
 
-// SAS 问题定义（20题）
+// SAS 问题定义�?0题）
 const SAS_QUESTIONS = [
-    { id: 1, text: "我感到比往常更紧张和焦虑", reverse: false },
-    { id: 2, text: "我无缘无故地感到害怕", reverse: false },
+    { id: 1, text: "我感到比往常更紧张和焦�?, reverse: false },
+    { id: 2, text: "我无缘无故地感到害�?, reverse: false },
     { id: 3, text: "我容易心烦意乱或感到恐慌", reverse: false },
-    { id: 4, text: "我感到我可能要发疯", reverse: false },
+    { id: 4, text: "我感到我可能要发�?, reverse: false },
     { id: 5, text: "我感到一切都好，不会发生不幸", reverse: true },
     { id: 6, text: "我的手脚发抖打颤", reverse: false },
-    { id: 7, text: "我因头痛、颈痛、背痛而烦恼", reverse: false },
+    { id: 7, text: "我因头痛、颈痛、背痛而烦�?, reverse: false },
     { id: 8, text: "我感到无力且容易疲劳", reverse: false },
     { id: 9, text: "我感到平静，能安静坐下来", reverse: true },
-    { id: 10, text: "我感到我的心跳很快", reverse: false },
-    { id: 11, text: "我因阵阵头晕而烦恼", reverse: false },
-    { id: 12, text: "我有过晕倒或感到要晕倒", reverse: false },
-    { id: 13, text: "我呼吸时进出气都很容易", reverse: true },
-    { id: 14, text: "我的手脚麻木和刺痛", reverse: false },
-    { id: 15, text: "我因胃痛和消化不良而烦恼", reverse: false },
-    { id: 16, text: "我需要经常排尿", reverse: false },
-    { id: 17, text: "我的手常常是干燥温暖的", reverse: true },
+    { id: 10, text: "我感到我的心跳很�?, reverse: false },
+    { id: 11, text: "我因阵阵头晕而烦�?, reverse: false },
+    { id: 12, text: "我有过晕倒或感到要晕�?, reverse: false },
+    { id: 13, text: "我呼吸时进出气都很容�?, reverse: true },
+    { id: 14, text: "我的手脚麻木和刺�?, reverse: false },
+    { id: 15, text: "我因胃痛和消化不良而烦�?, reverse: false },
+    { id: 16, text: "我需要经常排�?, reverse: false },
+    { id: 17, text: "我的手常常是干燥温暖�?, reverse: true },
     { id: 18, text: "我脸发烧发红", reverse: false },
     { id: 19, text: "我容易入睡，睡眠很好", reverse: true },
     { id: 20, text: "我做噩梦", reverse: false },
@@ -35,17 +35,17 @@ const SAS_QUESTIONS = [
 
 const OPTIONS = [
     { value: 1, label: "很少", description: "偶尔或无" },
-    { value: 2, label: "有时", description: "少部分时间" },
-    { value: 3, label: "经常", description: "相当多时间" },
-    { value: 4, label: "总是", description: "绝大部分或全部时间" },
+    { value: 2, label: "有时", description: "少部分时�? },
+    { value: 3, label: "经常", description: "相当多时�? },
+    { value: 4, label: "总是", description: "绝大部分或全部时�? },
 ];
 
 // 严重程度解读
 const getSeverity = (indexScore: number) => {
-    if (indexScore < 50) return { level: '正常', color: 'green', description: '无明显焦虑症状' };
+    if (indexScore < 50) return { level: '正常', color: 'green', description: '无明显焦虑症�? };
     if (indexScore < 60) return { level: '轻度焦虑', color: 'yellow', description: '存在轻度焦虑倾向' };
     if (indexScore < 70) return { level: '中度焦虑', color: 'orange', description: '建议寻求专业帮助' };
-    return { level: '重度焦虑', color: 'red', description: '请尽快寻求专业心理治疗' };
+    return { level: '重度焦虑', color: 'red', description: '请尽快寻求专业心理治�? };
 };
 
 interface SASScaleProps {
@@ -69,7 +69,7 @@ export const SASScale = ({ onComplete, onClose }: SASScaleProps) => {
     const [isLoading, setIsLoading] = useState(false);
     const [aiInterpretation, setAiInterpretation] = useState<string | null>(null);
 
-    // 计算原始分和指数分
+    // 计算原始分和指数�?
     const calculateScores = useCallback(() => {
         let rawScore = 0;
         answers.forEach((answer, index) => {
@@ -106,12 +106,12 @@ export const SASScale = ({ onComplete, onClose }: SASScaleProps) => {
         setIsLoading(true);
 
         try {
-            const response = await fetch('http://localhost:8000/api/v1/chat', {
+            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     user_id: 'scale_user',
-                    message: `我完成了SAS焦虑自评量表，指数分是${indexScore}分（${severity.level}）。请给我一些缓解焦虑的建议和放松技巧。`,
+                    message: `我完成了SAS焦虑自评量表，指数分�?{indexScore}分（${severity.level}）。请给我一些缓解焦虑的建议和放松技巧。`,
                 }),
             });
 
@@ -120,10 +120,10 @@ export const SASScale = ({ onComplete, onClose }: SASScaleProps) => {
                 setAiInterpretation(data.reply_text || data.message);
             }
 
-            // 保存到历史记录
+            // 保存到历史记�?
             const token = localStorage.getItem('token');
             if (token) {
-                await fetch(`http://localhost:8000/api/v1/history/save?token=${token}`, {
+                await fetch(`https://neurasense-m409.onrender.com/api/v1/history/save?token=${token}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -159,7 +159,7 @@ export const SASScale = ({ onComplete, onClose }: SASScaleProps) => {
             <div className="text-center mb-8">
                 <h2 className="text-2xl font-bold text-warm-800 mb-2">SAS 焦虑自评量表</h2>
                 <p className="text-warm-600">
-                    请根据您 <span className="font-semibold text-orange-600">最近一周</span> 的实际感受选择最符合的选项
+                    请根据您 <span className="font-semibold text-orange-600">最近一�?/span> 的实际感受选择最符合的选项
                 </p>
             </div>
 
@@ -220,7 +220,7 @@ export const SASScale = ({ onComplete, onClose }: SASScaleProps) => {
                             disabled={currentQuestion === 0}
                             className="px-6 py-3 text-warm-600 hover:text-warm-800 disabled:opacity-50"
                         >
-                            ← 上一题
+                            �?上一�?
                         </button>
 
                         {currentQuestion === 19 ? (
@@ -229,7 +229,7 @@ export const SASScale = ({ onComplete, onClose }: SASScaleProps) => {
                                 disabled={answers.some(a => a === null) || isLoading}
                                 className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-semibold hover:from-orange-600 hover:to-orange-700 transition-all disabled:opacity-50"
                             >
-                                {isLoading ? '分析中...' : '完成评估'}
+                                {isLoading ? '分析�?..' : '完成评估'}
                             </button>
                         ) : (
                             <button
@@ -237,7 +237,7 @@ export const SASScale = ({ onComplete, onClose }: SASScaleProps) => {
                                 disabled={answers[currentQuestion] === null}
                                 className="px-6 py-3 text-orange-600 hover:text-orange-700 disabled:opacity-50"
                             >
-                                下一题 →
+                                下一�?�?
                             </button>
                         )}
                     </div>
@@ -252,7 +252,7 @@ export const SASScale = ({ onComplete, onClose }: SASScaleProps) => {
                             </div>
                             <div className="text-right">
                                 <div className="text-4xl font-bold text-orange-600">{indexScore}</div>
-                                <div className="text-sm text-warm-500">指数分</div>
+                                <div className="text-sm text-warm-500">指数�?/div>
                             </div>
                         </div>
 
@@ -289,7 +289,7 @@ export const SASScale = ({ onComplete, onClose }: SASScaleProps) => {
                                     <span className="text-2xl">💬</span>
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-lg mb-2">小心的专业建议</h3>
+                                    <h3 className="font-bold text-lg mb-2">小心的专业建�?/h3>
                                     <p className="leading-relaxed opacity-95">{aiInterpretation}</p>
                                 </div>
                             </div>
@@ -310,7 +310,7 @@ export const SASScale = ({ onComplete, onClose }: SASScaleProps) => {
                             onClick={onClose}
                             className="flex-1 py-4 bg-warm-100 text-warm-700 rounded-xl font-medium hover:bg-warm-200 transition-all"
                         >
-                            ← 返回
+                            �?返回
                         </button>
                         <button
                             onClick={() => {

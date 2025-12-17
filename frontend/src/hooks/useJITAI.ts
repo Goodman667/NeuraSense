@@ -6,7 +6,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 
-const API_BASE = 'http://localhost:8000/api/v1';
+import { API_BASE } from '../config/api';
 
 export type RiskLevel = 'low' | 'medium' | 'high';
 export type InterventionType = 'breathing' | 'cbt' | 'gratitude' | 'community';

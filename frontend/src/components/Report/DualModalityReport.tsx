@@ -48,7 +48,7 @@ export interface DualModalityReportProps {
 
 // Score interpretation helpers
 const getScoreLevel = (score: number, thresholds: [number, number, number]) => {
-    if (score <= thresholds[0]) return { level: '正常', color: 'green', icon: '✅' };
+    if (score <= thresholds[0]) return { level: '正常', color: 'green', icon: '�? };
     if (score <= thresholds[1]) return { level: '轻度', color: 'yellow', icon: '⚠️' };
     if (score <= thresholds[2]) return { level: '中度', color: 'orange', icon: '🔶' };
     return { level: '重度', color: 'red', icon: '🔴' };
@@ -93,33 +93,33 @@ export const DualModalityReport = ({
         try {
             const discrepancy = calculateDiscrepancy();
 
-            const response = await fetch('http://localhost:8000/api/v1/counselor/chat', {
+            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/counselor/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     message: `请对比分析以下心理健康评估数据，并给出专业见解：
 
-【主观评估数据】
-- PHQ-9 抑郁评分: ${subjective.phq9Score ?? '未测'}分
-- GAD-7 焦虑评分: ${subjective.gad7Score ?? '未测'}分
-- 用户自述摘要: ${subjective.selfReportSummary ?? '无'}
+【主观评估数据�?
+- PHQ-9 抑郁评分: ${subjective.phq9Score ?? '未测'}�?
+- GAD-7 焦虑评分: ${subjective.gad7Score ?? '未测'}�?
+- 用户自述摘要: ${subjective.selfReportSummary ?? '�?}
 
-【客观生物信号数据】
+【客观生物信号数据�?
 - 语音情绪评分: ${objective.voiceEmotionScore ?? '未测'}
 - 语音压力水平: ${objective.voiceStressLevel ?? '未测'}%
 - 眼部疲劳指数: ${objective.fatigueIndex ?? '未测'}
-- 注意力评分: ${objective.attentionScore ?? '未测'}
+- 注意力评�? ${objective.attentionScore ?? '未测'}
 - 键盘焦虑指数: ${objective.typingAnxietyIndex ?? '未测'}
 - Stroop认知评分: ${objective.stroopCognitiveScore ?? '未测'}
 
-【一致性分析】
+【一致性分析�?
 - 主观困扰指数: ${discrepancy.subjective}%
 - 客观压力指数: ${discrepancy.objective}%
-- 差异度: ${discrepancy.difference}%
+- 差异�? ${discrepancy.difference}%
 
-请从以下角度分析（100字左右）：
-1. 主观与客观数据是否一致
-2. 如有不一致，可能的原因
+请从以下角度分析�?00字左右）�?
+1. 主观与客观数据是否一�?
+2. 如有不一致，可能的原�?
 3. 针对性建议`,
                     user_id: 'dual_modality_report',
                 }),
@@ -131,7 +131,7 @@ export const DualModalityReport = ({
             }
         } catch (error) {
             console.error('AI analysis failed:', error);
-            setAiComparison('分析失败，请稍后重试。');
+            setAiComparison('分析失败，请稍后重试�?);
         }
         setIsAnalyzing(false);
     }, [subjective, objective, calculateDiscrepancy]);
@@ -148,7 +148,7 @@ export const DualModalityReport = ({
                     <div>
                         <h2 className="text-xl font-bold flex items-center space-x-2">
                             <span>📊</span>
-                            <span>双模态综合分析报告</span>
+                            <span>双模态综合分析报�?/span>
                         </h2>
                         <p className="text-sm text-indigo-200 mt-1">
                             Dual-Modality Validation Report
@@ -189,7 +189,7 @@ export const DualModalityReport = ({
                                         <span className="text-sm font-medium text-blue-700">PHQ-9 抑郁</span>
                                         <div className="flex items-center space-x-2">
                                             <span className={`text-lg font-bold text-${phq9Level.color}-600`}>
-                                                {subjective.phq9Score}分
+                                                {subjective.phq9Score}�?
                                             </span>
                                             <span className={`px-2 py-0.5 text-xs rounded-full bg-${phq9Level.color}-100 text-${phq9Level.color}-700`}>
                                                 {phq9Level.level}
@@ -212,7 +212,7 @@ export const DualModalityReport = ({
                                         <span className="text-sm font-medium text-blue-700">GAD-7 焦虑</span>
                                         <div className="flex items-center space-x-2">
                                             <span className={`text-lg font-bold text-${gad7Level.color}-600`}>
-                                                {subjective.gad7Score}分
+                                                {subjective.gad7Score}�?
                                             </span>
                                             <span className={`px-2 py-0.5 text-xs rounded-full bg-${gad7Level.color}-100 text-${gad7Level.color}-700`}>
                                                 {gad7Level.level}
@@ -268,7 +268,7 @@ export const DualModalityReport = ({
                                         {objective.voiceEmotionScore !== undefined && (
                                             <div className="text-center">
                                                 <div className="text-lg font-bold text-purple-600">{objective.voiceEmotionScore}</div>
-                                                <div className="text-xs text-gray-500">情绪分</div>
+                                                <div className="text-xs text-gray-500">情绪�?/div>
                                             </div>
                                         )}
                                         {objective.voiceStressLevel !== undefined && (
@@ -284,18 +284,18 @@ export const DualModalityReport = ({
                             {/* Eye Tracking */}
                             {(objective.fatigueIndex !== undefined || objective.attentionScore !== undefined) && (
                                 <div className="bg-white rounded-lg p-3">
-                                    <span className="text-sm font-medium text-purple-700">👁️ 眼动追踪</span>
+                                    <span className="text-sm font-medium text-purple-700">👁�?眼动追踪</span>
                                     <div className="grid grid-cols-2 gap-2 mt-2">
                                         {objective.fatigueIndex !== undefined && (
                                             <div className="text-center">
                                                 <div className="text-lg font-bold text-purple-600">{objective.fatigueIndex}</div>
-                                                <div className="text-xs text-gray-500">疲劳度</div>
+                                                <div className="text-xs text-gray-500">疲劳�?/div>
                                             </div>
                                         )}
                                         {objective.attentionScore !== undefined && (
                                             <div className="text-center">
                                                 <div className="text-lg font-bold text-purple-600">{objective.attentionScore}</div>
-                                                <div className="text-xs text-gray-500">注意力</div>
+                                                <div className="text-xs text-gray-500">注意�?/div>
                                             </div>
                                         )}
                                     </div>
@@ -305,7 +305,7 @@ export const DualModalityReport = ({
                             {/* Keystroke */}
                             {objective.typingAnxietyIndex !== undefined && (
                                 <div className="bg-white rounded-lg p-3">
-                                    <span className="text-sm font-medium text-purple-700">⌨️ 键盘动力学</span>
+                                    <span className="text-sm font-medium text-purple-700">⌨️ 键盘动力�?/span>
                                     <div className="grid grid-cols-2 gap-2 mt-2">
                                         <div className="text-center">
                                             <div className="text-lg font-bold text-purple-600">{objective.typingAnxietyIndex}</div>
@@ -314,7 +314,7 @@ export const DualModalityReport = ({
                                         {objective.typingFocusScore !== undefined && (
                                             <div className="text-center">
                                                 <div className="text-lg font-bold text-purple-600">{objective.typingFocusScore}</div>
-                                                <div className="text-xs text-gray-500">专注度</div>
+                                                <div className="text-xs text-gray-500">专注�?/div>
                                             </div>
                                         )}
                                     </div>
@@ -328,12 +328,12 @@ export const DualModalityReport = ({
                                     <div className="grid grid-cols-2 gap-2 mt-2">
                                         <div className="text-center">
                                             <div className="text-lg font-bold text-purple-600">{objective.stroopCognitiveScore}</div>
-                                            <div className="text-xs text-gray-500">认知分</div>
+                                            <div className="text-xs text-gray-500">认知�?/div>
                                         </div>
                                         {objective.stroopAttentionScore !== undefined && (
                                             <div className="text-center">
                                                 <div className="text-lg font-bold text-purple-600">{objective.stroopAttentionScore}</div>
-                                                <div className="text-xs text-gray-500">注意力</div>
+                                                <div className="text-xs text-gray-500">注意�?/div>
                                             </div>
                                         )}
                                     </div>
@@ -354,7 +354,7 @@ export const DualModalityReport = ({
                 {/* Emotion Radar (if available) */}
                 {objective.emotionData && (
                     <div className="mb-6 bg-warm-50 rounded-xl p-4">
-                        <h4 className="text-sm font-medium text-warm-700 mb-2 text-center">情绪雷达图</h4>
+                        <h4 className="text-sm font-medium text-warm-700 mb-2 text-center">情绪雷达�?/h4>
                         <EmotionRadarChart data={objective.emotionData} size="sm" />
                     </div>
                 )}
@@ -369,10 +369,10 @@ export const DualModalityReport = ({
                         <div className="flex items-start space-x-3">
                             <span className="text-2xl">⚠️</span>
                             <div>
-                                <h4 className="font-medium text-amber-800">数据不一致提醒</h4>
+                                <h4 className="font-medium text-amber-800">数据不一致提�?/h4>
                                 <p className="text-sm text-amber-700 mt-1">
-                                    您的主观自评与客观监测数据存在较大差异（{discrepancy.difference.toFixed(0)}%）。
-                                    这可能提示存在"隐性焦虑"或评估偏差，建议结合AI分析深入了解。
+                                    您的主观自评与客观监测数据存在较大差异（{discrepancy.difference.toFixed(0)}%）�?
+                                    这可能提示存�?隐性焦�?或评估偏差，建议结合AI分析深入了解�?
                                 </p>
                             </div>
                         </div>
@@ -398,7 +398,7 @@ export const DualModalityReport = ({
                                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                                         </svg>
-                                        <span>分析中...</span>
+                                        <span>分析�?..</span>
                                     </>
                                 ) : (
                                     <>
@@ -417,7 +417,7 @@ export const DualModalityReport = ({
                         </div>
                     ) : (
                         <div className="bg-white/50 rounded-lg p-4 text-center text-gray-400">
-                            点击"生成分析"获取 AI 对主观与客观数据的综合解读
+                            点击"生成分析"获取 AI 对主观与客观数据的综合解�?
                         </div>
                     )}
                 </div>
@@ -425,7 +425,7 @@ export const DualModalityReport = ({
                 {/* Footer */}
                 <div className="mt-6 pt-4 border-t border-warm-200">
                     <p className="text-xs text-warm-400 text-center">
-                        ⚕️ 本报告仅供参考，不能替代专业心理评估。如需帮助，请咨询专业人士。
+                        ⚕️ 本报告仅供参考，不能替代专业心理评估。如需帮助，请咨询专业人士�?
                     </p>
                 </div>
             </div>

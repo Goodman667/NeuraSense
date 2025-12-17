@@ -42,7 +42,7 @@ export const AssessmentHistory = ({ onClose }: AssessmentHistoryProps) => {
 
             try {
                 const response = await fetch(
-                    `http://localhost:8000/api/v1/history?token=${token}${selectedScale ? `&scale_type=${selectedScale}` : ''}`
+                    `https://neurasense-m409.onrender.com/api/v1/history?token=${token}${selectedScale ? `&scale_type=${selectedScale}` : ''}`
                 );
                 if (response.ok) {
                     const data = await response.json();
@@ -57,7 +57,7 @@ export const AssessmentHistory = ({ onClose }: AssessmentHistoryProps) => {
         loadHistory();
     }, [selectedScale]);
 
-    // 格式化日期
+    // 格式化日�?
     const formatDate = (dateStr: string) => {
         const date = new Date(dateStr);
         return date.toLocaleDateString('zh-CN', {
@@ -76,14 +76,14 @@ export const AssessmentHistory = ({ onClose }: AssessmentHistoryProps) => {
         const avgRecent = recent.slice(0, 2).reduce((s, r) => s + r.total_score, 0) / Math.min(2, recent.length);
         const avgOlder = recent.slice(2).reduce((s, r) => s + r.total_score, 0) / Math.max(1, recent.slice(2).length);
 
-        if (avgRecent < avgOlder - 2) return { direction: 'improving', text: '好转中', icon: '📈', color: 'green' };
+        if (avgRecent < avgOlder - 2) return { direction: 'improving', text: '好转�?, icon: '📈', color: 'green' };
         if (avgRecent > avgOlder + 2) return { direction: 'worsening', text: '需关注', icon: '📉', color: 'red' };
         return { direction: 'stable', text: '保持稳定', icon: '➡️', color: 'yellow' };
     }, [history]);
 
     const trend = getTrend();
 
-    // 未登录状态
+    // 未登录状�?
     if (!localStorage.getItem('token')) {
         return (
             <div className="max-w-2xl mx-auto text-center py-16">
@@ -102,7 +102,7 @@ export const AssessmentHistory = ({ onClose }: AssessmentHistoryProps) => {
         );
     }
 
-    // 加载中
+    // 加载�?
     if (isLoading) {
         return (
             <div className="max-w-2xl mx-auto text-center py-16">
@@ -121,7 +121,7 @@ export const AssessmentHistory = ({ onClose }: AssessmentHistoryProps) => {
                     onClick={() => setSelectedRecord(null)}
                     className="mb-6 text-warm-600 hover:text-warm-800"
                 >
-                    ← 返回列表
+                    �?返回列表
                 </button>
 
                 <div className="bg-white rounded-2xl shadow-lg p-6 border border-warm-100">
@@ -169,7 +169,7 @@ export const AssessmentHistory = ({ onClose }: AssessmentHistoryProps) => {
                     <div>
                         <p className={`font-medium text-${trend.color}-800`}>整体趋势: {trend.text}</p>
                         <p className={`text-sm text-${trend.color}-600`}>
-                            基于最近 {Math.min(5, history.length)} 次评估分析
+                            基于最�?{Math.min(5, history.length)} 次评估分�?
                         </p>
                     </div>
                 </div>
@@ -256,7 +256,7 @@ export const AssessmentHistory = ({ onClose }: AssessmentHistoryProps) => {
                     onClick={onClose}
                     className="px-8 py-3 text-warm-600 hover:text-warm-800 transition-all"
                 >
-                    ← 返回
+                    �?返回
                 </button>
             </div>
         </div>

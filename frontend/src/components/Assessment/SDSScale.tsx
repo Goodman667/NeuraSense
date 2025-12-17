@@ -9,24 +9,24 @@
 import { useState, useCallback } from 'react';
 import { PDFDownloadButton } from './PDFDownloadButton';
 
-// SDS 问题定义（20题）
+// SDS 问题定义�?0题）
 const SDS_QUESTIONS = [
     { id: 1, text: "我感到情绪沮丧，郁闷", reverse: false },
-    { id: 2, text: "我感到早晨心情最好", reverse: true },
+    { id: 2, text: "我感到早晨心情最�?, reverse: true },
     { id: 3, text: "我要哭或想哭", reverse: false },
-    { id: 4, text: "我夜间睡眠不好", reverse: false },
+    { id: 4, text: "我夜间睡眠不�?, reverse: false },
     { id: 5, text: "我吃饭像平时一样多", reverse: true },
-    { id: 6, text: "我的性功能正常", reverse: true },
-    { id: 7, text: "我感到体重减轻", reverse: false },
+    { id: 6, text: "我的性功能正�?, reverse: true },
+    { id: 7, text: "我感到体重减�?, reverse: false },
     { id: 8, text: "我为便秘烦恼", reverse: false },
     { id: 9, text: "我的心跳比平时快", reverse: false },
-    { id: 10, text: "我无故感到疲劳", reverse: false },
-    { id: 11, text: "我的头脑像往常一样清楚", reverse: true },
+    { id: 10, text: "我无故感到疲�?, reverse: false },
+    { id: 11, text: "我的头脑像往常一样清�?, reverse: true },
     { id: 12, text: "我做事情像平时一样不感到困难", reverse: true },
     { id: 13, text: "我坐卧不安，难以保持平静", reverse: false },
-    { id: 14, text: "我对未来感到有希望", reverse: true },
-    { id: 15, text: "我比平时更容易激怒", reverse: false },
-    { id: 16, text: "我觉得决定什么事很容易", reverse: true },
+    { id: 14, text: "我对未来感到有希�?, reverse: true },
+    { id: 15, text: "我比平时更容易激�?, reverse: false },
+    { id: 16, text: "我觉得决定什么事很容�?, reverse: true },
     { id: 17, text: "我感到自己是有用的和不可缺少的人", reverse: true },
     { id: 18, text: "我的生活很有意义", reverse: true },
     { id: 19, text: "假若我死了别人会过得更好", reverse: false },
@@ -35,17 +35,17 @@ const SDS_QUESTIONS = [
 
 const OPTIONS = [
     { value: 1, label: "很少", description: "偶尔或无" },
-    { value: 2, label: "有时", description: "少部分时间" },
-    { value: 3, label: "经常", description: "相当多时间" },
-    { value: 4, label: "总是", description: "绝大部分或全部时间" },
+    { value: 2, label: "有时", description: "少部分时�? },
+    { value: 3, label: "经常", description: "相当多时�? },
+    { value: 4, label: "总是", description: "绝大部分或全部时�? },
 ];
 
 // 严重程度解读
 const getSeverity = (indexScore: number) => {
-    if (indexScore < 50) return { level: '正常', color: 'green', description: '无明显抑郁症状' };
+    if (indexScore < 50) return { level: '正常', color: 'green', description: '无明显抑郁症�? };
     if (indexScore < 60) return { level: '轻度抑郁', color: 'yellow', description: '存在轻度抑郁倾向' };
     if (indexScore < 70) return { level: '中度抑郁', color: 'orange', description: '建议寻求专业帮助' };
-    return { level: '重度抑郁', color: 'red', description: '请尽快寻求专业心理治疗' };
+    return { level: '重度抑郁', color: 'red', description: '请尽快寻求专业心理治�? };
 };
 
 interface SDSScaleProps {
@@ -69,13 +69,13 @@ export const SDSScale = ({ onComplete, onClose }: SDSScaleProps) => {
     const [isLoading, setIsLoading] = useState(false);
     const [aiInterpretation, setAiInterpretation] = useState<string | null>(null);
 
-    // 计算原始分和指数分
+    // 计算原始分和指数�?
     const calculateScores = useCallback(() => {
         let rawScore = 0;
         answers.forEach((answer, index) => {
             if (answer === null) return;
             const question = SDS_QUESTIONS[index];
-            // 反向计分题目需要反转分数
+            // 反向计分题目需要反转分�?
             if (question.reverse) {
                 rawScore += (5 - answer);
             } else {
@@ -108,12 +108,12 @@ export const SDSScale = ({ onComplete, onClose }: SDSScaleProps) => {
 
         try {
             // 获取 AI 解读
-            const response = await fetch('http://localhost:8000/api/v1/chat', {
+            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     user_id: 'scale_user',
-                    message: `我完成了SDS抑郁自评量表，指数分是${indexScore}分（${severity.level}）。请根据这个结果给我一些温暖的建议和指导。`,
+                    message: `我完成了SDS抑郁自评量表，指数分�?{indexScore}分（${severity.level}）。请根据这个结果给我一些温暖的建议和指导。`,
                 }),
             });
 
@@ -122,10 +122,10 @@ export const SDSScale = ({ onComplete, onClose }: SDSScaleProps) => {
                 setAiInterpretation(data.reply_text || data.message);
             }
 
-            // 保存到历史记录
+            // 保存到历史记�?
             const token = localStorage.getItem('token');
             if (token) {
-                await fetch(`http://localhost:8000/api/v1/history/save?token=${token}`, {
+                await fetch(`https://neurasense-m409.onrender.com/api/v1/history/save?token=${token}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -162,13 +162,13 @@ export const SDSScale = ({ onComplete, onClose }: SDSScaleProps) => {
             <div className="text-center mb-8">
                 <h2 className="text-2xl font-bold text-warm-800 mb-2">SDS 抑郁自评量表</h2>
                 <p className="text-warm-600">
-                    请根据您 <span className="font-semibold text-purple-600">最近一周</span> 的实际感受选择最符合的选项
+                    请根据您 <span className="font-semibold text-purple-600">最近一�?/span> 的实际感受选择最符合的选项
                 </p>
             </div>
 
             {!isComplete ? (
                 <>
-                    {/* 进度条 */}
+                    {/* 进度�?*/}
                     <div className="mb-8">
                         <div className="flex justify-between text-sm text-warm-500 mb-2">
                             <span>问题 {currentQuestion + 1} / 20</span>
@@ -227,7 +227,7 @@ export const SDSScale = ({ onComplete, onClose }: SDSScaleProps) => {
                             disabled={currentQuestion === 0}
                             className="px-6 py-3 text-warm-600 hover:text-warm-800 disabled:opacity-50"
                         >
-                            ← 上一题
+                            �?上一�?
                         </button>
 
                         {currentQuestion === 19 ? (
@@ -236,7 +236,7 @@ export const SDSScale = ({ onComplete, onClose }: SDSScaleProps) => {
                                 disabled={answers.some(a => a === null) || isLoading}
                                 className="px-8 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl font-semibold hover:from-purple-600 hover:to-purple-700 transition-all disabled:opacity-50"
                             >
-                                {isLoading ? '分析中...' : '完成评估'}
+                                {isLoading ? '分析�?..' : '完成评估'}
                             </button>
                         ) : (
                             <button
@@ -244,7 +244,7 @@ export const SDSScale = ({ onComplete, onClose }: SDSScaleProps) => {
                                 disabled={answers[currentQuestion] === null}
                                 className="px-6 py-3 text-purple-600 hover:text-purple-700 disabled:opacity-50"
                             >
-                                下一题 →
+                                下一�?�?
                             </button>
                         )}
                     </div>
@@ -261,11 +261,11 @@ export const SDSScale = ({ onComplete, onClose }: SDSScaleProps) => {
                             </div>
                             <div className="text-right">
                                 <div className="text-4xl font-bold text-purple-600">{indexScore}</div>
-                                <div className="text-sm text-warm-500">指数分</div>
+                                <div className="text-sm text-warm-500">指数�?/div>
                             </div>
                         </div>
 
-                        {/* 得分仪表盘 */}
+                        {/* 得分仪表�?*/}
                         <div className="mb-6">
                             <div className="flex justify-between text-xs text-warm-500 mb-2">
                                 <span>正常 (&lt;50)</span>
@@ -301,7 +301,7 @@ export const SDSScale = ({ onComplete, onClose }: SDSScaleProps) => {
                                     <span className="text-2xl">💬</span>
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-lg mb-2">小心的专业建议</h3>
+                                    <h3 className="font-bold text-lg mb-2">小心的专业建�?/h3>
                                     <p className="leading-relaxed opacity-95">{aiInterpretation}</p>
                                 </div>
                             </div>
@@ -323,7 +323,7 @@ export const SDSScale = ({ onComplete, onClose }: SDSScaleProps) => {
                             onClick={onClose}
                             className="flex-1 py-4 bg-warm-100 text-warm-700 rounded-xl font-medium hover:bg-warm-200 transition-all"
                         >
-                            ← 返回
+                            �?返回
                         </button>
                         <button
                             onClick={() => {

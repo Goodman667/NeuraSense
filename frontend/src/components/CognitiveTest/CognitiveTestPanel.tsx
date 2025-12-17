@@ -29,13 +29,13 @@ interface CognitiveTestPanelProps {
 const TEST_CONFIG = {
     eye_tracking: {
         name: '眼球追踪测试',
-        description: '用眼睛跟随移动的目标点',
+        description: '用眼睛跟随移动的目标�?,
         duration: 15000,
-        icon: '👁️',
+        icon: '👁�?,
         color: 'from-blue-500 to-cyan-500',
     },
     attention: {
-        name: '注意力集中测试',
+        name: '注意力集中测�?,
         description: '持续注视中心目标',
         duration: 30000,
         icon: '🎯',
@@ -43,9 +43,9 @@ const TEST_CONFIG = {
     },
     reaction: {
         name: '反应速度测试',
-        description: '目标出现时快速点击',
+        description: '目标出现时快速点�?,
         duration: 20000,
-        icon: '⚡',
+        icon: '�?,
         color: 'from-yellow-500 to-orange-500',
     },
 };
@@ -244,18 +244,18 @@ export const CognitiveTestPanel = ({
 
         setIsAnalyzing(true);
         try {
-            const response = await fetch('http://localhost:8000/api/v1/counselor/chat', {
+            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/counselor/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: `请分析以下认知测试结果并给出专业建议：
+                    message: `请分析以下认知测试结果并给出专业建议�?
 测试类型: ${TEST_CONFIG[result.testType].name}
-得分: ${result.score}分
-准确率: ${result.accuracy}%
+得分: ${result.score}�?
+准确�? ${result.accuracy}%
 ${result.testType === 'reaction' ? `平均反应时间: ${result.averageTime}ms` : ''}
 
 请从以下几个方面分析（用JSON格式回复）：
-1. analysis: 对测试结果的专业解读 (50-80字)
+1. analysis: 对测试结果的专业解读 (50-80�?
 2. cognitive_score: 认知功能评分 (0-100)
 3. recommendations: 3条改善建议`,
                     user_id: 'cognitive_test',
@@ -338,7 +338,7 @@ ${result.testType === 'reaction' ? `平均反应时间: ${result.averageTime}ms`
                         <div className="text-6xl font-bold text-indigo-500 animate-pulse">
                             {countdown}
                         </div>
-                        <p className="mt-4 text-warm-600">准备开始...</p>
+                        <p className="mt-4 text-warm-600">准备开�?..</p>
                     </div>
                 )}
 
@@ -370,7 +370,7 @@ ${result.testType === 'reaction' ? `平均反应时间: ${result.averageTime}ms`
                                         <div className="w-4 h-4 bg-green-500 rounded-full" />
                                     </div>
                                     <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-sm text-warm-600">
-                                        注视中心点
+                                        注视中心�?
                                     </div>
                                 </div>
                             </div>
@@ -398,7 +398,7 @@ ${result.testType === 'reaction' ? `平均反应时间: ${result.averageTime}ms`
                                 <span className="text-sm text-warm-500">完成: {reactionTimes.length}/10</span>
                             )}
                             {selectedTest === 'attention' && (
-                                <span className="text-sm text-warm-500">专注度: {attentionScore}%</span>
+                                <span className="text-sm text-warm-500">专注�? {attentionScore}%</span>
                             )}
                         </div>
                     </div>
@@ -409,7 +409,7 @@ ${result.testType === 'reaction' ? `平均反应时间: ${result.averageTime}ms`
                     <div className="space-y-4">
                         <div className="text-center">
                             <div className="text-6xl mb-2">{TEST_CONFIG[result.testType].icon}</div>
-                            <h3 className="text-lg font-bold text-warm-800">测试完成！</h3>
+                            <h3 className="text-lg font-bold text-warm-800">测试完成�?/h3>
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
@@ -423,7 +423,7 @@ ${result.testType === 'reaction' ? `平均反应时间: ${result.averageTime}ms`
                                 <div className={`text-3xl font-bold ${getScoreColor(result.accuracy)}`}>
                                     {result.accuracy.toFixed(0)}%
                                 </div>
-                                <div className="text-xs text-purple-400">准确率</div>
+                                <div className="text-xs text-purple-400">准确�?/div>
                             </div>
                         </div>
 
@@ -448,7 +448,7 @@ ${result.testType === 'reaction' ? `平均反应时间: ${result.averageTime}ms`
                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                                     </svg>
-                                    <span>分析中...</span>
+                                    <span>分析�?..</span>
                                 </>
                             ) : (
                                 <>
@@ -502,7 +502,7 @@ ${result.testType === 'reaction' ? `平均反应时间: ${result.averageTime}ms`
                                     <ul className="space-y-1">
                                         {aiResult.recommendations.map((rec, i) => (
                                             <li key={i} className="text-sm text-green-600 flex items-start">
-                                                <span className="mr-2">•</span>
+                                                <span className="mr-2">�?/span>
                                                 <span>{rec}</span>
                                             </li>
                                         ))}
