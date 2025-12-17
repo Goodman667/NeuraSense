@@ -1254,14 +1254,6 @@ function App() {
                                     <h4 className="text-lg font-semibold text-warm-800 mb-2">3D 呼吸球</h4>
                                     <p className="text-warm-600 text-sm">WebGL 粒子球引导同步呼吸，激活副交感神经，快速缓解焦虑</p>
                                 </div>
-
-                                <div className="bg-white/80 backdrop-blur rounded-2xl p-6 border border-rose-200/50 hover:shadow-xl transition-all cursor-pointer group" onClick={() => setCurrentView('breathing')}>
-                                    <div className="w-14 h-14 bg-gradient-to-br from-rose-100 to-rose-200 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                        <span className="text-3xl">🫁</span>
-                                    </div>
-                                    <h4 className="text-lg font-semibold text-warm-800 mb-2">Avatar 呼吸引导</h4>
-                                    <p className="text-warm-600 text-sm">跟随虚拟形象进行 4-7-8 呼吸练习，视觉化引导更轻松</p>
-                                </div>
                             </div>
                         </div>
 
