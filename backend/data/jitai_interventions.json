@@ -1,0 +1,1180 @@
+[
+  {
+    "id": "07e81a19-7c07-42bb-826b-1a70a75439d8",
+    "user_id": "user_1765984501502",
+    "timestamp": "2025-12-17T23:15:05.180527",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "81c9ec85-1140-4683-9f2f-3995dfd293cc",
+    "user_id": "user_1765984501469",
+    "timestamp": "2025-12-17T23:15:05.214725",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "28eccd2f-d932-452b-a8a5-fde4692de5aa",
+    "user_id": "user_1765984501502",
+    "timestamp": "2025-12-17T23:15:05.229768",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "86a37d1c-f64b-40d4-9c65-3c7ea4a0aa86",
+    "user_id": "user_1765984501455",
+    "timestamp": "2025-12-17T23:15:05.245958",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "cbed5923-c20d-43cf-811b-3572d29d5a13",
+    "user_id": "user_1765984501459",
+    "timestamp": "2025-12-17T23:15:05.263204",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "344f9888-eeea-4673-bf5a-a95971bc4f14",
+    "user_id": "user_1765984501454",
+    "timestamp": "2025-12-17T23:15:05.280712",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "f9bae74b-e2de-4ac3-9b33-9e6c2d2c15d4",
+    "user_id": "user_1765984501455",
+    "timestamp": "2025-12-17T23:15:05.300859",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "521d482f-7499-4b17-985f-de21b70ff54a",
+    "user_id": "user_1765984501469",
+    "timestamp": "2025-12-17T23:15:05.317938",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "95d9378b-25e7-4832-85d2-44c9410153ec",
+    "user_id": "user_1765984501454",
+    "timestamp": "2025-12-17T23:15:05.334871",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "1c75b365-8a43-4398-8b54-5f6c228fce46",
+    "user_id": "user_1765984534514",
+    "timestamp": "2025-12-17T23:15:34.809149",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "50426f60-1c21-44a7-93a5-b80be6acdd43",
+    "user_id": "user_1765984534514",
+    "timestamp": "2025-12-17T23:15:34.833172",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": false,
+    "post_mood": null,
+    "feedback_time": "2025-12-17T23:16:22.750922"
+  },
+  {
+    "id": "f928e1c2-318e-4af8-a101-5acd8d6a9801",
+    "user_id": "user_1765984501467",
+    "timestamp": "2025-12-17T23:18:46.090855",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "1c341adb-651c-4ca8-adce-01021d419a10",
+    "user_id": "user_1765984501461",
+    "timestamp": "2025-12-17T23:18:46.107786",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "63673558-0931-4995-850a-526213ea98c3",
+    "user_id": "user_1765984501469",
+    "timestamp": "2025-12-17T23:18:46.123062",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "75beef32-79e3-401a-8638-6fd76d424c87",
+    "user_id": "user_1765984501455",
+    "timestamp": "2025-12-17T23:18:46.138209",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "ed00c587-2398-4ea9-acee-53214adee145",
+    "user_id": "user_1765984534514",
+    "timestamp": "2025-12-17T23:18:46.168317",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "c36d081b-c3e7-4363-94a4-03d1335829fc",
+    "user_id": "user_1765984501454",
+    "timestamp": "2025-12-17T23:18:46.670840",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "ed525ded-4953-4d6c-80c9-61a2ec3bd2be",
+    "user_id": "user_1765984501459",
+    "timestamp": "2025-12-17T23:18:46.686693",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "9b7f2318-cad5-4495-9d06-8ca69c2718d9",
+    "user_id": "user_1765984501502",
+    "timestamp": "2025-12-17T23:18:46.702872",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "44929a4a-c052-4a6d-a8c6-be99b586804b",
+    "user_id": "user_1765984501461",
+    "timestamp": "2025-12-17T23:19:00.842469",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "3302d050-f32e-4e3d-a57e-836056508e68",
+    "user_id": "user_1765984501467",
+    "timestamp": "2025-12-17T23:19:00.863094",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "b18d1e16-0da8-496f-8911-9e35a7dc5149",
+    "user_id": "user_1765984534514",
+    "timestamp": "2025-12-17T23:19:01.313123",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": false,
+    "post_mood": null,
+    "feedback_time": "2025-12-17T23:19:14.557079"
+  },
+  {
+    "id": "e3dc2e06-0f28-4d14-8fa1-b740fbaab11e",
+    "user_id": "user_1765984501455",
+    "timestamp": "2025-12-17T23:19:01.332817",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "7964c601-f803-4e25-a8b7-d4f943c7c248",
+    "user_id": "user_1765984501454",
+    "timestamp": "2025-12-17T23:19:01.794339",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "c48cc616-8748-46f7-9cfc-cc5ebe852694",
+    "user_id": "user_1765984501502",
+    "timestamp": "2025-12-17T23:19:01.814625",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "68e5f97c-8d53-4db2-b291-6a228a98b2ae",
+    "user_id": "user_1765984501469",
+    "timestamp": "2025-12-17T23:19:01.844959",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "1f4b5379-c4c8-48b3-95c3-c992d2ab4600",
+    "user_id": "user_1765984501459",
+    "timestamp": "2025-12-17T23:19:01.889521",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "1e2471c7-2b62-411f-aced-6eae67b9d716",
+    "user_id": "user_1765984501461",
+    "timestamp": "2025-12-17T23:24:01.163107",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "e2b05ae1-c7a4-4058-b891-69af385be38c",
+    "user_id": "user_1765984501467",
+    "timestamp": "2025-12-17T23:24:01.176298",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "285f748f-805b-47db-b09a-a66c6b9f6f00",
+    "user_id": "user_1765984534514",
+    "timestamp": "2025-12-17T23:24:01.335232",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "62ad5fd8-f678-4a5a-b02f-1a6f7a6f5b5c",
+    "user_id": "user_1765984501455",
+    "timestamp": "2025-12-17T23:24:01.418753",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "a66ddf5e-e152-41e1-ab54-45e2775c9b47",
+    "user_id": "user_1765984501502",
+    "timestamp": "2025-12-17T23:24:01.812921",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "2513de27-9279-4b13-97d0-c7d53ef4b409",
+    "user_id": "user_1765984501454",
+    "timestamp": "2025-12-17T23:24:01.846343",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "5be7514d-d548-42f5-8031-4ca57b371bb5",
+    "user_id": "user_1765984501469",
+    "timestamp": "2025-12-17T23:24:01.883919",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "01ae3441-c0e0-4854-980a-5f1fb0c77a2b",
+    "user_id": "user_1765984501459",
+    "timestamp": "2025-12-17T23:24:01.901531",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "38d4f557-899c-4f13-ace2-ffc82ad2ba18",
+    "user_id": "user_1765989014697",
+    "timestamp": "2025-12-18T00:30:16.073168",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "d94093a1-377a-4b0c-8a5d-f849d67c682f",
+    "user_id": "user_1765989014697",
+    "timestamp": "2025-12-18T00:30:16.120052",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": false,
+    "post_mood": null,
+    "feedback_time": "2025-12-18T00:30:19.584803"
+  },
+  {
+    "id": "95180350-acf9-4e98-a2cd-11e15656947d",
+    "user_id": "user_1765989254644",
+    "timestamp": "2025-12-18T00:34:15.340629",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "f9bb27aa-b71f-4789-88d7-0a117ba96acf",
+    "user_id": "user_1765989254644",
+    "timestamp": "2025-12-18T00:34:15.355972",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "f991ed0a-a32d-415e-9712-108180e9351d",
+    "user_id": "user_1765989254619",
+    "timestamp": "2025-12-18T00:34:16.726156",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "80f992c3-3959-4939-8169-89f5473e744d",
+    "user_id": "user_1765989254619",
+    "timestamp": "2025-12-18T00:34:16.738600",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "44f1708d-8867-4435-a561-8be6598a88a6",
+    "user_id": "user_1765990002067",
+    "timestamp": "2025-12-18T00:51:42.422550",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "45841a9a-0c34-49a8-b035-d0a198f797fb",
+    "user_id": "user_1765990002159",
+    "timestamp": "2025-12-18T00:51:42.439642",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "68e8f1f5-bff3-4cd6-b016-58ab85225c96",
+    "user_id": "user_1765990002305",
+    "timestamp": "2025-12-18T00:51:42.460143",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "cd601283-0f20-47fc-9b8b-bc887638cfc7",
+    "user_id": "user_1765990012515",
+    "timestamp": "2025-12-18T00:51:52.896130",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "7d50f42c-00d7-4fcc-9710-e18c5bc0e214",
+    "user_id": "user_1765990319031",
+    "timestamp": "2025-12-18T00:51:59.089729",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": false,
+    "post_mood": null,
+    "feedback_time": "2025-12-18T00:52:00.558237"
+  },
+  {
+    "id": "025ae592-6a78-4d1d-8d3a-de5ee09e2be2",
+    "user_id": "user_1765990319031",
+    "timestamp": "2025-12-18T00:51:59.111299",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "19f4c19b-d8e9-411f-b848-f410649489b1",
+    "user_id": "user_1765990521763",
+    "timestamp": "2025-12-18T00:55:22.115230",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "4806a9f6-6c00-4641-870b-d2cae82461b6",
+    "user_id": "user_1765990521763",
+    "timestamp": "2025-12-18T00:55:22.135897",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": false,
+    "post_mood": null,
+    "feedback_time": "2025-12-18T00:55:23.515542"
+  },
+  {
+    "id": "ff77b7ab-cb96-4ad2-9091-24b5e5adb21c",
+    "user_id": "user_1765990002067",
+    "timestamp": "2025-12-18T00:56:42.420330",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "103984cc-1fc1-45bd-b300-51ea476bb03c",
+    "user_id": "user_1765990002159",
+    "timestamp": "2025-12-18T00:56:42.438127",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "c5000741-347b-4141-878e-92b6de41fec3",
+    "user_id": "user_1765990002305",
+    "timestamp": "2025-12-18T00:56:42.461299",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "90eaee40-c8f9-4509-8647-0a6e46c38af0",
+    "user_id": "user_1765990012515",
+    "timestamp": "2025-12-18T00:56:52.889271",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "74f9e16a-e571-4460-8758-0028592d1a48",
+    "user_id": "user_1765990521763",
+    "timestamp": "2025-12-18T01:00:22.141530",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "ade7fa23-99f4-4509-b10c-8bd5c1657cc4",
+    "user_id": "user_1765990002067",
+    "timestamp": "2025-12-18T01:01:42.411166",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "35b7f61e-40a7-4e39-a578-09adf5ffd442",
+    "user_id": "user_1765990002159",
+    "timestamp": "2025-12-18T01:01:42.425505",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "79855bfe-c81b-47fd-ba8a-380e18fe500e",
+    "user_id": "user_1765990002305",
+    "timestamp": "2025-12-18T01:01:42.464895",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "eb79cb7c-2d10-4a8f-beb2-d9a47e213613",
+    "user_id": "user_1765990012515",
+    "timestamp": "2025-12-18T01:01:52.891839",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "45649e10-e578-4ffc-8344-ada90be64c03",
+    "user_id": "user_1765990521763",
+    "timestamp": "2025-12-18T01:05:22.132105",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "e418a1bb-279d-4ab9-a75c-f450dee94edd",
+    "user_id": "user_1765990002067",
+    "timestamp": "2025-12-18T01:06:42.422336",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "741f5656-f95c-49e8-ab70-d99a5b0266e9",
+    "user_id": "user_1765990002159",
+    "timestamp": "2025-12-18T01:06:42.438332",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "c54c787d-4817-4567-8254-c88e99e1136a",
+    "user_id": "user_1765990002305",
+    "timestamp": "2025-12-18T01:06:42.462398",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "d28a9863-0298-4757-a238-7bdb9a0be339",
+    "user_id": "user_1765990012515",
+    "timestamp": "2025-12-18T01:06:52.888511",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "f1612937-9866-4bb8-babf-b7763ccc6a10",
+    "user_id": "user_1765990002067",
+    "timestamp": "2025-12-18T01:08:26.564563",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "32f8cab4-60ce-48ff-ad95-749aa3558518",
+    "user_id": "user_1765990002159",
+    "timestamp": "2025-12-18T01:08:26.584371",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "59978dce-cabf-4473-8cf3-0d7939a2b97a",
+    "user_id": "user_1765990012515",
+    "timestamp": "2025-12-18T01:08:26.603410",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "6848aee1-bd72-4649-af97-efadf197ddbe",
+    "user_id": "user_1765990002305",
+    "timestamp": "2025-12-18T01:08:26.623948",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "35ef193f-6c03-4194-9e91-f739a223a4f4",
+    "user_id": "user_1765990521763",
+    "timestamp": "2025-12-18T01:08:26.642964",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "8dd8e2a1-ce0e-4f30-9e18-2610ae9a5f89",
+    "user_id": "user_1765991449506",
+    "timestamp": "2025-12-18T01:10:50.089472",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "26622253-bcda-4c61-af33-59c2743537df",
+    "user_id": "user_1765991449506",
+    "timestamp": "2025-12-18T01:10:50.113986",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "cdcb0140-a50b-46c1-adfa-0a37c26bf51f",
+    "user_id": "user_1765990002067",
+    "timestamp": "2025-12-18T01:13:26.577463",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "4127f3ec-51fa-406f-9885-97eb3b709421",
+    "user_id": "user_1765990002159",
+    "timestamp": "2025-12-18T01:13:26.593772",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "1e2db3f9-1ae1-4050-9b88-2e0f8b4d07ff",
+    "user_id": "user_1765990012515",
+    "timestamp": "2025-12-18T01:13:26.609014",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "862efc21-ff5f-4e07-a098-e0237914a18c",
+    "user_id": "user_1765990002305",
+    "timestamp": "2025-12-18T01:13:26.624849",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "508fce4e-482c-487f-b90e-0744249a3665",
+    "user_id": "user_1765990521763",
+    "timestamp": "2025-12-18T01:13:26.642410",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "f64c3248-128e-4d4e-bcf4-d7da02f465ef",
+    "user_id": "user_1765991646853",
+    "timestamp": "2025-12-18T01:14:06.893621",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "b1481fc1-79c1-4cf6-8e6c-5e32de69e2f1",
+    "user_id": "user_1765991646853",
+    "timestamp": "2025-12-18T01:14:06.913534",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "052e8e9c-ef18-4476-85fe-8841fa48ddfb",
+    "user_id": "user_1765991905395",
+    "timestamp": "2025-12-18T01:18:25.783966",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "19a28d92-e67b-4bba-82c8-f2995e6b1343",
+    "user_id": "user_1765991905395",
+    "timestamp": "2025-12-18T01:18:25.800108",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "4f0639f7-3615-4076-8040-bcee25411346",
+    "user_id": "user_1765990002067",
+    "timestamp": "2025-12-18T01:18:26.254668",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "998d78d0-5a32-40c8-a333-8ec4c0a6d022",
+    "user_id": "user_1765990002159",
+    "timestamp": "2025-12-18T01:18:26.274756",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "d6e5654e-2793-4567-ba05-c07c50557f7a",
+    "user_id": "user_1765990012515",
+    "timestamp": "2025-12-18T01:18:26.397020",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "7461d83a-f09f-4524-b4ba-88dba9ea109f",
+    "user_id": "user_1765990002305",
+    "timestamp": "2025-12-18T01:18:26.457149",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "e86fa597-8874-42fd-99a9-a3342b9bd65f",
+    "user_id": "user_1765990521763",
+    "timestamp": "2025-12-18T01:18:26.481546",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "d0c84d31-c311-47d1-b761-519ea01be2ad",
+    "user_id": "user_1765992022627",
+    "timestamp": "2025-12-18T01:20:23.002378",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "cd9cdf01-7a22-430b-bb41-1c5a1cf0b392",
+    "user_id": "user_1765992022627",
+    "timestamp": "2025-12-18T01:20:23.018333",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": false,
+    "post_mood": null,
+    "feedback_time": "2025-12-18T01:20:35.544408"
+  },
+  {
+    "id": "6ad43da7-2772-4c1c-889d-055cf9a204e8",
+    "user_id": "user_1765992047927",
+    "timestamp": "2025-12-18T01:20:48.197750",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "6b8023bb-c970-4868-bffe-2920089c4ca9",
+    "user_id": "user_1765992047927",
+    "timestamp": "2025-12-18T01:20:48.224804",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": false,
+    "post_mood": null,
+    "feedback_time": "2025-12-18T01:20:50.685484"
+  },
+  {
+    "id": "511121d7-6644-4c00-a40b-93117b01a54f",
+    "user_id": "user_1766001420552",
+    "timestamp": "2025-12-18T03:57:01.082952",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "f5dc3628-a75d-47db-9ba0-fc0676227c1e",
+    "user_id": "user_1766001420552",
+    "timestamp": "2025-12-18T03:57:01.116018",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": false,
+    "post_mood": null,
+    "feedback_time": "2025-12-18T03:57:19.915923"
+  }
+]

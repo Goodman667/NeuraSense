@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Dark Mode Support */
+:root {
+  --bg-primary: 249 250 251;
+  --bg-secondary: 255 255 255;
+  --text-primary: 17 24 39;
+  --text-secondary: 107 114 128;
+  --border-color: 229 231 235;
+}
+
+.dark {
+  --bg-primary: 17 24 39;
+  --bg-secondary: 31 41 55;
+  --text-primary: 249 250 251;
+  --text-secondary: 156 163 175;
+  --border-color: 55 65 81;
+}
+
+/* Custom base styles for PsyAntigravity */
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    @apply antialiased transition-colors duration-300;
+    background-color: rgb(var(--bg-primary));
+    color: rgb(var(--text-primary));
+  }
+}
+
+/* Custom component styles */
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors duration-200;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 bg-calm-600 text-white font-medium rounded-lg hover:bg-calm-700 focus:outline-none focus:ring-2 focus:ring-calm-500 focus:ring-offset-2 transition-colors duration-200;
+  }
+
+  .card {
+    @apply rounded-xl shadow-sm p-6 transition-colors duration-300;
+    background-color: rgb(var(--bg-secondary));
+    border: 1px solid rgb(var(--border-color));
+  }
+
+  .assessment-card {
+    @apply card hover:shadow-md transition-all duration-200 cursor-pointer;
+  }
+
+  /* Dark mode specific overrides */
+  .dark .bg-white {
+    background-color: rgb(var(--bg-secondary));
+  }
+
+  .dark .bg-gray-50,
+  .dark .bg-warm-50 {
+    background-color: rgb(var(--bg-primary));
+  }
+
+  .dark .text-gray-900,
+  .dark .text-warm-800 {
+    color: rgb(var(--text-primary));
+  }
+
+  .dark .text-gray-600,
+  .dark .text-warm-600 {
+    color: rgb(var(--text-secondary));
+  }
+
+  .dark .border-gray-100,
+  .dark .border-warm-100,
+  .dark .border-warm-200 {
+    border-color: rgb(var(--border-color));
+  }
+}
+
+/* Custom utility styles */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
