@@ -1017,12 +1017,7 @@ function App() {
                             >
                                 心理咨询
                             </button>
-                            <button
-                                className="px-4 py-2 bg-gradient-to-r from-primary-500 to-accent-500 text-white rounded-lg font-medium hover:from-primary-600 hover:to-accent-600 transition-all shadow-md shadow-primary-200 hover:shadow-lg"
-                                onClick={startDemoMode}
-                            >
-                                完整演示
-                            </button>
+
 
                             {/* 深色模式切换 */}
                             <button
@@ -1252,7 +1247,7 @@ function App() {
                                     recommended={phenotyping.result?.features.physiologicalStressIndex! > 0.6}
                                 />
 
-                                <div className="bg-white/80 backdrop-blur rounded-2xl p-6 border border-warm-200/50 hover:shadow-xl transition-all cursor-pointer group" onClick={startDemoMode}>
+                                <div className="bg-white/80 backdrop-blur rounded-2xl p-6 border border-warm-200/50 hover:shadow-xl transition-all cursor-pointer group" onClick={() => setCurrentView('breathing')}>
                                     <div className="w-14 h-14 bg-gradient-to-br from-violet-100 to-purple-200 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                                         <span className="text-3xl">🔮</span>
                                     </div>
@@ -1260,7 +1255,7 @@ function App() {
                                     <p className="text-warm-600 text-sm">WebGL 粒子球引导同步呼吸，激活副交感神经，快速缓解焦虑</p>
                                 </div>
 
-                                <div className="bg-white/80 backdrop-blur rounded-2xl p-6 border border-rose-200/50 hover:shadow-xl transition-all cursor-pointer group" onClick={startDemoMode}>
+                                <div className="bg-white/80 backdrop-blur rounded-2xl p-6 border border-rose-200/50 hover:shadow-xl transition-all cursor-pointer group" onClick={() => setCurrentView('breathing')}>
                                     <div className="w-14 h-14 bg-gradient-to-br from-rose-100 to-rose-200 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                                         <span className="text-3xl">🫁</span>
                                     </div>
