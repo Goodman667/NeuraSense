@@ -8,7 +8,7 @@
  * Emotion types supported by the virtual avatar.
  * Used to trigger corresponding motion animations.
  */
-export type EmotionType = 'happy' | 'sad' | 'neutral' | 'surprised' | 'angry';
+export type EmotionType = 'happy' | 'sad' | 'neutral' | 'surprised' | 'angry' | 'anxious' | 'confused' | 'calm';
 
 /**
  * Motion group names available in the Live2D model.

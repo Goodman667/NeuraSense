@@ -24,6 +24,9 @@ const EMOTION_MOTION_MAP: Record<EmotionType, { group: string; index?: number }>
     neutral: { group: 'Idle', index: 0 },
     surprised: { group: 'TapBody', index: 1 },
     angry: { group: 'TapBody', index: 2 },
+    anxious: { group: 'Idle', index: 1 },
+    confused: { group: 'TapBody', index: 1 },
+    calm: { group: 'Idle', index: 0 },
 };
 
 /**
@@ -261,16 +264,100 @@ export const VirtualAvatar = forwardRef<VirtualAvatarRef, VirtualAvatarProps>(
             }
         }, []);
 
+        // Emotion state validation
+        const [currentEmotion, setCurrentEmotion] = useState<EmotionType>('neutral');
+
+        // Parameter definition for emotions
+        const EMOTION_PARAMS: Record<EmotionType, Record<string, number>> = {
+            neutral: {
+                'ParamMouthForm': 0,
+                'ParamBrowLY': 0,
+                'ParamBrowRY': 0,
+                'ParamBrowLAngle': 0,
+                'ParamBrowRAngle': 0,
+            },
+            happy: {
+                'ParamMouthForm': 1,
+                'ParamCheek': 1,
+                'ParamEyeLOpen': 1, // Ensure eyes are open/happy
+                'ParamEyeROpen': 1,
+                'ParamBrowLY': 0.2,
+                'ParamBrowRY': 0.2
+            },
+            sad: {
+                'ParamMouthForm': -1,
+                'ParamBrowLY': -0.4,
+                'ParamBrowRY': -0.4,
+                'ParamBrowLAngle': 0.1,
+                'ParamBrowRAngle': 0.1,
+                'ParamEyeLOpen': 0.8,
+                'ParamEyeROpen': 0.8,
+            },
+            angry: {
+                'ParamMouthForm': -0.5,
+                'ParamBrowLAngle': 0.6,
+                'ParamBrowRAngle': 0.6,
+                'ParamEyeLOpen': 0.8,
+                'ParamEyeROpen': 0.8,
+            },
+            surprised: {
+                'ParamMouthForm': 0,
+                'ParamEyeLOpen': 1.2,
+                'ParamEyeROpen': 1.2,
+                'ParamBrowLY': 0.5,
+                'ParamBrowRY': 0.5,
+            },
+            anxious: {
+                'ParamBrowLY': -0.4,
+                'ParamBrowRY': -0.4,
+                'ParamMouthForm': -0.5
+            },
+            confused: {
+                'ParamBrowLY': 0.2,
+                'ParamBrowRY': -0.2,
+            },
+            calm: {
+                'ParamMouthForm': 0,
+            }
+        };
+
+        // Enforce expression parameters every frame
+        useEffect(() => {
+            if (!modelRef.current || !appRef.current) return;
+
+            const enforceExpression = () => {
+                const model = modelRef.current;
+                if (!model || !model.internalModel || !model.internalModel.coreModel) return;
+
+                const core = model.internalModel.coreModel;
+                const params = EMOTION_PARAMS[currentEmotion] || EMOTION_PARAMS.neutral;
+
+                // Apply all defined parameters for the current emotion
+                Object.entries(params).forEach(([id, value]) => {
+                    // Start checking if setParameterValueById exists
+                    if (core.setParameterValueById) {
+                        core.setParameterValueById(id, value);
+                    }
+                });
+            };
+
+            // Add to ticker
+            appRef.current.ticker.add(enforceExpression);
+
+            return () => {
+                if (appRef.current && appRef.current.ticker) {
+                    appRef.current.ticker.remove(enforceExpression);
+                }
+            };
+        }, [currentEmotion, isModelLoaded]);
+
         /**
          * Set expression.
          */
         const setExpression = useCallback((expression: string) => {
-            if (!modelRef.current) return;
-
-            try {
-                modelRef.current.expression(expression);
-            } catch (error) {
-                console.warn(`Failed to set expression ${expression}:`, error);
+            // Map string expression to EmotionType if valid
+            if (Object.keys(EMOTION_PARAMS).includes(expression)) {
+                setCurrentEmotion(expression as EmotionType);
             }
         }, []);
 
@@ -279,6 +366,10 @@ export const VirtualAvatar = forwardRef<VirtualAvatarRef, VirtualAvatarProps>(
          */
         const speak = useCallback(
             async (text: string, emotion: EmotionType = 'neutral'): Promise<void> => {
+                // Update current emotion state
+                setCurrentEmotion(emotion);
+
+                // ... rest of the logic ...
                 // 将情绪映射到 TTS 情感
                 const emotionMap: Record<string, string> = {
                     neutral: 'gentle',
@@ -290,7 +381,7 @@ export const VirtualAvatar = forwardRef<VirtualAvatarRef, VirtualAvatarProps>(
                 };
                 const ttsEmotion = emotionMap[emotion] || 'gentle';
 
-                // Trigger emotion motion
+                // Trigger emotion motion (body movement)
                 if (modelRef.current) {
                     const motionConfig = EMOTION_MOTION_MAP[emotion] || EMOTION_MOTION_MAP.neutral;
                     triggerMotion(motionConfig.group as MotionGroup, motionConfig.index);
@@ -330,6 +421,8 @@ export const VirtualAvatar = forwardRef<VirtualAvatarRef, VirtualAvatarProps>(
                             audio.onended = () => {
                                 setIsSpeaking(false);
                                 setMouthOpen(0);
+                                // Optional: Reset emotion after speaking?
+                                // setCurrentEmotion('neutral'); // Uncomment if desired
                                 if (lipSyncIntervalRef.current) {
                                     clearInterval(lipSyncIntervalRef.current);
                                     lipSyncIntervalRef.current = null;
@@ -407,7 +500,7 @@ export const VirtualAvatar = forwardRef<VirtualAvatarRef, VirtualAvatarProps>(
                     window.speechSynthesis.speak(utterance);
                 });
             },
-            [enableLipSync, triggerMotion, onSpeechStart, onSpeechEnd]
+            [enableLipSync, triggerMotion, onSpeechStart, onSpeechEnd, currentEmotion]
         );
 
         /**
