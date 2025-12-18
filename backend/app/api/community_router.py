@@ -265,10 +265,15 @@ async def get_messages(user_id: str):
     """Get private messages for a user (grouped by conversation)"""
     if _supabase:
         try:
-            # Get messages where user is sender or receiver
-            response = _supabase.table("private_messages").select("*").or_(f"from_user.eq.{user_id},to_user.eq.{user_id}").order("created_at", desc=False).execute()
-            messages = response.data or []
-            return {"success": True, "messages": messages}
+            # Fetch sent and received messages separately to avoid OR syntax issues with special chars
+            sent = _supabase.table("private_messages").select("*").eq("from_user", user_id).execute()
+            received = _supabase.table("private_messages").select("*").eq("to_user", user_id).execute()
+            
+            all_messages = (sent.data or []) + (received.data or [])
+            # Sort by created_at asc
+            all_messages.sort(key=lambda x: x.get("created_at", ""))
+            
+            return {"success": True, "messages": all_messages}
         except Exception as e:
             print(f"Supabase error loading messages: {e}")
             return {"success": False, "messages": []}
