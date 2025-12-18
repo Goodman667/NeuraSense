@@ -47,10 +47,31 @@ export const translations: Translations = {
     'chat.voice': { zh: '语音输入', en: 'Voice Input' },
 
     // Community
-    'community.title': { zh: '温暖社区', en: 'Community' },
+    'community.title': { zh: '温暖社区', en: 'Warm Community' },
     'community.post': { zh: '发布动态', en: 'Post' },
-    'community.leaderboard': { zh: '排行榜', en: 'Leaderboard' },
-    'community.messages': { zh: '私信', en: 'Messages' },
+    'community.feed': { zh: '📱 动态', en: '📱 Feed' },
+    'community.leaderboard': { zh: '🏆 排行榜', en: '🏆 Leaderboard' },
+    'community.messages': { zh: '💬 私信', en: '💬 Messages' },
+    'community.subtitle': { zh: '匿名分享，传递正能量', en: 'Share anonymously, spread positivity' },
+    'community.publishBtn': { zh: '✨ 发布动态', en: '✨ Publish' },
+    'community.placeholder': { zh: '分享一件让你开心的事，传递温暖给他人...', en: 'Share something that makes you happy...' },
+    'community.publishing': { zh: '发布中...', en: 'Publishing...' },
+    'community.publish': { zh: '发布', en: 'Publish' },
+    'community.loading': { zh: '加载中...', en: 'Loading...' },
+    'community.empty': { zh: '还没有动态，来发布第一条吧！', en: 'No posts yet, be the first!' },
+    'community.like': { zh: '点赞', en: 'Like' },
+    'community.reply': { zh: '回复', en: 'Reply' },
+    'community.message': { zh: '私信', en: 'Message' },
+    'community.replies': { zh: '回复', en: 'replies' },
+    'community.replyPlaceholder': { zh: '写下你的回复...', en: 'Write your reply...' },
+    'community.replyBtn': { zh: '回复', en: 'Reply' },
+    'community.footer': { zh: '🌟 在这里，每一句话都可能温暖另一个人', en: '🌟 Every word here can warm another heart' },
+
+    // Categories
+    'category.all': { zh: '全部', en: 'All' },
+    'category.gratitude': { zh: '感恩', en: 'Gratitude' },
+    'category.encouragement': { zh: '鼓励', en: 'Encouragement' },
+    'category.achievement': { zh: '成就', en: 'Achievement' },
 
     // Breathing
     'breathing.title': { zh: '呼吸训练', en: 'Breathing Exercise' },

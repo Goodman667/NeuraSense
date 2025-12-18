@@ -32,7 +32,6 @@ DEFAULT_POSTS = [
         "likes": 12,
         "category": "gratitude",
         "created_at": datetime.now().isoformat(),
-        "author": "小太阳",
         "replies": []
     },
     {
@@ -41,7 +40,6 @@ DEFAULT_POSTS = [
         "likes": 8,
         "category": "achievement",
         "created_at": datetime.now().isoformat(),
-        "author": "坚持帝",
         "replies": []
     },
     {
@@ -50,7 +48,6 @@ DEFAULT_POSTS = [
         "likes": 15,
         "category": "encouragement",
         "created_at": datetime.now().isoformat(),
-        "author": "正能量派",
         "replies": []
     },
     {
@@ -59,7 +56,6 @@ DEFAULT_POSTS = [
         "likes": 9,
         "category": "gratitude",
         "created_at": datetime.now().isoformat(),
-        "author": "暖心人",
         "replies": []
     },
     {
@@ -68,7 +64,6 @@ DEFAULT_POSTS = [
         "likes": 20,
         "category": "achievement",
         "created_at": datetime.now().isoformat(),
-        "author": "深呼吸",
         "replies": []
     },
 ]
@@ -158,7 +153,6 @@ async def create_post(post: NewPost) -> PostResponse:
         "likes": 0,
         "category": post.category,
         "created_at": datetime.now().isoformat(),
-        "author": "匿名用户",
         "replies": [],
     }
     

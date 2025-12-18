@@ -5,6 +5,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
+import { useI18n } from '../../i18n';
 
 interface Reply {
     id: string;
@@ -19,7 +20,6 @@ interface CommunityPost {
     likes: number;
     createdAt?: string;
     created_at?: string;
-    author?: string;
     category: 'gratitude' | 'encouragement' | 'achievement';
     replies: Reply[];
 }
@@ -27,7 +27,7 @@ interface CommunityPost {
 interface CommunityFeedProps {
     maxPosts?: number;
     fullPage?: boolean;
-    onStartMessage?: (userId: string) => void;
+    onStartMessage?: () => void;
 }
 
 const CATEGORY_INFO = {
@@ -53,6 +53,7 @@ const timeAgo = (dateStr: string): string => {
 };
 
 export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage }: CommunityFeedProps) => {
+    const { t } = useI18n();
     const [posts, setPosts] = useState<CommunityPost[]>([]);
     const [loading, setLoading] = useState(true);
     const [showCompose, setShowCompose] = useState(false);
@@ -183,15 +184,15 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage 
                     <div className="flex items-center space-x-3">
                         <span className="text-3xl">💜</span>
                         <div>
-                            <h3 className="font-bold text-xl">温暖社区</h3>
-                            <p className="text-white/80 text-sm">匿名分享，传递正能量</p>
+                            <h3 className="font-bold text-xl">{t('community.title')}</h3>
+                            <p className="text-white/80 text-sm">{t('community.subtitle')}</p>
                         </div>
                     </div>
                     <button
                         onClick={() => setShowCompose(!showCompose)}
                         className="px-4 py-2 bg-white text-purple-600 rounded-xl font-medium hover:bg-white/90 transition-colors"
                     >
-                        ✨ 发布动态
+                        {t('community.publishBtn')}
                     </button>
                 </div>
 
@@ -218,7 +219,7 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage 
                     <textarea
                         value={newContent}
                         onChange={(e) => setNewContent(e.target.value)}
-                        placeholder="分享一件让你开心的事，传递温暖给他人..."
+                        placeholder={t('community.placeholder')}
                         className="w-full p-4 border border-warm-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white"
                         rows={3}
                         maxLength={500}
@@ -245,7 +246,7 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage 
                                 disabled={!newContent.trim() || submitting}
                                 className="px-5 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-medium disabled:opacity-50 hover:shadow-lg transition-all"
                             >
-                                {submitting ? '发布中...' : '发布'}
+                                {submitting ? t('community.publishing') : t('community.publish')}
                             </button>
                         </div>
                     </div>
@@ -259,12 +260,12 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage 
             <div className="divide-y divide-warm-100">
                 {loading ? (
                     <div className="p-8 text-center text-warm-400">
-                        <span className="animate-spin inline-block">⏳</span> 加载中...
+                        <span className="animate-spin inline-block">⏳</span> {t('community.loading')}
                     </div>
                 ) : posts.length === 0 ? (
                     <div className="p-8 text-center text-warm-400">
                         <span className="text-4xl mb-2 block">🌱</span>
-                        还没有动态，来发布第一条吧！
+                        {t('community.empty')}
                     </div>
                 ) : (
                     posts.map(post => {
@@ -304,15 +305,15 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage 
                                                 className="flex items-center space-x-1 text-sm text-warm-400 hover:text-purple-500 transition-colors"
                                             >
                                                 <span>💬</span>
-                                                <span>{post.replies?.length || 0} 回复</span>
+                                                <span>{post.replies?.length || 0} {t('community.replies')}</span>
                                             </button>
                                             <button
                                                 className="flex items-center space-x-1 text-sm text-warm-400 hover:text-blue-500 transition-colors"
-                                                title="发私信"
-                                                onClick={() => onStartMessage?.(post.author || '匿名用户')}
+                                                title={t('community.message')}
+                                                onClick={() => onStartMessage?.()}
                                             >
                                                 <span>✉️</span>
-                                                <span>私信</span>
+                                                <span>{t('community.message')}</span>
                                             </button>
                                         </div>
 
@@ -337,7 +338,7 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage 
                                                         type="text"
                                                         value={replyContent[post.id] || ''}
                                                         onChange={(e) => setReplyContent(prev => ({ ...prev, [post.id]: e.target.value }))}
-                                                        placeholder="写下你的回复..."
+                                                        placeholder={t('community.replyPlaceholder')}
                                                         className="flex-1 p-2 border border-warm-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
                                                         maxLength={200}
                                                     />
@@ -346,7 +347,7 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage 
                                                         disabled={!replyContent[post.id]?.trim()}
                                                         className="px-4 py-2 bg-purple-500 text-white rounded-lg text-sm font-medium disabled:opacity-50"
                                                     >
-                                                        回复
+                                                        {t('community.replyBtn')}
                                                     </button>
                                                 </div>
                                             </div>
@@ -362,7 +363,7 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage 
             {/* Footer */}
             <div className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 text-center">
                 <p className="text-sm text-warm-500">
-                    🌟 在这里，每一句话都可能温暖另一个人
+                    {t('community.footer')}
                 </p>
             </div>
         </div>

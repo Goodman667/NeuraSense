@@ -1430,10 +1430,9 @@ function App() {
                             </div>
                             <CommunityFeed
                                 maxPosts={5}
-                                onStartMessage={(author) => {
+                                onStartMessage={() => {
                                     setCurrentView('community');
                                     setCommunityTab('messages');
-                                    // You can later pass the author to PrivateMessage to auto-select the conversation
                                 }}
                             />
                         </div>
@@ -1486,7 +1485,7 @@ function App() {
                                     <CommunityFeed
                                         maxPosts={50}
                                         fullPage={true}
-                                        onStartMessage={(author) => {
+                                        onStartMessage={() => {
                                             setCommunityTab('messages');
                                         }}
                                     />
