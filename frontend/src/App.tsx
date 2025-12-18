@@ -22,6 +22,8 @@ import {
     AchievementCenter,
     EMACheckIn,
     CommunityFeed,
+    CommunityLeaderboard,
+    PrivateMessage,
     PsyChat,
     GuardianCard,
     InterventionModal,
@@ -705,6 +707,9 @@ function App() {
     // EMA Check-in modal state
     const [showEMACheckIn, setShowEMACheckIn] = useState(false);
 
+    // Community tab state
+    const [communityTab, setCommunityTab] = useState<'feed' | 'leaderboard' | 'messages'>('feed');
+
     // Gamification state
     const { streak, todayPoints, checkStreak } = useGamificationStore();
 
@@ -1105,6 +1110,20 @@ function App() {
                                 )}
                             </button>
 
+                            {/* 语言切换 */}
+                            <button
+                                onClick={() => {
+                                    const currentLang = localStorage.getItem('language') || 'zh';
+                                    const newLang = currentLang === 'zh' ? 'en' : 'zh';
+                                    localStorage.setItem('language', newLang);
+                                    window.location.reload();
+                                }}
+                                className="px-3 py-1.5 rounded-lg bg-warm-100 dark:bg-gray-700 hover:bg-warm-200 dark:hover:bg-gray-600 text-sm font-medium text-warm-700 dark:text-gray-200 transition-all"
+                                title="切换语言 / Switch Language"
+                            >
+                                🌐 {localStorage.getItem('language') === 'en' ? '中文' : 'EN'}
+                            </button>
+
                             {/* 用户登录/头像 */}
                             {currentUser ? (
                                 <div className="flex items-center space-x-2">
@@ -1432,7 +1451,45 @@ function App() {
                                 ← 返回首页
                             </button>
                         </div>
-                        <CommunityFeed maxPosts={50} fullPage={true} />
+
+                        {/* Community Tabs */}
+                        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+                            <div className="flex border-b border-warm-200">
+                                <button
+                                    onClick={() => setCommunityTab('feed')}
+                                    className={`flex-1 py-4 px-6 text-center font-medium transition-all ${communityTab === 'feed'
+                                        ? 'text-primary-600 border-b-2 border-primary-500 bg-primary-50'
+                                        : 'text-warm-600 hover:text-warm-800 hover:bg-warm-50'
+                                        }`}
+                                >
+                                    📱 动态
+                                </button>
+                                <button
+                                    onClick={() => setCommunityTab('leaderboard')}
+                                    className={`flex-1 py-4 px-6 text-center font-medium transition-all ${communityTab === 'leaderboard'
+                                        ? 'text-primary-600 border-b-2 border-primary-500 bg-primary-50'
+                                        : 'text-warm-600 hover:text-warm-800 hover:bg-warm-50'
+                                        }`}
+                                >
+                                    🏆 排行榜
+                                </button>
+                                <button
+                                    onClick={() => setCommunityTab('messages')}
+                                    className={`flex-1 py-4 px-6 text-center font-medium transition-all ${communityTab === 'messages'
+                                        ? 'text-primary-600 border-b-2 border-primary-500 bg-primary-50'
+                                        : 'text-warm-600 hover:text-warm-800 hover:bg-warm-50'
+                                        }`}
+                                >
+                                    💬 私信
+                                </button>
+                            </div>
+
+                            <div className="p-6">
+                                {communityTab === 'feed' && <CommunityFeed maxPosts={50} fullPage={true} />}
+                                {communityTab === 'leaderboard' && <CommunityLeaderboard />}
+                                {communityTab === 'messages' && <PrivateMessage />}
+                            </div>
+                        </div>
                     </section>
                 )}
 

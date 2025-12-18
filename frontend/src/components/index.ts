@@ -52,7 +52,7 @@ export { AchievementCenter } from './Gamification';
 export { EMACheckIn } from './EMA';
 
 // Community
-export { CommunityFeed, CommunityLeaderboard } from './Community';
+export { CommunityFeed, CommunityLeaderboard, PrivateMessage } from './Community';
 
 // Chat
 export { PsyChat } from './Chat';
