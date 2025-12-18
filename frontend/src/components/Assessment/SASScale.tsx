@@ -106,12 +106,29 @@ export const SASScale = ({ onComplete, onClose }: SASScaleProps) => {
         setIsLoading(true);
 
         try {
-            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/chat', {
+            // 获取 AI 解读（使用详细 prompt）
+            const detailedPrompt = `我完成了SAS焦虑自评量表，指数分是${indexScore}分（${severity.level}）。
+
+请根据这个结果给我具体、可操作的焦虑缓解建议，包括：
+1. 如果需要专业帮助，请推荐具体的治疗方式（如认知行为疗法CBT、暴露疗法、药物治疗等）
+2. 提供心理援助热线号码（如400-161-9995、800-810-1117）
+3. 给出具体的焦虑缓解技巧：
+   - 呼吸法：具体步骤（如478呼吸法）
+   - 接地技术：具体操作方法
+   - 渐进式肌肉放松：如何做
+4. 给出生活调节建议：
+   - 运动：具体类型和时长
+   - 睡眠：几点睡、睡多久
+   - 饮食：避免什么、多吃什么
+5. 推荐相关App（如潮汐、Calm、Headspace）
+
+请用分点列表的形式回复，使用emoji让建议更友好。`;
+
+            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/counselor/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    user_id: 'scale_user',
-                    message: `我完成了SAS焦虑自评量表，指数分是${indexScore}分（${severity.level}）。请给我一些缓解焦虑的建议和放松技巧。`,
+                    message: detailedPrompt,
                 }),
             });
 

@@ -491,7 +491,7 @@ const TrendPredictionView = () => {
                                         <span className="absolute -left-2 -top-2 text-[10px] text-green-500 bg-white px-1">正常</span>
                                     </div>
                                     {/* SVG Line Chart */}
-                                    <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
+                                    <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
                                         <defs>
                                             <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                                                 <stop offset="0%" stopColor="#8B5CF6" stopOpacity="0.3" />
@@ -501,38 +501,46 @@ const TrendPredictionView = () => {
                                         {/* Area fill */}
                                         <path
                                             d={`M ${predictionData.predicted_scores.map((score, i) => {
-                                                const x = (i / (predictionData.predicted_scores.length - 1)) * 100;
+                                                const x = predictionData.predicted_scores.length > 1
+                                                    ? (i / (predictionData.predicted_scores.length - 1)) * 100
+                                                    : 50;
                                                 const y = 100 - (score / 27) * 100;
-                                                return `${x}%,${y}%`;
-                                            }).join(' L ')} L 100%,100% L 0%,100% Z`}
+                                                return `${x},${y}`;
+                                            }).join(' L ')} L 100,100 L 0,100 Z`}
                                             fill="url(#lineGradient)"
                                         />
-                                        {/* Line */}
+                                        {/* Line connecting all points */}
                                         <polyline
                                             points={predictionData.predicted_scores.map((score, i) => {
-                                                const x = (i / (predictionData.predicted_scores.length - 1)) * 100;
+                                                const x = predictionData.predicted_scores.length > 1
+                                                    ? (i / (predictionData.predicted_scores.length - 1)) * 100
+                                                    : 50;
                                                 const y = 100 - (score / 27) * 100;
-                                                return `${x}%,${y}%`;
+                                                return `${x},${y}`;
                                             }).join(' ')}
                                             fill="none"
                                             stroke="#8B5CF6"
-                                            strokeWidth="3"
+                                            strokeWidth="2"
                                             strokeLinecap="round"
                                             strokeLinejoin="round"
+                                            vectorEffect="non-scaling-stroke"
                                         />
                                         {/* Data points */}
                                         {predictionData.predicted_scores.map((score, i) => {
-                                            const x = (i / (predictionData.predicted_scores.length - 1)) * 100;
+                                            const x = predictionData.predicted_scores.length > 1
+                                                ? (i / (predictionData.predicted_scores.length - 1)) * 100
+                                                : 50;
                                             const y = 100 - (score / 27) * 100;
                                             return (
                                                 <circle
                                                     key={i}
-                                                    cx={`${x}%`}
-                                                    cy={`${y}%`}
-                                                    r="6"
+                                                    cx={x}
+                                                    cy={y}
+                                                    r="3"
                                                     fill="white"
                                                     stroke="#8B5CF6"
-                                                    strokeWidth="2"
+                                                    strokeWidth="1.5"
+                                                    vectorEffect="non-scaling-stroke"
                                                 />
                                             );
                                         })}
@@ -1690,7 +1698,8 @@ function App() {
             {/* Footer */}
             <footer className="bg-warm-800 text-warm-300 py-8 mt-16">
                 <div className="max-w-7xl mx-auto px-4 text-center">
-                    <p className="text-sm">© 2024 NeuraSense AI心理健康平台</p>
+                    <p className="text-sm">NeuraSense平台 - By MaRunqi</p>
+                    <p className="text-xs text-warm-500 mt-1">Email: p2523030@mpu.edu.mo</p>
                     <p className="text-xs text-warm-500 mt-1">本平台仅供参考，不能替代专业医疗诊断</p>
                 </div>
             </footer>

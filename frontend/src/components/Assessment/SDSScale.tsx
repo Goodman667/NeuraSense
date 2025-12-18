@@ -107,13 +107,26 @@ export const SDSScale = ({ onComplete, onClose }: SDSScaleProps) => {
         setIsLoading(true);
 
         try {
-            // 获取 AI 解读
-            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/chat', {
+            // 获取 AI 解读（使用详细 prompt）
+            const detailedPrompt = `我完成了SDS抑郁自评量表，指数分是${indexScore}分（${severity.level}）。
+
+请根据这个结果给我具体、可操作的建议，包括：
+1. 如果需要专业帮助，请推荐具体的治疗方式（如认知行为疗法CBT、药物治疗等）
+2. 提供心理援助热线号码（如400-161-9995、800-810-1117）
+3. 给出具体的自我调节建议：
+   - 睡眠：具体睡多少小时、什么时间睡
+   - 运动：具体运动类型和时长
+   - 饮食：具体吃什么食物
+   - 社交：具体怎么做
+4. 推荐放松技巧和相关App（如潮汐、Headspace）
+
+请用分点列表的形式回复，使用emoji让建议更友好。`;
+
+            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/counselor/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    user_id: 'scale_user',
-                    message: `我完成了SDS抑郁自评量表，指数分是${indexScore}分（${severity.level}）。请根据这个结果给我一些温暖的建议和指导。`,
+                    message: detailedPrompt,
                 }),
             });
 
