@@ -54,7 +54,7 @@ export const PrivateMessage = ({ onClose, preSelectedUser, currentUser }: Privat
         if (!currentUser) return;
         setLoading(true);
         try {
-            const response = await fetch(`${API_BASE} /community/messages / ${currentUser} `);
+            const response = await fetch(`${API_BASE}/community/messages/${currentUser}`);
             const data = await response.json();
 
             if (data.success && Array.isArray(data.messages)) {
@@ -182,7 +182,7 @@ export const PrivateMessage = ({ onClose, preSelectedUser, currentUser }: Privat
         setNewMessage('');
 
         try {
-            const res = await fetch(`${API_BASE} /community/message / send`, {
+            const res = await fetch(`${API_BASE}/community/message/send`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
