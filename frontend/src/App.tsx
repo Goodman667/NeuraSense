@@ -45,6 +45,7 @@ import {
 
 // API base URL
 import { API_BASE } from './config/api';
+import { useI18n, LanguageToggle } from './i18n';
 
 // ====== INLINE STROOP TEST VIEW ======
 interface StroopTestViewProps {
@@ -684,6 +685,7 @@ const BreathingBallView = () => {
 
 
 function App() {
+    const { t } = useI18n();
     const { error, setError } = useAppStore();
     const avatarRef = useRef<VirtualAvatarRef>(null);
     const embodiedAvatarRef = useRef<EmbodiedAvatarRef>(null);
@@ -1078,8 +1080,8 @@ function App() {
                                 <span className="text-white font-bold text-lg">P</span>
                             </div>
                             <div>
-                                <h1 className="text-xl font-semibold text-warm-800">NeuraSense</h1>
-                                <p className="text-xs text-warm-500">智能心理测评平台</p>
+                                <h1 className="text-xl font-semibold text-warm-800">{t('app.name')}</h1>
+                                <p className="text-xs text-warm-500">{t('app.subtitle')}</p>
                             </div>
                         </div>
                         <nav className="flex items-center space-x-4">
@@ -1087,13 +1089,13 @@ function App() {
                                 className={`text-warm-600 hover:text-warm-900 transition-colors ${currentView === 'home' ? 'font-semibold' : ''}`}
                                 onClick={() => setCurrentView('home')}
                             >
-                                首页
+                                {t('nav.home')}
                             </button>
                             <button
                                 className={`text-warm-600 hover:text-warm-900 transition-colors ${currentView === 'chat' ? 'font-semibold' : ''}`}
                                 onClick={startCounselingChat}
                             >
-                                心理咨询
+                                {t('nav.chat')}
                             </button>
 
 
@@ -1110,19 +1112,7 @@ function App() {
                                 )}
                             </button>
 
-                            {/* 语言切换 */}
-                            <button
-                                onClick={() => {
-                                    const currentLang = localStorage.getItem('language') || 'zh';
-                                    const newLang = currentLang === 'zh' ? 'en' : 'zh';
-                                    localStorage.setItem('language', newLang);
-                                    window.location.reload();
-                                }}
-                                className="px-3 py-1.5 rounded-lg bg-warm-100 dark:bg-gray-700 hover:bg-warm-200 dark:hover:bg-gray-600 text-sm font-medium text-warm-700 dark:text-gray-200 transition-all"
-                                title="切换语言 / Switch Language"
-                            >
-                                🌐 {localStorage.getItem('language') === 'en' ? '中文' : 'EN'}
-                            </button>
+                            <LanguageToggle />
 
                             {/* 用户登录/头像 */}
                             {currentUser ? (
@@ -1136,7 +1126,7 @@ function App() {
                                         }}
                                         className="text-sm text-warm-500 hover:text-warm-700"
                                     >
-                                        退出
+                                        {t('nav.logout')}
                                     </button>
                                 </div>
                             ) : (
@@ -1145,7 +1135,7 @@ function App() {
                                     className="flex items-center space-x-1 px-4 py-2 bg-white border border-warm-200 rounded-lg hover:bg-warm-50 transition-all"
                                 >
                                     <span>👤</span>
-                                    <span className="text-sm font-medium text-warm-700">登录</span>
+                                    <span className="text-sm font-medium text-warm-700">{t('nav.login')}</span>
                                 </button>
                             )}
                         </nav>
@@ -1438,9 +1428,16 @@ function App() {
                                     进入社区 →
                                 </button>
                             </div>
-                            <CommunityFeed maxPosts={5} />
+                            <CommunityFeed
+                                maxPosts={5}
+                                onStartMessage={(author) => {
+                                    setCurrentView('community');
+                                    setCommunityTab('messages');
+                                    // You can later pass the author to PrivateMessage to auto-select the conversation
+                                }}
+                            />
                         </div>
-                    </>
+                    </section>
                 )}
 
                 {/* ===== COMMUNITY VIEW ===== */}
@@ -1448,7 +1445,7 @@ function App() {
                     <section className="animate-fadeIn">
                         <div className="flex items-center justify-between mb-6">
                             <button onClick={() => setCurrentView('home')} className="text-warm-500 hover:text-warm-700">
-                                ← 返回首页
+                                ← {t('common.back')}
                             </button>
                         </div>
 
@@ -1462,7 +1459,7 @@ function App() {
                                         : 'text-warm-600 hover:text-warm-800 hover:bg-warm-50'
                                         }`}
                                 >
-                                    📱 动态
+                                    {t('community.feed') || '📱 动态'}
                                 </button>
                                 <button
                                     onClick={() => setCommunityTab('leaderboard')}
@@ -1471,7 +1468,7 @@ function App() {
                                         : 'text-warm-600 hover:text-warm-800 hover:bg-warm-50'
                                         }`}
                                 >
-                                    🏆 排行榜
+                                    {t('community.leaderboard')}
                                 </button>
                                 <button
                                     onClick={() => setCommunityTab('messages')}
@@ -1480,12 +1477,20 @@ function App() {
                                         : 'text-warm-600 hover:text-warm-800 hover:bg-warm-50'
                                         }`}
                                 >
-                                    💬 私信
+                                    {t('community.messages')}
                                 </button>
                             </div>
 
                             <div className="p-6">
-                                {communityTab === 'feed' && <CommunityFeed maxPosts={50} fullPage={true} />}
+                                {communityTab === 'feed' && (
+                                    <CommunityFeed
+                                        maxPosts={50}
+                                        fullPage={true}
+                                        onStartMessage={(author) => {
+                                            setCommunityTab('messages');
+                                        }}
+                                    />
+                                )}
                                 {communityTab === 'leaderboard' && <CommunityLeaderboard />}
                                 {communityTab === 'messages' && <PrivateMessage />}
                             </div>
@@ -1760,7 +1765,7 @@ function App() {
                     <p className="text-xs text-warm-500 mt-1">本平台仅供参考，不能替代专业医疗诊断</p>
                 </div>
             </footer>
-        </div>
+        </div >
     );
 }
 

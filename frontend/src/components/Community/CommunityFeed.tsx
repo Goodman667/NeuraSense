@@ -9,14 +9,17 @@ import { useState, useEffect, useCallback } from 'react';
 interface Reply {
     id: string;
     content: string;
-    createdAt: string;
+    createdAt?: string;
+    created_at?: string;
 }
 
 interface CommunityPost {
     id: string;
     content: string;
     likes: number;
-    createdAt: string;
+    createdAt?: string;
+    created_at?: string;
+    author?: string;
     category: 'gratitude' | 'encouragement' | 'achievement';
     replies: Reply[];
 }
@@ -24,6 +27,7 @@ interface CommunityPost {
 interface CommunityFeedProps {
     maxPosts?: number;
     fullPage?: boolean;
+    onStartMessage?: (userId: string) => void;
 }
 
 const CATEGORY_INFO = {
@@ -48,7 +52,7 @@ const timeAgo = (dateStr: string): string => {
     return date.toLocaleDateString('zh-CN');
 };
 
-export const CommunityFeed = ({ maxPosts = 10, fullPage = false }: CommunityFeedProps) => {
+export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage }: CommunityFeedProps) => {
     const [posts, setPosts] = useState<CommunityPost[]>([]);
     const [loading, setLoading] = useState(true);
     const [showCompose, setShowCompose] = useState(false);
@@ -198,8 +202,8 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false }: CommunityFeed
                             key={key}
                             onClick={() => setFilter(key)}
                             className={`px-3 py-1 rounded-full text-sm whitespace-nowrap transition-colors ${filter === key
-                                    ? 'bg-white text-purple-600'
-                                    : 'bg-white/20 text-white hover:bg-white/30'
+                                ? 'bg-white text-purple-600'
+                                : 'bg-white/20 text-white hover:bg-white/30'
                                 }`}
                         >
                             {info.icon} {info.label}
@@ -226,8 +230,8 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false }: CommunityFeed
                                     key={cat}
                                     onClick={() => setNewCategory(cat)}
                                     className={`px-3 py-1.5 rounded-full text-sm transition-all ${newCategory === cat
-                                            ? 'bg-purple-500 text-white shadow-md'
-                                            : 'bg-white text-warm-600 border border-warm-200 hover:border-purple-300'
+                                        ? 'bg-purple-500 text-white shadow-md'
+                                        : 'bg-white text-warm-600 border border-warm-200 hover:border-purple-300'
                                         }`}
                                 >
                                     {CATEGORY_INFO[cat].icon} {CATEGORY_INFO[cat].label}
@@ -280,7 +284,7 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false }: CommunityFeed
                                             <span className={`text-xs px-2 py-0.5 rounded-full bg-${catInfo.color}-100 text-${catInfo.color}-600`}>
                                                 {catInfo.label}
                                             </span>
-                                            <span className="text-xs text-warm-400">{timeAgo(post.createdAt)}</span>
+                                            <span className="text-xs text-warm-400">{timeAgo(post.created_at || post.createdAt || new Date().toISOString())}</span>
                                         </div>
                                         <p className="text-warm-700 whitespace-pre-wrap break-words">{post.content}</p>
 
@@ -302,6 +306,14 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false }: CommunityFeed
                                                 <span>💬</span>
                                                 <span>{post.replies?.length || 0} 回复</span>
                                             </button>
+                                            <button
+                                                className="flex items-center space-x-1 text-sm text-warm-400 hover:text-blue-500 transition-colors"
+                                                title="发私信"
+                                                onClick={() => onStartMessage?.(post.author || '匿名用户')}
+                                            >
+                                                <span>✉️</span>
+                                                <span>私信</span>
+                                            </button>
                                         </div>
 
                                         {/* Replies Section */}
@@ -313,7 +325,7 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false }: CommunityFeed
                                                         {post.replies.map(reply => (
                                                             <div key={reply.id} className="bg-warm-50 rounded-xl p-3">
                                                                 <p className="text-warm-700 text-sm">{reply.content}</p>
-                                                                <span className="text-xs text-warm-400">{timeAgo(reply.createdAt)}</span>
+                                                                <span className="text-xs text-warm-400">{timeAgo(reply.created_at || reply.createdAt || new Date().toISOString())}</span>
                                                             </div>
                                                         ))}
                                                     </div>
