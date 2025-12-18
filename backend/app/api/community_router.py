@@ -2,6 +2,7 @@
 Community API Router - Full Interactive Version
 
 Endpoints for real community with posts, replies, and interactions
+Uses Supabase for persistent storage with file fallback.
 """
 
 from fastapi import APIRouter, HTTPException
@@ -12,67 +13,67 @@ import json
 from pathlib import Path
 import uuid
 
+from ..services.database.supabase_client import get_supabase_client
+
 router = APIRouter(prefix="/community", tags=["Community"])
 
-# Data storage
+# Data storage (fallback)
 DATA_DIR = Path("./data")
 COMMUNITY_FILE = DATA_DIR / "community_posts.json"
 
-# Initialize
-if not DATA_DIR.exists():
-    DATA_DIR.mkdir(exist_ok=True)
-if not COMMUNITY_FILE.exists():
-    # Initialize with some warm posts
-    initial_posts = [
-        {
-            "id": str(uuid.uuid4()),
-            "content": "今天阳光很好，感恩这个美好的早晨",
-            "likes": 12,
-            "category": "gratitude",
-            "createdAt": datetime.now().isoformat(),
-            "replies": [
-                {"id": str(uuid.uuid4()), "content": "是的，阳光让人心情变好！", "createdAt": datetime.now().isoformat()}
-            ]
-        },
-        {
-            "id": str(uuid.uuid4()),
-            "content": "坚持了7天日记，给自己一个大大的赞！",
-            "likes": 8,
-            "category": "achievement",
-            "createdAt": datetime.now().isoformat(),
-            "replies": []
-        },
-        {
-            "id": str(uuid.uuid4()),
-            "content": "每一天都是新的开始，加油！",
-            "likes": 15,
-            "category": "encouragement",
-            "createdAt": datetime.now().isoformat(),
-            "replies": [
-                {"id": str(uuid.uuid4()), "content": "加油！你可以的！", "createdAt": datetime.now().isoformat()},
-                {"id": str(uuid.uuid4()), "content": "💪💪💪", "createdAt": datetime.now().isoformat()}
-            ]
-        },
-        {
-            "id": str(uuid.uuid4()),
-            "content": "感谢朋友今天的陪伴，有朋友真好",
-            "likes": 9,
-            "category": "gratitude",
-            "createdAt": datetime.now().isoformat(),
-            "replies": []
-        },
-        {
-            "id": str(uuid.uuid4()),
-            "content": "完成了第一次呼吸练习，感觉很放松，推荐大家试试！",
-            "likes": 20,
-            "category": "achievement",
-            "createdAt": datetime.now().isoformat(),
-            "replies": [
-                {"id": str(uuid.uuid4()), "content": "我也试了，真的有用！", "createdAt": datetime.now().isoformat()}
-            ]
-        },
-    ]
-    COMMUNITY_FILE.write_text(json.dumps(initial_posts, ensure_ascii=False, indent=2))
+# Get Supabase client
+_supabase = get_supabase_client()
+
+# Default posts for initialization
+DEFAULT_POSTS = [
+    {
+        "id": str(uuid.uuid4()),
+        "content": "今天阳光很好，感恩这个美好的早晨",
+        "likes": 12,
+        "category": "gratitude",
+        "created_at": datetime.now().isoformat(),
+        "replies": []
+    },
+    {
+        "id": str(uuid.uuid4()),
+        "content": "坚持了7天日记，给自己一个大大的赞！",
+        "likes": 8,
+        "category": "achievement",
+        "created_at": datetime.now().isoformat(),
+        "replies": []
+    },
+    {
+        "id": str(uuid.uuid4()),
+        "content": "每一天都是新的开始，加油！",
+        "likes": 15,
+        "category": "encouragement",
+        "created_at": datetime.now().isoformat(),
+        "replies": []
+    },
+    {
+        "id": str(uuid.uuid4()),
+        "content": "感谢朋友今天的陪伴，有朋友真好",
+        "likes": 9,
+        "category": "gratitude",
+        "created_at": datetime.now().isoformat(),
+        "replies": []
+    },
+    {
+        "id": str(uuid.uuid4()),
+        "content": "完成了第一次呼吸练习，感觉很放松，推荐大家试试！",
+        "likes": 20,
+        "category": "achievement",
+        "created_at": datetime.now().isoformat(),
+        "replies": []
+    },
+]
+
+# Initialize file storage if Supabase not available
+if _supabase is None:
+    if not DATA_DIR.exists():
+        DATA_DIR.mkdir(exist_ok=True)
+    if not COMMUNITY_FILE.exists():
+        COMMUNITY_FILE.write_text(json.dumps(DEFAULT_POSTS, ensure_ascii=False, indent=2))
 
 
 class NewPost(BaseModel):
@@ -94,14 +95,31 @@ class PostResponse(BaseModel):
 
 
 def _load_posts() -> List[dict]:
-    try:
-        return json.loads(COMMUNITY_FILE.read_text())
-    except:
-        return []
+    """Load posts from Supabase or file"""
+    if _supabase:
+        try:
+            response = _supabase.table("community_posts").select("*").order("created_at", desc=True).execute()
+            posts = response.data or []
+            # If no posts, initialize with defaults
+            if not posts:
+                for post in DEFAULT_POSTS:
+                    _supabase.table("community_posts").insert(post).execute()
+                return DEFAULT_POSTS
+            return posts
+        except Exception as e:
+            print(f"Supabase error loading posts: {e}")
+            return []
+    else:
+        try:
+            return json.loads(COMMUNITY_FILE.read_text())
+        except:
+            return []
 
 
 def _save_posts(data: List[dict]):
-    COMMUNITY_FILE.write_text(json.dumps(data, ensure_ascii=False, indent=2))
+    """Save posts to file (only used for fallback)"""
+    if not _supabase:
+        COMMUNITY_FILE.write_text(json.dumps(data, ensure_ascii=False, indent=2))
 
 
 def _moderate_content(content: str) -> tuple[bool, str]:
@@ -129,18 +147,25 @@ async def create_post(post: NewPost) -> PostResponse:
     if not is_ok:
         return PostResponse(success=False, post_id="", message=reason)
     
-    posts = _load_posts()
-    
     new_post = {
         "id": str(uuid.uuid4()),
         "content": post.content.strip()[:500],
         "likes": 0,
         "category": post.category,
-        "createdAt": datetime.now().isoformat(),
+        "created_at": datetime.now().isoformat(),
         "replies": [],
     }
-    posts.insert(0, new_post)  # Add to beginning
-    _save_posts(posts)
+    
+    if _supabase:
+        try:
+            _supabase.table("community_posts").insert(new_post).execute()
+        except Exception as e:
+            print(f"Supabase error creating post: {e}")
+            return PostResponse(success=False, post_id="", message="发布失败，请稍后重试")
+    else:
+        posts = _load_posts()
+        posts.insert(0, new_post)
+        _save_posts(posts)
     
     return PostResponse(success=True, post_id=new_post["id"], message="发布成功！感谢分享正能量 💜")
 

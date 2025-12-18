@@ -2,7 +2,7 @@
 Authentication Service
 
 Provides user authentication, registration, and session management.
-Simple file-based storage for development; replace with database in production.
+Uses Supabase for persistent storage, with file-based fallback for development.
 """
 
 import hashlib
@@ -13,8 +13,10 @@ from datetime import datetime, timedelta
 from typing import Optional
 from pydantic import BaseModel
 
+# Import Supabase client
+from ..database.supabase_client import get_supabase_client, is_supabase_available
 
-# 数据存储路径
+# 数据存储路径 (fallback)
 DATA_DIR = Path("./data")
 USERS_FILE = DATA_DIR / "users.json"
 SESSIONS_FILE = DATA_DIR / "sessions.json"
@@ -52,12 +54,19 @@ class AssessmentRecord(BaseModel):
 
 
 class AuthService:
-    """认证服务"""
+    """认证服务 - 支持 Supabase 和本地文件双模式"""
 
     def __init__(self):
-        # 确保数据目录存在
-        DATA_DIR.mkdir(exist_ok=True)
-        self._init_files()
+        self.supabase = get_supabase_client()
+        self.use_supabase = self.supabase is not None
+        
+        if self.use_supabase:
+            print("AuthService: Using Supabase for storage")
+        else:
+            print("AuthService: Using local file storage (fallback)")
+            # 确保数据目录存在
+            DATA_DIR.mkdir(exist_ok=True)
+            self._init_files()
 
     def _init_files(self):
         """初始化数据文件"""
@@ -80,38 +89,79 @@ class AuthService:
         """生成唯一ID"""
         return secrets.token_hex(8)
 
+    # ========== Supabase Methods ==========
+    
+    def _supabase_get_users(self) -> list[dict]:
+        """从 Supabase 加载用户"""
+        try:
+            response = self.supabase.table("users").select("*").execute()
+            return response.data or []
+        except Exception as e:
+            print(f"Supabase error loading users: {e}")
+            return []
+
+    def _supabase_save_user(self, user: dict):
+        """保存用户到 Supabase"""
+        try:
+            self.supabase.table("users").insert(user).execute()
+        except Exception as e:
+            print(f"Supabase error saving user: {e}")
+            raise
+
+    def _supabase_get_sessions(self) -> list[dict]:
+        """从 Supabase 加载会话"""
+        try:
+            response = self.supabase.table("sessions").select("*").execute()
+            return response.data or []
+        except Exception as e:
+            print(f"Supabase error loading sessions: {e}")
+            return []
+
+    def _supabase_save_session(self, session: dict):
+        """保存会话到 Supabase"""
+        try:
+            self.supabase.table("sessions").insert(session).execute()
+        except Exception as e:
+            print(f"Supabase error saving session: {e}")
+            raise
+
+    # ========== File Methods (Fallback) ==========
+    
     def _load_users(self) -> list[dict]:
-        """加载用户数据 (with recovery from corruption)"""
+        """加载用户数据"""
+        if self.use_supabase:
+            return self._supabase_get_users()
         try:
             return json.loads(USERS_FILE.read_text(encoding='utf-8'))
         except (json.JSONDecodeError, UnicodeDecodeError):
-            # File corrupted, reset it
             USERS_FILE.write_text("[]", encoding='utf-8')
             return []
 
     def _save_users(self, users: list[dict]):
         """保存用户数据"""
-        USERS_FILE.write_text(json.dumps(users, ensure_ascii=False, indent=2), encoding='utf-8')
+        if not self.use_supabase:
+            USERS_FILE.write_text(json.dumps(users, ensure_ascii=False, indent=2), encoding='utf-8')
 
     def _load_sessions(self) -> list[dict]:
-        """加载会话数据 (with recovery from corruption)"""
+        """加载会话数据"""
+        if self.use_supabase:
+            return self._supabase_get_sessions()
         try:
             return json.loads(SESSIONS_FILE.read_text(encoding='utf-8'))
         except (json.JSONDecodeError, UnicodeDecodeError):
-            # File corrupted, reset it
             SESSIONS_FILE.write_text("[]", encoding='utf-8')
             return []
 
     def _save_sessions(self, sessions: list[dict]):
         """保存会话数据"""
-        SESSIONS_FILE.write_text(json.dumps(sessions, ensure_ascii=False, indent=2), encoding='utf-8')
+        if not self.use_supabase:
+            SESSIONS_FILE.write_text(json.dumps(sessions, ensure_ascii=False, indent=2), encoding='utf-8')
 
     def _load_history(self) -> list[dict]:
-        """加载评估历史 (with recovery from corruption)"""
+        """加载评估历史"""
         try:
             return json.loads(HISTORY_FILE.read_text(encoding='utf-8'))
         except (json.JSONDecodeError, UnicodeDecodeError):
-            # File corrupted, reset it
             HISTORY_FILE.write_text("[]", encoding='utf-8')
             return []
 
@@ -119,6 +169,8 @@ class AuthService:
         """保存评估历史"""
         HISTORY_FILE.write_text(json.dumps(history, ensure_ascii=False, indent=2), encoding='utf-8')
 
+    # ========== Public Methods ==========
+    
     def register(self, username: str, password: str, nickname: str = None) -> dict:
         """用户注册"""
         users = self._load_users()
@@ -137,8 +189,11 @@ class AuthService:
             "avatar": None,
         }
 
-        users.append(user)
-        self._save_users(users)
+        if self.use_supabase:
+            self._supabase_save_user(user)
+        else:
+            users.append(user)
+            self._save_users(users)
 
         # 返回用户信息（不含密码）
         return {
@@ -163,7 +218,6 @@ class AuthService:
             raise ValueError("用户名或密码错误")
 
         # 创建会话
-        sessions = self._load_sessions()
         token = self._generate_token()
         session = {
             "token": token,
@@ -171,8 +225,13 @@ class AuthService:
             "created_at": datetime.now().isoformat(),
             "expires_at": (datetime.now() + timedelta(days=7)).isoformat(),
         }
-        sessions.append(session)
-        self._save_sessions(sessions)
+        
+        if self.use_supabase:
+            self._supabase_save_session(session)
+        else:
+            sessions = self._load_sessions()
+            sessions.append(session)
+            self._save_sessions(sessions)
 
         return {
             "token": token,
@@ -208,24 +267,28 @@ class AuthService:
             "nickname": user["nickname"],
         }
 
-    def logout(self, token: str):
+    def logout(self, token: str) -> bool:
         """用户登出"""
-        sessions = self._load_sessions()
-        sessions = [s for s in sessions if s["token"] != token]
-        self._save_sessions(sessions)
+        if self.use_supabase:
+            try:
+                self.supabase.table("sessions").delete().eq("token", token).execute()
+                return True
+            except Exception:
+                return False
+        else:
+            sessions = self._load_sessions()
+            sessions = [s for s in sessions if s["token"] != token]
+            self._save_sessions(sessions)
+            return True
 
-    def save_assessment(
-        self,
-        user_id: str,
-        scale_type: str,
-        total_score: int,
-        answers: list[int],
-        severity: str,
-        ai_interpretation: str = None
-    ) -> dict:
-        """保存评估记录"""
+    def get_assessment_history(self, user_id: str) -> list[dict]:
+        """获取用户的评估历史"""
         history = self._load_history()
+        return [h for h in history if h.get("user_id") == user_id]
 
+    def save_assessment(self, user_id: str, scale_type: str, total_score: int,
+                        answers: list[int], severity: str, ai_interpretation: str = None) -> dict:
+        """保存评估结果"""
         record = {
             "id": self._generate_id(),
             "user_id": user_id,
@@ -237,25 +300,12 @@ class AuthService:
             "created_at": datetime.now().isoformat(),
         }
 
+        history = self._load_history()
         history.append(record)
         self._save_history(history)
 
         return record
 
-    def get_user_history(self, user_id: str, scale_type: str = None) -> list[dict]:
-        """获取用户评估历史"""
-        history = self._load_history()
 
-        user_history = [h for h in history if h["user_id"] == user_id]
-
-        if scale_type:
-            user_history = [h for h in user_history if h["scale_type"] == scale_type]
-
-        # 按时间倒序
-        user_history.sort(key=lambda x: x["created_at"], reverse=True)
-
-        return user_history
-
-
-# 全局实例
+# 创建全局服务实例
 auth_service = AuthService()
