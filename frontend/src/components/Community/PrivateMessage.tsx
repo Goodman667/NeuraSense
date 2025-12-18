@@ -45,11 +45,12 @@ interface PrivateMessageProps {
 }
 
 export const PrivateMessage = ({ onClose, preSelectedUser }: PrivateMessageProps) => {
-    const [conversations] = useState<Conversation[]>(MOCK_CONVERSATIONS);
+    const [conversations, setConversations] = useState<Conversation[]>(MOCK_CONVERSATIONS);
     const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
     const [messages, setMessages] = useState<Message[]>(MOCK_MESSAGES);
     const [newMessage, setNewMessage] = useState('');
 
+    // Auto-select conversation if preSelectedUser is provided
     // Auto-select conversation if preSelectedUser is provided
     useEffect(() => {
         if (preSelectedUser) {
@@ -61,15 +62,16 @@ export const PrivateMessage = ({ onClose, preSelectedUser }: PrivateMessageProps
                 const newConv: Conversation = {
                     userId: Date.now().toString(),
                     nickname: preSelectedUser,
-                    avatar: '💭',
+                    avatar: '👤', // Default avatar for new users
                     lastMessage: '开始新对话...',
                     lastTime: new Date(),
                     unread: 0,
                 };
+                setConversations(prev => [newConv, ...prev]);
                 setSelectedConversation(newConv);
             }
         }
-    }, [preSelectedUser, conversations]);
+    }, [preSelectedUser]); // Only run when preSelectedUser changes to avoid loops
 
     const formatTime = (date: Date) => {
         const now = new Date();
