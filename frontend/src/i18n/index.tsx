@@ -66,6 +66,7 @@ export const translations: Translations = {
     'community.replyPlaceholder': { zh: '写下你的回复...', en: 'Write your reply...' },
     'community.replyBtn': { zh: '回复', en: 'Reply' },
     'community.footer': { zh: '🌟 在这里，每一句话都可能温暖另一个人', en: '🌟 Every word here can warm another heart' },
+    'community.anonymous': { zh: '匿名用户', en: 'Anonymous' },
 
     // Categories
     'category.all': { zh: '全部', en: 'All' },
