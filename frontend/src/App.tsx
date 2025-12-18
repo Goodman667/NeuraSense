@@ -711,6 +711,7 @@ function App() {
 
     // Community tab state
     const [communityTab, setCommunityTab] = useState<'feed' | 'leaderboard' | 'messages'>('feed');
+    const [selectedMessageUser, setSelectedMessageUser] = useState<string | null>(null);  // For targeted private messaging
 
     // Gamification state
     const { streak, todayPoints, checkStreak } = useGamificationStore();
@@ -1430,9 +1431,10 @@ function App() {
                             </div>
                             <CommunityFeed
                                 maxPosts={5}
-                                onStartMessage={() => {
+                                onStartMessage={(userName) => {
                                     setCurrentView('community');
                                     setCommunityTab('messages');
+                                    setSelectedMessageUser(userName);
                                 }}
                             />
                         </div>
@@ -1485,13 +1487,14 @@ function App() {
                                     <CommunityFeed
                                         maxPosts={50}
                                         fullPage={true}
-                                        onStartMessage={() => {
+                                        onStartMessage={(userName) => {
                                             setCommunityTab('messages');
+                                            setSelectedMessageUser(userName);
                                         }}
                                     />
                                 )}
                                 {communityTab === 'leaderboard' && <CommunityLeaderboard />}
-                                {communityTab === 'messages' && <PrivateMessage />}
+                                {communityTab === 'messages' && <PrivateMessage preSelectedUser={selectedMessageUser} />}
                             </div>
                         </div>
                     </section>

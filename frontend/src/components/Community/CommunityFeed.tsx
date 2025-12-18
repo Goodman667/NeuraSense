@@ -20,6 +20,7 @@ interface CommunityPost {
     likes: number;
     createdAt?: string;
     created_at?: string;
+    author?: string;  // Author name for private messaging
     category: 'gratitude' | 'encouragement' | 'achievement';
     replies: Reply[];
 }
@@ -27,7 +28,7 @@ interface CommunityPost {
 interface CommunityFeedProps {
     maxPosts?: number;
     fullPage?: boolean;
-    onStartMessage?: () => void;
+    onStartMessage?: (userName: string) => void;  // Pass user name for targeting
 }
 
 const CATEGORY_INFO = {
@@ -310,7 +311,7 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage 
                                             <button
                                                 className="flex items-center space-x-1 text-sm text-warm-400 hover:text-blue-500 transition-colors"
                                                 title={t('community.message')}
-                                                onClick={() => onStartMessage?.()}
+                                                onClick={() => onStartMessage?.(post.author || '匿名用户')}
                                             >
                                                 <span>✉️</span>
                                                 <span>{t('community.message')}</span>

@@ -4,7 +4,7 @@
  * Private messaging feature for community users
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Message {
     id: string;
@@ -41,13 +41,35 @@ const MOCK_MESSAGES: Message[] = [
 
 interface PrivateMessageProps {
     onClose?: () => void;
+    preSelectedUser?: string | null;  // Auto-select conversation by user name
 }
 
-export const PrivateMessage = ({ onClose }: PrivateMessageProps) => {
+export const PrivateMessage = ({ onClose, preSelectedUser }: PrivateMessageProps) => {
     const [conversations] = useState<Conversation[]>(MOCK_CONVERSATIONS);
     const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
     const [messages, setMessages] = useState<Message[]>(MOCK_MESSAGES);
     const [newMessage, setNewMessage] = useState('');
+
+    // Auto-select conversation if preSelectedUser is provided
+    useEffect(() => {
+        if (preSelectedUser) {
+            const targetConv = conversations.find(c => c.nickname === preSelectedUser);
+            if (targetConv) {
+                setSelectedConversation(targetConv);
+            } else {
+                // Create new conversation for this user if not exists
+                const newConv: Conversation = {
+                    userId: Date.now().toString(),
+                    nickname: preSelectedUser,
+                    avatar: '💭',
+                    lastMessage: '开始新对话...',
+                    lastTime: new Date(),
+                    unread: 0,
+                };
+                setSelectedConversation(newConv);
+            }
+        }
+    }, [preSelectedUser, conversations]);
 
     const formatTime = (date: Date) => {
         const now = new Date();
@@ -148,8 +170,8 @@ export const PrivateMessage = ({ onClose }: PrivateMessageProps) => {
                                         <div className={`max-w-[70%] ${msg.from === 'me' ? 'order-2' : 'order-1'}`}>
                                             <div
                                                 className={`px-4 py-2 rounded-2xl ${msg.from === 'me'
-                                                        ? 'bg-primary-500 text-white rounded-br-md'
-                                                        : 'bg-warm-100 dark:bg-gray-700 text-warm-800 dark:text-white rounded-bl-md'
+                                                    ? 'bg-primary-500 text-white rounded-br-md'
+                                                    : 'bg-warm-100 dark:bg-gray-700 text-warm-800 dark:text-white rounded-bl-md'
                                                     }`}
                                             >
                                                 {msg.content}
