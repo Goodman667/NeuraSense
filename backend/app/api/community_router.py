@@ -20,6 +20,7 @@ router = APIRouter(prefix="/community", tags=["Community"])
 # Data storage (fallback)
 DATA_DIR = Path("./data")
 COMMUNITY_FILE = DATA_DIR / "community_posts.json"
+PRIVATE_MESSAGE_FILE = DATA_DIR / "private_messages.json"
 
 # Get Supabase client
 _supabase = get_supabase_client()
@@ -79,6 +80,8 @@ if _supabase is None:
         DATA_DIR.mkdir(exist_ok=True)
     if not COMMUNITY_FILE.exists():
         COMMUNITY_FILE.write_text(json.dumps(DEFAULT_POSTS, ensure_ascii=False, indent=2))
+    if not PRIVATE_MESSAGE_FILE.exists():
+        PRIVATE_MESSAGE_FILE.write_text(json.dumps([], ensure_ascii=False, indent=2))
 
 
 class NewPost(BaseModel):
@@ -118,13 +121,13 @@ def _load_posts() -> List[dict]:
                 for post in DEFAULT_POSTS:
                     _supabase.table("community_posts").insert(post).execute()
                 return DEFAULT_POSTS
-            return posts
+            return _normalize_posts(posts)
         except Exception as e:
             print(f"Supabase error loading posts: {e}")
             return []
     else:
         try:
-            return json.loads(COMMUNITY_FILE.read_text())
+            return _normalize_posts(json.loads(COMMUNITY_FILE.read_text()))
         except:
             return []
 
@@ -151,6 +154,35 @@ def _moderate_content(content: str) -> tuple[bool, str]:
     return True, ""
 
 
+def _normalize_posts(posts: List[dict]) -> List[dict]:
+    """Ensure posts have required fields and sane defaults"""
+    normalized = []
+    for post in posts:
+        normalized.append(
+            {
+                **post,
+                "author": (post.get("author") or "匿名用户").strip(),
+                "replies": post.get("replies", []) or [],
+            }
+        )
+    return normalized
+
+
+def _load_messages() -> List[dict]:
+    if not PRIVATE_MESSAGE_FILE.exists():
+        return []
+    try:
+        return json.loads(PRIVATE_MESSAGE_FILE.read_text())
+    except Exception:
+        return []
+
+
+def _save_messages(messages: List[dict]):
+    if not DATA_DIR.exists():
+        DATA_DIR.mkdir(exist_ok=True)
+    PRIVATE_MESSAGE_FILE.write_text(json.dumps(messages, ensure_ascii=False, indent=2))
+
+
 @router.post("/post", response_model=PostResponse)
 async def create_post(post: NewPost) -> PostResponse:
     """
@@ -160,13 +192,15 @@ async def create_post(post: NewPost) -> PostResponse:
     if not is_ok:
         return PostResponse(success=False, post_id="", message=reason)
     
+    author = post.author.strip() or "匿名用户"
+
     new_post = {
         "id": str(uuid.uuid4()),
         "content": post.content.strip()[:500],
         "likes": 0,
         "category": post.category,
         "created_at": datetime.now().isoformat(),
-        "author": post.author,  # Use provided author name
+        "author": author,  # Use provided author name
         "replies": [],
     }
     
@@ -277,8 +311,11 @@ async def get_messages(user_id: str):
             return {"success": True, "messages": all_messages}
         except Exception as e:
             print(f"Supabase error loading messages: {e}")
-            return {"success": False, "messages": []}
-    return {"success": True, "messages": []}  # Fallback empty for local mode
+    # Fallback to local file storage
+    all_messages = _load_messages()
+    user_messages = [m for m in all_messages if m.get("from_user") == user_id or m.get("to_user") == user_id]
+    user_messages.sort(key=lambda x: x.get("created_at", ""))
+    return {"success": True, "messages": user_messages}
 
 
 @router.post("/message/send")
@@ -292,7 +329,7 @@ async def send_message(message: NewMessage):
         "from_user": message.from_user,
         "to_user": message.to_user,
         "content": message.content[:1000],
-        "created_at": datetime.now().isoformat(),
+        "created_at": datetime.utcnow().isoformat() + "Z",
         "read": False
     }
     
@@ -302,9 +339,12 @@ async def send_message(message: NewMessage):
             return {"success": True, "message": new_msg}
         except Exception as e:
             print(f"Supabase error sending message: {e}")
-            return {"success": False, "message": "发送失败"}
     
-    return {"success": False, "message": "服务不可用"}
+    # Fallback to local file storage so messaging still works without Supabase
+    messages = _load_messages()
+    messages.append(new_msg)
+    _save_messages(messages)
+    return {"success": True, "message": new_msg}
 
 
 @router.get("/post/{post_id}")

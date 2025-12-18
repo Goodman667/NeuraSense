@@ -5,9 +5,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-
-// Using the same API base as CommunityFeed
-const API_BASE = 'https://neurasense-m409.onrender.com/api/v1';
+import { API_BASE } from '../../config/api';
 
 interface Message {
     id: string;

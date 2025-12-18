@@ -404,15 +404,58 @@ const TrendPredictionView = () => {
         interpretation: string;
     } | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetch(`${API_BASE}/prediction/demo`)
-            .then(res => res.json())
-            .then(data => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            setError('请登录并完成至少 3 次 PHQ-9 评估后查看趋势预测');
+            setIsLoading(false);
+            return;
+        }
+
+        const load = async () => {
+            try {
+                // 拉取用户 PHQ-9 历史
+                const historyRes = await fetch(`${API_BASE}/history?token=${token}&scale_type=phq9`);
+                if (!historyRes.ok) throw new Error('加载评估历史失败');
+
+                const historyData = await historyRes.json();
+                const phqHistory = Array.isArray(historyData.history) ? historyData.history : [];
+
+                // 按时间升序排列，提取分数
+                const scores = [...phqHistory]
+                    .sort((a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+                    .map((h: any) => h.total_score);
+
+                if (scores.length < 3) {
+                    setError('需要至少 3 次 PHQ-9 记录才能生成趋势预测');
+                    setIsLoading(false);
+                    return;
+                }
+
+                const forecastRes = await fetch(`${API_BASE}/prediction/forecast`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phq9_history: scores }),
+                });
+
+                if (!forecastRes.ok) {
+                    const errBody = await forecastRes.json().catch(() => ({}));
+                    throw new Error(errBody.detail || '预测失败，请稍后重试');
+                }
+
+                const data = await forecastRes.json();
                 setPredictionData(data);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : '加载失败');
+            } finally {
                 setIsLoading(false);
-            })
-            .catch(() => setIsLoading(false));
+            }
+        };
+
+        load();
     }, []);
 
     const getTrendIcon = (trend: string) => {
@@ -447,6 +490,11 @@ const TrendPredictionView = () => {
                     <div className="text-center py-12">
                         <div className="animate-spin w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full mx-auto mb-4" />
                         <p className="text-warm-500">模型预测中...</p>
+                    </div>
+                ) : error ? (
+                    <div className="text-center py-12">
+                        <div className="w-16 h-16 rounded-full bg-warm-100 text-3xl flex items-center justify-center mx-auto mb-4">🤔</div>
+                        <p className="text-warm-600">{error}</p>
                     </div>
                 ) : predictionData ? (
                     <>
@@ -714,12 +762,17 @@ function App() {
     const [selectedMessageUser, setSelectedMessageUser] = useState<string | null>(null);  // For targeted private messaging
 
     // Gamification state
-    const { streak, todayPoints, checkStreak } = useGamificationStore();
+    const { streak, todayPoints, checkStreak, setActiveUser } = useGamificationStore();
 
     // Check streak on mount
     useEffect(() => {
         checkStreak();
     }, [checkStreak]);
+
+    // Reset gamification state when用户切换，防止连击串号
+    useEffect(() => {
+        setActiveUser(currentUser?.id || null);
+    }, [currentUser?.id, setActiveUser]);
 
 
     // Dark mode state

@@ -9,6 +9,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import { API_BASE } from '../../config/api';
 
 interface DashboardProps {
     onStartAssessment?: () => void;
@@ -58,12 +59,16 @@ export const Dashboard = ({ onStartAssessment, onStartChat, userName }: Dashboar
             const token = localStorage.getItem('token');
             if (token) {
                 try {
-                    const response = await fetch(`https://neurasense-m409.onrender.com/api/v1/history?token=${token}`);
+                    const response = await fetch(`${API_BASE}/history?token=${token}`);
                     if (response.ok) {
                         const data = await response.json();
                         // 获取每个量表最近的评分
                         const latestByScale: Record<string, RecentScore> = {};
-                        (data.history || []).forEach((record: RecentScore) => {
+                        const sorted = (data.history || []).sort(
+                            (a: RecentScore, b: RecentScore) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+                        );
+
+                        sorted.forEach((record: RecentScore) => {
                             if (!latestByScale[record.scale_type]) {
                                 latestByScale[record.scale_type] = record;
                             }

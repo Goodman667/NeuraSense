@@ -31,6 +31,7 @@ interface GamificationState {
     todayPoints: number;
     streak: number;
     lastActiveDate: string | null;
+    activeUserId: string | null;
 
     // Badges
     badges: Badge[];
@@ -45,6 +46,7 @@ interface GamificationState {
     checkStreak: () => void;
     unlockBadge: (badgeId: string) => void;
     resetDailyTasks: () => void;
+    setActiveUser: (userId: string | null) => void;
 }
 
 // Available badges
@@ -78,6 +80,7 @@ export const useGamificationStore = create<GamificationState>()(
             todayPoints: 0,
             streak: 0,
             lastActiveDate: null,
+            activeUserId: null,
             badges: ALL_BADGES,
             unlockedBadges: [],
             dailyTasks: getDefaultDailyTasks(),
@@ -177,6 +180,23 @@ export const useGamificationStore = create<GamificationState>()(
                 set({
                     dailyTasks: getDefaultDailyTasks(),
                     todayPoints: 0,
+                });
+            },
+
+            setActiveUser: (userId) => {
+                set((state) => {
+                    // 切换用户时重置积分、连击和每日任务，避免串号
+                    if (state.activeUserId === userId) return {};
+
+                    return {
+                        activeUserId: userId,
+                        totalPoints: 0,
+                        todayPoints: 0,
+                        streak: 0,
+                        lastActiveDate: null,
+                        unlockedBadges: [],
+                        dailyTasks: getDefaultDailyTasks(),
+                    };
                 });
             },
         }),

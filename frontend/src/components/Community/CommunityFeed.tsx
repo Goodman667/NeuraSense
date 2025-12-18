@@ -6,6 +6,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useI18n } from '../../i18n';
+import { API_BASE } from '../../config/api';
 
 interface Reply {
     id: string;
@@ -38,8 +39,6 @@ const CATEGORY_INFO = {
     encouragement: { label: '鼓励', icon: '💪', color: 'blue' },
     achievement: { label: '成就', icon: '🎉', color: 'amber' },
 };
-
-const API_BASE = 'https://neurasense-m409.onrender.com/api/v1';
 
 // Format time ago
 const timeAgo = (dateStr: string): string => {

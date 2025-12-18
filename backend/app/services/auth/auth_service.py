@@ -286,6 +286,22 @@ class AuthService:
         history = self._load_history()
         return [h for h in history if h.get("user_id") == user_id]
 
+    def get_user_history(self, user_id: str, scale_type: str | None = None) -> list[dict]:
+        """获取用户评估历史，按时间倒序，可按量表过滤"""
+        history = self._load_history()
+        filtered = [h for h in history if h.get("user_id") == user_id]
+
+        if scale_type:
+            filtered = [h for h in filtered if h.get("scale_type") == scale_type]
+
+        # 按创建时间倒序
+        try:
+            filtered.sort(key=lambda x: x.get("created_at", ""), reverse=True)
+        except Exception:
+            pass
+
+        return filtered
+
     def save_assessment(self, user_id: str, scale_type: str, total_score: int,
                         answers: list[int], severity: str, ai_interpretation: str = None) -> dict:
         """保存评估结果"""

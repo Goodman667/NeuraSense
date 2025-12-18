@@ -271,8 +271,9 @@ async def predict_weekly_trend(
         PredictionResult with 7-day forecast
     """
     if len(phq9_history) < TrendPredictor.MIN_DATA_POINTS:
-        # Generate mock data for demo
-        phq9_history = [8, 10, 9, 11, 10, 9, 8]
+        raise ValueError(
+            f"Need at least {TrendPredictor.MIN_DATA_POINTS} PHQ-9 records to predict"
+        )
     
     features = FeatureVector(
         phq9_scores=phq9_history,

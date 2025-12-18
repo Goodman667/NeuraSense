@@ -5,6 +5,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
+import { API_BASE } from '../../config/api';
 
 interface HistoryRecord {
     id: string;
@@ -23,6 +24,9 @@ interface AssessmentHistoryProps {
 const SCALE_INFO: Record<string, { name: string; maxScore: number; icon: string; color: string }> = {
     phq9: { name: 'PHQ-9 抑郁', maxScore: 27, icon: '😔', color: 'rose' },
     gad7: { name: 'GAD-7 焦虑', maxScore: 21, icon: '😰', color: 'blue' },
+    sds: { name: 'SDS 抑郁自评', maxScore: 80, icon: '💜', color: 'purple' },
+    sas: { name: 'SAS 焦虑自评', maxScore: 80, icon: '🧡', color: 'orange' },
+    pss10: { name: 'PSS-10 压力感知', maxScore: 40, icon: '💪', color: 'indigo' },
 };
 
 export const AssessmentHistory = ({ onClose }: AssessmentHistoryProps) => {
@@ -42,7 +46,7 @@ export const AssessmentHistory = ({ onClose }: AssessmentHistoryProps) => {
 
             try {
                 const response = await fetch(
-                    `https://neurasense-m409.onrender.com/api/v1/history?token=${token}${selectedScale ? `&scale_type=${selectedScale}` : ''}`
+                    `${API_BASE}/history?token=${token}${selectedScale ? `&scale_type=${selectedScale}` : ''}`
                 );
                 if (response.ok) {
                     const data = await response.json();
@@ -176,28 +180,26 @@ export const AssessmentHistory = ({ onClose }: AssessmentHistoryProps) => {
             )}
 
             {/* 筛选器 */}
-            <div className="flex space-x-2 mb-6">
-                <button
-                    onClick={() => setSelectedScale(null)}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${!selectedScale ? 'bg-primary-500 text-white' : 'bg-warm-100 text-warm-700 hover:bg-warm-200'
-                        }`}
-                >
-                    全部
-                </button>
-                <button
-                    onClick={() => setSelectedScale('phq9')}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${selectedScale === 'phq9' ? 'bg-rose-500 text-white' : 'bg-warm-100 text-warm-700 hover:bg-warm-200'
-                        }`}
-                >
-                    😔 PHQ-9
-                </button>
-                <button
-                    onClick={() => setSelectedScale('gad7')}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${selectedScale === 'gad7' ? 'bg-blue-500 text-white' : 'bg-warm-100 text-warm-700 hover:bg-warm-200'
-                        }`}
-                >
-                    😰 GAD-7
-                </button>
+            <div className="flex space-x-2 mb-6 flex-wrap">
+                {[
+                    { key: null, label: '全部', className: 'bg-primary-500 text-white', inactive: 'bg-warm-100 text-warm-700 hover:bg-warm-200' },
+                    { key: 'phq9', label: '😔 PHQ-9', className: 'bg-rose-500 text-white', inactive: 'bg-warm-100 text-warm-700 hover:bg-warm-200' },
+                    { key: 'gad7', label: '😰 GAD-7', className: 'bg-blue-500 text-white', inactive: 'bg-warm-100 text-warm-700 hover:bg-warm-200' },
+                    { key: 'sds', label: '💜 SDS', className: 'bg-purple-500 text-white', inactive: 'bg-warm-100 text-warm-700 hover:bg-warm-200' },
+                    { key: 'sas', label: '🧡 SAS', className: 'bg-orange-500 text-white', inactive: 'bg-warm-100 text-warm-700 hover:bg-warm-200' },
+                    { key: 'pss10', label: '💪 PSS-10', className: 'bg-indigo-500 text-white', inactive: 'bg-warm-100 text-warm-700 hover:bg-warm-200' },
+                ].map((btn) => (
+                    <button
+                        key={btn.key ?? 'all'}
+                        onClick={() => setSelectedScale(btn.key as string | null)}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${selectedScale === btn.key || (!btn.key && !selectedScale)
+                                ? btn.className
+                                : btn.inactive
+                            }`}
+                    >
+                        {btn.label}
+                    </button>
+                ))}
             </div>
 
             {/* 历史列表 */}
