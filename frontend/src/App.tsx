@@ -1437,7 +1437,7 @@ function App() {
                                 }}
                             />
                         </div>
-                    </section>
+                    </>
                 )}
 
                 {/* ===== COMMUNITY VIEW ===== */}
