@@ -85,6 +85,7 @@ class NewPost(BaseModel):
     """Create a new post"""
     content: str
     category: str  # gratitude, encouragement, achievement
+    author: str = "匿名用户"  # Optional author name
 
 
 class NewReply(BaseModel):
@@ -165,7 +166,7 @@ async def create_post(post: NewPost) -> PostResponse:
         "likes": 0,
         "category": post.category,
         "created_at": datetime.now().isoformat(),
-        "author": "匿名用户",  # Default anonymous user
+        "author": post.author,  # Use provided author name
         "replies": [],
     }
     

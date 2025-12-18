@@ -29,6 +29,7 @@ interface CommunityFeedProps {
     maxPosts?: number;
     fullPage?: boolean;
     onStartMessage?: (userName: string) => void;  // Pass user name for targeting
+    currentUser?: string;
 }
 
 const CATEGORY_INFO = {
@@ -53,7 +54,7 @@ const timeAgo = (dateStr: string): string => {
     return date.toLocaleDateString('zh-CN');
 };
 
-export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage }: CommunityFeedProps) => {
+export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage, currentUser }: CommunityFeedProps) => {
     const { t } = useI18n();
     const [posts, setPosts] = useState<CommunityPost[]>([]);
     const [loading, setLoading] = useState(true);
@@ -135,6 +136,7 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage 
                 body: JSON.stringify({
                     content: newContent.trim(),
                     category: newCategory,
+                    author: currentUser || t('community.anonymous')
                 }),
             });
 
@@ -152,7 +154,7 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage 
         } finally {
             setSubmitting(false);
         }
-    }, [newContent, newCategory, submitting, loadPosts]);
+    }, [newContent, newCategory, submitting, loadPosts, currentUser, t]);
 
     const handleSubmitReply = useCallback(async (postId: string) => {
         const content = replyContent[postId];
@@ -294,6 +296,9 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage 
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center space-x-2 mb-1">
+                                            <span className="font-medium text-warm-900 text-sm">
+                                                {post.author || t('community.anonymous')}
+                                            </span>
                                             <span className={`text-xs px-2 py-0.5 rounded-full bg-${catInfo.color}-100 text-${catInfo.color}-600`}>
                                                 {catInfo.label}
                                             </span>
@@ -328,6 +333,7 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage 
                                                 <span>{t('community.message')}</span>
                                             </button>
                                         </div>
+
 
                                         {/* Replies Section */}
                                         {isExpanded && (
