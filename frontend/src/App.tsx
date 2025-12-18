@@ -1491,7 +1491,7 @@ function App() {
                                             setCommunityTab('messages');
                                             setSelectedMessageUser(userName);
                                         }}
-                                        currentUser={currentUser?.nickname || '匿名用户'}
+                                        currentUser={currentUser?.nickname || currentUser?.username || '匿名用户'}
                                     />
                                 )}
                                 {communityTab === 'leaderboard' && <CommunityLeaderboard />}
