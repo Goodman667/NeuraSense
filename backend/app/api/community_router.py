@@ -92,6 +92,13 @@ class NewReply(BaseModel):
     content: str
 
 
+class NewMessage(BaseModel):
+    """Send a private message"""
+    from_user: str
+    to_user: str
+    content: str
+
+
 class PostResponse(BaseModel):
     """Response after creating post"""
     success: bool
@@ -251,6 +258,47 @@ async def reply_to_post(post_id: str, reply: NewReply):
             return {"success": True, "reply": new_reply}
     
     return {"success": False, "message": "帖子不存在"}
+
+
+@router.get("/messages/{user_id}")
+async def get_messages(user_id: str):
+    """Get private messages for a user (grouped by conversation)"""
+    if _supabase:
+        try:
+            # Get messages where user is sender or receiver
+            response = _supabase.table("private_messages").select("*").or_(f"from_user.eq.{user_id},to_user.eq.{user_id}").order("created_at", desc=False).execute()
+            messages = response.data or []
+            return {"success": True, "messages": messages}
+        except Exception as e:
+            print(f"Supabase error loading messages: {e}")
+            return {"success": False, "messages": []}
+    return {"success": True, "messages": []}  # Fallback empty for local mode
+
+
+@router.post("/message/send")
+async def send_message(message: NewMessage):
+    """Send a private message"""
+    if len(message.content.strip()) < 1:
+        return {"success": False, "message": "内容不能为空"}
+    
+    new_msg = {
+        "id": str(uuid.uuid4()),
+        "from_user": message.from_user,
+        "to_user": message.to_user,
+        "content": message.content[:1000],
+        "created_at": datetime.now().isoformat(),
+        "read": False
+    }
+    
+    if _supabase:
+        try:
+            _supabase.table("private_messages").insert(new_msg).execute()
+            return {"success": True, "message": new_msg}
+        except Exception as e:
+            print(f"Supabase error sending message: {e}")
+            return {"success": False, "message": "发送失败"}
+    
+    return {"success": False, "message": "服务不可用"}
 
 
 @router.get("/post/{post_id}")

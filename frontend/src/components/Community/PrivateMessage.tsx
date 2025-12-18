@@ -1,22 +1,35 @@
 /**
  * PrivateMessage Component
  * 
- * Private messaging feature for community users
+ * Real-time private messaging feature connected to Supabase
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+
+// Using the same API base as CommunityFeed
+const API_BASE = 'https://neurasense-m409.onrender.com/api/v1';
 
 interface Message {
     id: string;
-    from: string;
+    from: string; // 'me' or 'them' (computed on frontend)
+    fromUser: string; // raw username
     fromAvatar: string;
     content: string;
     timestamp: Date;
     read: boolean;
 }
 
+interface ApiMessage {
+    id: string;
+    from_user: string;
+    to_user: string;
+    content: string;
+    created_at: string;
+    read: boolean;
+}
+
 interface Conversation {
-    userId: string;
+    userId: string; // We use nickname as ID since auth is nickname-based
     nickname: string;
     avatar: string;
     lastMessage: string;
@@ -24,54 +37,175 @@ interface Conversation {
     unread: number;
 }
 
-// Mock conversations
-const MOCK_CONVERSATIONS: Conversation[] = [
-    { userId: '1', nickname: '正能量小太阳', avatar: '🌟', lastMessage: '谢谢你的鼓励！', lastTime: new Date(), unread: 2 },
-    { userId: '2', nickname: '心灵守护者', avatar: '💜', lastMessage: '最近感觉好多了', lastTime: new Date(Date.now() - 3600000), unread: 0 },
-    { userId: '3', nickname: '微笑面对', avatar: '😊', lastMessage: '一起加油！', lastTime: new Date(Date.now() - 86400000), unread: 1 },
-];
-
-// Mock messages for a conversation
-const MOCK_MESSAGES: Message[] = [
-    { id: '1', from: 'them', fromAvatar: '🌟', content: '你好！看到你的帖子很有共鸣', timestamp: new Date(Date.now() - 7200000), read: true },
-    { id: '2', from: 'me', fromAvatar: '😊', content: '谢谢！很高兴认识你', timestamp: new Date(Date.now() - 3600000), read: true },
-    { id: '3', from: 'them', fromAvatar: '🌟', content: '我们可以互相支持！', timestamp: new Date(Date.now() - 1800000), read: true },
-    { id: '4', from: 'them', fromAvatar: '🌟', content: '谢谢你的鼓励！', timestamp: new Date(), read: false },
-];
-
 interface PrivateMessageProps {
     onClose?: () => void;
-    preSelectedUser?: string | null;  // Auto-select conversation by user name
+    preSelectedUser?: string | null;
+    currentUser: string;
 }
 
-export const PrivateMessage = ({ onClose, preSelectedUser }: PrivateMessageProps) => {
-    const [conversations, setConversations] = useState<Conversation[]>(MOCK_CONVERSATIONS);
+export const PrivateMessage = ({ onClose, preSelectedUser, currentUser }: PrivateMessageProps) => {
+    const [conversations, setConversations] = useState<Conversation[]>([]);
     const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
-    const [messages, setMessages] = useState<Message[]>(MOCK_MESSAGES);
+    const [allMessages, setAllMessages] = useState<ApiMessage[]>([]); // Store raw API messages
+    const [messages, setMessages] = useState<Message[]>([]); // Messages for current view
     const [newMessage, setNewMessage] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    // Auto-select conversation if preSelectedUser is provided
-    // Auto-select conversation if preSelectedUser is provided
+    // Fetch messages from backend
+    const loadMessages = useCallback(async () => {
+        if (!currentUser) return;
+        setLoading(true);
+        try {
+            const response = await fetch(`${API_BASE}/community/messages/${currentUser}`);
+            const data = await response.json();
+
+            if (data.success && Array.isArray(data.messages)) {
+                setAllMessages(data.messages);
+                processConversations(data.messages);
+            }
+        } catch (err) {
+            console.error('Failed to load messages:', err);
+        } finally {
+            setLoading(false);
+        }
+    }, [currentUser]);
+
+    // Process raw messages into conversation list
+    const processConversations = (paramsMessages: ApiMessage[]) => {
+        const groups = new Map<string, Conversation>();
+
+        paramsMessages.forEach(msg => {
+            const isMe = msg.from_user === currentUser;
+            const otherUser = isMe ? msg.to_user : msg.from_user;
+
+            if (!groups.has(otherUser)) {
+                groups.set(otherUser, {
+                    userId: otherUser,
+                    nickname: otherUser,
+                    avatar: '👤', // Default avatar
+                    lastMessage: '',
+                    lastTime: new Date(0),
+                    unread: 0
+                });
+            }
+
+            const conv = groups.get(otherUser)!;
+            const msgTime = new Date(msg.created_at);
+
+            // Update last message info
+            if (msgTime > conv.lastTime) {
+                conv.lastTime = msgTime;
+                conv.lastMessage = msg.content;
+            }
+
+            // Count unread
+            if (!msg.read && msg.to_user === currentUser) {
+                conv.unread++;
+            }
+        });
+
+        // Sort by time desc
+        const sorted = Array.from(groups.values()).sort((a, b) => b.lastTime.getTime() - a.lastTime.getTime());
+        setConversations(sorted);
+    };
+
+    // Initial load
     useEffect(() => {
-        if (preSelectedUser) {
-            const targetConv = conversations.find(c => c.nickname === preSelectedUser);
-            if (targetConv) {
-                setSelectedConversation(targetConv);
-            } else {
-                // Create new conversation for this user if not exists
-                const newConv: Conversation = {
-                    userId: Date.now().toString(),
+        loadMessages();
+        const interval = setInterval(loadMessages, 10000); // Poll every 10s
+        return () => clearInterval(interval);
+    }, [loadMessages]);
+
+    // Filter messages for selected conversation
+    useEffect(() => {
+        if (selectedConversation) {
+            const filtered = allMessages
+                .filter(m => m.from_user === selectedConversation.nickname || m.to_user === selectedConversation.nickname)
+                .map(m => ({
+                    id: m.id,
+                    from: m.from_user === currentUser ? 'me' : 'them',
+                    fromUser: m.from_user,
+                    fromAvatar: m.from_user === currentUser ? '😊' : '👤',
+                    content: m.content,
+                    timestamp: new Date(m.created_at),
+                    read: m.read
+                }))
+                .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+
+            setMessages(filtered);
+        } else {
+            setMessages([]);
+        }
+    }, [selectedConversation, allMessages, currentUser]);
+
+    // Handle preSelectedUser (Targeting)
+    useEffect(() => {
+        if (preSelectedUser && !loading) {
+            const existing = conversations.find(c => c.nickname === preSelectedUser);
+            if (existing) {
+                setSelectedConversation(existing);
+            } else if (preSelectedUser !== currentUser) {
+                // Create temporary conversation object
+                const tempConv: Conversation = {
+                    userId: preSelectedUser,
                     nickname: preSelectedUser,
-                    avatar: '👤', // Default avatar for new users
+                    avatar: '👤',
                     lastMessage: '开始新对话...',
                     lastTime: new Date(),
-                    unread: 0,
+                    unread: 0
                 };
-                setConversations(prev => [newConv, ...prev]);
-                setSelectedConversation(newConv);
+                // Only add if not already in list (prevent dupe visuals)
+                setConversations(prev => {
+                    if (prev.find(p => p.nickname === preSelectedUser)) return prev;
+                    return [tempConv, ...prev];
+                });
+                setSelectedConversation(tempConv);
             }
         }
-    }, [preSelectedUser]); // Only run when preSelectedUser changes to avoid loops
+    }, [preSelectedUser, loading, conversations.length]); // Dependencies carefully chosen
+
+    const handleSendMessage = async () => {
+        if (!newMessage.trim() || !selectedConversation) return;
+
+        const content = newMessage.trim();
+        const targetUser = selectedConversation.nickname;
+
+        // Optimistic update
+        const tempMsg: Message = {
+            id: Date.now().toString(),
+            from: 'me',
+            fromUser: currentUser,
+            fromAvatar: '😊',
+            content: content,
+            timestamp: new Date(),
+            read: true
+        };
+        setMessages(prev => [...prev, tempMsg]);
+        setNewMessage('');
+
+        try {
+            const res = await fetch(`${API_BASE}/community/message/send`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    from_user: currentUser,
+                    to_user: targetUser,
+                    content: content
+                })
+            });
+
+            const data = await res.json();
+            if (data.success) {
+                // Reload to get server ID and exact timestamp, and update conversation list order
+                loadMessages();
+            } else {
+                alert('发送失败: ' + (data.message || '未知错误'));
+            }
+        } catch (err) {
+            console.error('Send error:', err);
+            alert('网络错误，消息发送失败');
+        }
+    };
 
     const formatTime = (date: Date) => {
         const now = new Date();
@@ -83,22 +217,6 @@ export const PrivateMessage = ({ onClose, preSelectedUser }: PrivateMessageProps
         return `${Math.floor(diff / 86400000)}天前`;
     };
 
-    const handleSendMessage = () => {
-        if (!newMessage.trim()) return;
-
-        const msg: Message = {
-            id: Date.now().toString(),
-            from: 'me',
-            fromAvatar: '😊',
-            content: newMessage.trim(),
-            timestamp: new Date(),
-            read: true,
-        };
-
-        setMessages([...messages, msg]);
-        setNewMessage('');
-    };
-
     const totalUnread = conversations.reduce((sum, c) => sum + c.unread, 0);
 
     return (
@@ -108,7 +226,7 @@ export const PrivateMessage = ({ onClose, preSelectedUser }: PrivateMessageProps
                 <div className="flex items-center gap-3">
                     <span className="text-2xl">💌</span>
                     <div>
-                        <h2 className="font-bold text-lg">私信</h2>
+                        <h2 className="font-bold text-lg">私信 ({currentUser})</h2>
                         {totalUnread > 0 && (
                             <span className="text-xs text-white/80">{totalUnread} 条未读消息</span>
                         )}
@@ -122,6 +240,9 @@ export const PrivateMessage = ({ onClose, preSelectedUser }: PrivateMessageProps
             <div className="flex-1 flex overflow-hidden">
                 {/* Conversation List */}
                 <div className="w-1/3 border-r border-warm-200 dark:border-gray-700 overflow-y-auto">
+                    {conversations.length === 0 && (
+                        <div className="p-4 text-center text-gray-400 text-sm">暂无消息</div>
+                    )}
                     {conversations.map((conv) => (
                         <div
                             key={conv.userId}
@@ -164,9 +285,9 @@ export const PrivateMessage = ({ onClose, preSelectedUser }: PrivateMessageProps
 
                             {/* Messages */}
                             <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                                {messages.map((msg) => (
+                                {messages.map((msg, idx) => (
                                     <div
-                                        key={msg.id}
+                                        key={msg.id || idx}
                                         className={`flex ${msg.from === 'me' ? 'justify-end' : 'justify-start'}`}
                                     >
                                         <div className={`max-w-[70%] ${msg.from === 'me' ? 'order-2' : 'order-1'}`}>
@@ -199,7 +320,8 @@ export const PrivateMessage = ({ onClose, preSelectedUser }: PrivateMessageProps
                                     />
                                     <button
                                         onClick={handleSendMessage}
-                                        className="px-6 py-2 bg-primary-500 text-white rounded-full hover:bg-primary-600 transition-colors"
+                                        disabled={!newMessage.trim()}
+                                        className="px-6 py-2 bg-primary-500 text-white rounded-full hover:bg-primary-600 transition-colors disabled:opacity-50"
                                     >
                                         发送
                                     </button>

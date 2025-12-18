@@ -1494,7 +1494,7 @@ function App() {
                                     />
                                 )}
                                 {communityTab === 'leaderboard' && <CommunityLeaderboard />}
-                                {communityTab === 'messages' && <PrivateMessage preSelectedUser={selectedMessageUser} />}
+                                {communityTab === 'messages' && <PrivateMessage preSelectedUser={selectedMessageUser} currentUser={currentUser?.nickname || '匿名用户'} />}
                             </div>
                         </div>
                     </section>
