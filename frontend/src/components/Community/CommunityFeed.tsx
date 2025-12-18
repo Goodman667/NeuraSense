@@ -69,6 +69,7 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage 
 
     // Load posts from API
     const loadPosts = useCallback(async () => {
+        console.log('[CommunityFeed] Loading posts...');
         setLoading(true);
         try {
             const url = filter === 'all'
@@ -77,10 +78,14 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage 
             const response = await fetch(url);
             if (response.ok) {
                 const data = await response.json();
+                console.log('[CommunityFeed] Posts loaded:', data.posts?.length, 'posts');
+                console.log('[CommunityFeed] First post replies:', data.posts?.[0]?.replies);
                 setPosts(data.posts || []);
+            } else {
+                console.error('[CommunityFeed] Failed to load posts, status:', response.status);
             }
         } catch (err) {
-            console.error('Failed to load posts:', err);
+            console.error('[CommunityFeed] Failed to load posts:', err);
         } finally {
             setLoading(false);
         }
@@ -154,6 +159,7 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage 
         if (!content?.trim()) return;
 
         try {
+            console.log('[CommunityFeed] Submitting reply to post:', postId);
             const response = await fetch(`${API_BASE}/community/reply/${postId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -161,15 +167,20 @@ export const CommunityFeed = ({ maxPosts = 10, fullPage = false, onStartMessage 
             });
 
             const data = await response.json();
+            console.log('[CommunityFeed] Reply response:', data);
 
             if (data.success) {
                 setReplyContent(prev => ({ ...prev, [postId]: '' }));
-                loadPosts(); // Refresh to show new reply
+                console.log('[CommunityFeed] Reply successful, refreshing posts...');
+                await loadPosts(); // Ensure posts are refreshed
+                console.log('[CommunityFeed] Posts refreshed');
             } else {
+                console.error('[CommunityFeed] Reply failed:', data.message);
                 alert(data.message || '回复失败');
             }
         } catch (err) {
-            console.error('Reply failed:', err);
+            console.error('[CommunityFeed] Reply error:', err);
+            alert('网络错误，请重试');
         }
     }, [replyContent, loadPosts]);
 

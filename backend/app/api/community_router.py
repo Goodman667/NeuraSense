@@ -203,7 +203,16 @@ async def like_post(post_id: str):
     for post in posts:
         if post["id"] == post_id:
             post["likes"] = post.get("likes", 0) + 1
-            _save_posts(posts)
+            
+            # Persist to Supabase if available
+            if _supabase:
+                try:
+                    _supabase.table("community_posts").update({"likes": post["likes"]}).eq("id", post_id).execute()
+                except Exception as e:
+                    print(f"Supabase error updating likes: {e}")
+            else:
+                _save_posts(posts)
+                
             return {"success": True, "likes": post["likes"]}
     
     return {"success": False, "error": "Post not found"}
@@ -228,7 +237,17 @@ async def reply_to_post(post_id: str, reply: NewReply):
             if "replies" not in post:
                 post["replies"] = []
             post["replies"].append(new_reply)
-            _save_posts(posts)
+            
+            # Persist to Supabase if available
+            if _supabase:
+                try:
+                    _supabase.table("community_posts").update({"replies": post["replies"]}).eq("id", post_id).execute()
+                except Exception as e:
+                    print(f"Supabase error updating replies: {e}")
+                    return {"success": False, "message": "回复保存失败"}
+            else:
+                _save_posts(posts)
+                
             return {"success": True, "reply": new_reply}
     
     return {"success": False, "message": "帖子不存在"}
