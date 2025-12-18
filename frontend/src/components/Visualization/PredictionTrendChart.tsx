@@ -18,6 +18,7 @@ import {
     ComposedChart,
     ReferenceLine,
 } from 'recharts';
+import { API_BASE } from '../../config/api';
 
 interface PredictionData {
     predicted_scores: number[];
@@ -41,7 +42,7 @@ interface PredictionTrendChartProps {
     className?: string;
 }
 
-const API_BASE = 'https://neurasense-m409.onrender.com/api/v1';
+
 
 export const PredictionTrendChart = ({
     historicalData,

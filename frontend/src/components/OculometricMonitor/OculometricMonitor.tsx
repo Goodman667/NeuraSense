@@ -12,6 +12,7 @@ import {
     EyeState,
     type BioSignalMetrics
 } from '../../hooks/useOculometricSensor';
+import { API_BASE } from '../../config/api';
 
 export interface OculometricMonitorProps {
     onMetricsUpdate?: (metrics: BioSignalMetrics) => void;
@@ -107,7 +108,7 @@ export const OculometricMonitor = ({
 
         setIsAnalyzing(true);
         try {
-            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/biosignal/analyze', {
+            const response = await fetch(`${API_BASE}/biosignal/analyze`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

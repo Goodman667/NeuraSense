@@ -5,6 +5,7 @@
  */
 
 import { useState, useCallback } from 'react';
+import { API_BASE } from '../../config/api';
 import { useGamificationStore } from '../../store/useGamificationStore';
 
 interface MoodJournalProps {
@@ -59,7 +60,7 @@ export const MoodJournal = ({ onComplete, onClose }: MoodJournalProps) => {
 
         try {
             // Save to backend
-            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/journal/daily', {
+            const response = await fetch(`${API_BASE}/journal/daily`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

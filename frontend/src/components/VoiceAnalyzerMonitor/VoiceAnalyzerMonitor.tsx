@@ -9,6 +9,7 @@ import {
     useVoiceAnalyzer,
     type VoiceMetrics
 } from '../../hooks/useVoiceAnalyzer';
+import { API_BASE } from '../../config/api';
 
 export interface VoiceAnalyzerMonitorProps {
     onMetricsUpdate?: (metrics: VoiceMetrics) => void;
@@ -55,7 +56,7 @@ export const VoiceAnalyzerMonitor = ({
 
         setIsAnalyzing(true);
         try {
-            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/biosignal/analyze', {
+            const response = await fetch(`${API_BASE}/biosignal/analyze`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

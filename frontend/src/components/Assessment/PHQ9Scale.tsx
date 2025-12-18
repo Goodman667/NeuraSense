@@ -6,6 +6,7 @@
  */
 
 import { useState, useCallback } from 'react';
+import { API_BASE } from '../../config/api';
 import { PDFDownloadButton } from './PDFDownloadButton';
 
 // PHQ-9 问题定义
@@ -99,7 +100,7 @@ export const PHQ9Scale = ({ onComplete, onClose }: PHQ9ScaleProps) => {
 
 请用分点列表的形式回复，使用emoji让建议更友好。`;
 
-            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/counselor/chat', {
+            const response = await fetch(`${API_BASE}/counselor/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

@@ -6,6 +6,7 @@
  */
 
 import { useState, useCallback } from 'react';
+import { API_BASE } from '../../config/api';
 import { PDFDownloadButton } from './PDFDownloadButton';
 
 // GAD-7 问题定义
@@ -78,7 +79,7 @@ export const GAD7Scale = ({ onComplete, onClose }: GAD7ScaleProps) => {
 
         try {
             // 调用后端 API 获取 AI 解读
-            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/chat', {
+            const response = await fetch(`${API_BASE}/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

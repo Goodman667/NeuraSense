@@ -6,6 +6,7 @@
  */
 
 import { useState, useCallback } from 'react';
+import { API_BASE } from '../../config/api';
 import { useGamificationStore } from '../../store/useGamificationStore';
 
 interface EMACheckInProps {
@@ -85,7 +86,7 @@ export const EMACheckIn = ({ onComplete, onClose }: EMACheckInProps) => {
 
         // Save to backend
         try {
-            await fetch('https://neurasense-m409.onrender.com/api/v1/ema/record', {
+            await fetch(`${API_BASE}/ema/record`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(result),
@@ -169,8 +170,8 @@ export const EMACheckIn = ({ onComplete, onClose }: EMACheckInProps) => {
                                         key={source.id}
                                         onClick={() => setStressSource(source.id)}
                                         className={`p-4 rounded-xl text-left transition-all ${stressSource === source.id
-                                                ? 'bg-cyan-100 border-2 border-cyan-500'
-                                                : 'bg-warm-50 border-2 border-transparent hover:bg-warm-100'
+                                            ? 'bg-cyan-100 border-2 border-cyan-500'
+                                            : 'bg-warm-50 border-2 border-transparent hover:bg-warm-100'
                                             }`}
                                     >
                                         <span className="text-xl">{source.icon}</span>
@@ -206,8 +207,8 @@ export const EMACheckIn = ({ onComplete, onClose }: EMACheckInProps) => {
                                         key={activity.id}
                                         onClick={() => setCurrentActivity(activity.id)}
                                         className={`p-4 rounded-xl text-left transition-all ${currentActivity === activity.id
-                                                ? 'bg-cyan-100 border-2 border-cyan-500'
-                                                : 'bg-warm-50 border-2 border-transparent hover:bg-warm-100'
+                                            ? 'bg-cyan-100 border-2 border-cyan-500'
+                                            : 'bg-warm-50 border-2 border-transparent hover:bg-warm-100'
                                             }`}
                                     >
                                         <span className="text-xl">{activity.icon}</span>

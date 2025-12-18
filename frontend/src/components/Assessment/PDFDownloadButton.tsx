@@ -5,6 +5,7 @@
  */
 
 import { useState } from 'react';
+import { API_BASE } from '../../config/api';
 
 interface PDFDownloadButtonProps {
     scaleType: string;
@@ -31,7 +32,7 @@ export const PDFDownloadButton = ({
         setError(null);
 
         try {
-            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/report/pdf', {
+            const response = await fetch(`${API_BASE}/report/pdf`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

@@ -8,6 +8,7 @@
  */
 
 import { useState, useCallback, useRef, useEffect } from 'react';
+import { API_BASE } from '../../config/api';
 
 type TestType = 'eye_tracking' | 'attention' | 'reaction';
 type TestStatus = 'idle' | 'countdown' | 'running' | 'completed';
@@ -244,7 +245,7 @@ export const CognitiveTestPanel = ({
 
         setIsAnalyzing(true);
         try {
-            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/counselor/chat', {
+            const response = await fetch(`${API_BASE}/counselor/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

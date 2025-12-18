@@ -4,7 +4,7 @@
  * Real-time private messaging feature connected to Supabase
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { API_BASE } from '../../config/api';
 
 interface Message {
@@ -54,7 +54,7 @@ export const PrivateMessage = ({ onClose, preSelectedUser, currentUser }: Privat
         if (!currentUser) return;
         setLoading(true);
         try {
-            const response = await fetch(`${API_BASE}/community/messages/${currentUser}`);
+            const response = await fetch(`${API_BASE} /community/messages / ${currentUser} `);
             const data = await response.json();
 
             if (data.success && Array.isArray(data.messages)) {
@@ -182,7 +182,7 @@ export const PrivateMessage = ({ onClose, preSelectedUser, currentUser }: Privat
         setNewMessage('');
 
         try {
-            const res = await fetch(`${API_BASE}/community/message/send`, {
+            const res = await fetch(`${API_BASE} /community/message / send`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -210,9 +210,9 @@ export const PrivateMessage = ({ onClose, preSelectedUser, currentUser }: Privat
         const diff = now.getTime() - date.getTime();
 
         if (diff < 60000) return '刚刚';
-        if (diff < 3600000) return `${Math.floor(diff / 60000)}分钟前`;
-        if (diff < 86400000) return `${Math.floor(diff / 3600000)}小时前`;
-        return `${Math.floor(diff / 86400000)}天前`;
+        if (diff < 3600000) return `${Math.floor(diff / 60000)} 分钟前`;
+        if (diff < 86400000) return `${Math.floor(diff / 3600000)} 小时前`;
+        return `${Math.floor(diff / 86400000)} 天前`;
     };
 
     const totalUnread = conversations.reduce((sum, c) => sum + c.unread, 0);
@@ -245,8 +245,8 @@ export const PrivateMessage = ({ onClose, preSelectedUser, currentUser }: Privat
                         <div
                             key={conv.userId}
                             onClick={() => setSelectedConversation(conv)}
-                            className={`p-4 border-b border-warm-100 dark:border-gray-700 cursor-pointer hover:bg-warm-50 dark:hover:bg-gray-700 transition-colors ${selectedConversation?.userId === conv.userId ? 'bg-primary-50 dark:bg-primary-900/30' : ''
-                                }`}
+                            className={`p - 4 border - b border - warm - 100 dark: border - gray - 700 cursor - pointer hover: bg - warm - 50 dark: hover: bg - gray - 700 transition - colors ${selectedConversation?.userId === conv.userId ? 'bg-primary-50 dark:bg-primary-900/30' : ''
+                                } `}
                         >
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-gradient-to-br from-primary-100 to-accent-100 rounded-full flex items-center justify-center text-xl relative">
@@ -286,18 +286,18 @@ export const PrivateMessage = ({ onClose, preSelectedUser, currentUser }: Privat
                                 {messages.map((msg, idx) => (
                                     <div
                                         key={msg.id || idx}
-                                        className={`flex ${msg.from === 'me' ? 'justify-end' : 'justify-start'}`}
+                                        className={`flex ${msg.from === 'me' ? 'justify-end' : 'justify-start'} `}
                                     >
-                                        <div className={`max-w-[70%] ${msg.from === 'me' ? 'order-2' : 'order-1'}`}>
+                                        <div className={`max - w - [70 %] ${msg.from === 'me' ? 'order-2' : 'order-1'} `}>
                                             <div
-                                                className={`px-4 py-2 rounded-2xl ${msg.from === 'me'
+                                                className={`px - 4 py - 2 rounded - 2xl ${msg.from === 'me'
                                                     ? 'bg-primary-500 text-white rounded-br-md'
                                                     : 'bg-warm-100 dark:bg-gray-700 text-warm-800 dark:text-white rounded-bl-md'
-                                                    }`}
+                                                    } `}
                                             >
                                                 {msg.content}
                                             </div>
-                                            <div className={`text-xs text-warm-400 mt-1 ${msg.from === 'me' ? 'text-right' : ''}`}>
+                                            <div className={`text - xs text - warm - 400 mt - 1 ${msg.from === 'me' ? 'text-right' : ''} `}>
                                                 {formatTime(msg.timestamp)}
                                             </div>
                                         </div>

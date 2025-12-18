@@ -5,6 +5,7 @@
  */
 
 import { useState, useCallback, useEffect } from 'react';
+import { API_BASE } from '../../config/api';
 
 interface AuthProps {
     onLoginSuccess?: (user: UserInfo) => void;
@@ -71,7 +72,8 @@ export const AuthModal = ({ onLoginSuccess, onClose }: AuthProps) => {
                 }
 
                 // 注册请求
-                const response = await fetch('https://neurasense-m409.onrender.com/api/v1/auth/register', {
+                // 注册请求
+                const response = await fetch(`${API_BASE}/auth/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -92,7 +94,8 @@ export const AuthModal = ({ onLoginSuccess, onClose }: AuthProps) => {
                 alert('注册成功！请登录');
             } else {
                 // 登录请求
-                const response = await fetch('https://neurasense-m409.onrender.com/api/v1/auth/login', {
+                // 登录请求
+                const response = await fetch(`${API_BASE}/auth/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, password }),
@@ -125,7 +128,7 @@ export const AuthModal = ({ onLoginSuccess, onClose }: AuthProps) => {
 
         try {
             // Get WeChat OAuth URL (backend will use its own callback URL)
-            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/auth/wechat/url');
+            const response = await fetch(`${API_BASE}/auth/wechat/url`);
 
             if (!response.ok) {
                 throw new Error('无法获取微信登录链接');
@@ -149,7 +152,7 @@ export const AuthModal = ({ onLoginSuccess, onClose }: AuthProps) => {
         setError(null);
 
         try {
-            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/auth/wechat/bind', {
+            const response = await fetch(`${API_BASE}/auth/wechat/bind`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -189,7 +192,7 @@ export const AuthModal = ({ onLoginSuccess, onClose }: AuthProps) => {
 
         try {
             const response = await fetch(
-                `https://neurasense-m409.onrender.com/api/v1/auth/wechat/register-new?openid=${weChatInfo.openid}&nickname=${encodeURIComponent(weChatInfo.nickname)}&avatar=${encodeURIComponent(weChatInfo.avatar)}`,
+                `${API_BASE}/auth/wechat/register-new?openid=${weChatInfo.openid}&nickname=${encodeURIComponent(weChatInfo.nickname)}&avatar=${encodeURIComponent(weChatInfo.avatar)}`,
                 { method: 'POST' }
             );
 

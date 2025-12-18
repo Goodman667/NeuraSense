@@ -6,6 +6,7 @@
  */
 
 import { useEffect, useState, useRef, useCallback } from 'react';
+import { API_BASE } from '../../config/api';
 
 // Emotion types
 type EmotionType = 'neutral' | 'happy' | 'sad' | 'angry' | 'fearful' | 'disgusted' | 'surprised';
@@ -192,7 +193,7 @@ export const EmotionDetector = ({
             const dominantEmotion = Object.entries(distribution)
                 .sort((a, b) => b[1] - a[1])[0][0] as EmotionType;
 
-            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/biosignal/analyze', {
+            const response = await fetch(`${API_BASE}/biosignal/analyze`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

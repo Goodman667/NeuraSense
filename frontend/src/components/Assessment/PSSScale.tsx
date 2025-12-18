@@ -6,6 +6,7 @@
  */
 
 import { useState, useCallback } from 'react';
+import { API_BASE } from '../../config/api';
 import { PDFDownloadButton } from './PDFDownloadButton';
 
 const PSS_QUESTIONS = [
@@ -86,7 +87,7 @@ export const PSSScale = ({ onComplete, onClose }: PSSScaleProps) => {
         setIsLoading(true);
 
         try {
-            const response = await fetch('https://neurasense-m409.onrender.com/api/v1/chat', {
+            const response = await fetch(`${API_BASE}/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -102,7 +103,7 @@ export const PSSScale = ({ onComplete, onClose }: PSSScaleProps) => {
 
             const token = localStorage.getItem('token');
             if (token) {
-                await fetch(`https://neurasense-m409.onrender.com/api/v1/history/save?token=${token}`, {
+                await fetch(`${API_BASE}/history/save?token=${token}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

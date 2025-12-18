@@ -14,14 +14,15 @@ import {
     useState,
 } from 'react';
 import type { VirtualAvatarProps, VirtualAvatarRef, EmotionType, MotionGroup } from './types';
+import { API_BASE } from '../../config/api';
 
 /**
  * Map emotion types to motion groups.
  */
 const EMOTION_MOTION_MAP: Record<EmotionType, { group: string; index?: number }> = {
+    neutral: { group: 'Idle', index: 0 },
     happy: { group: 'TapBody', index: 0 },
     sad: { group: 'Idle', index: 1 },
-    neutral: { group: 'Idle', index: 0 },
     surprised: { group: 'TapBody', index: 1 },
     angry: { group: 'TapBody', index: 2 },
     anxious: { group: 'Idle', index: 1 },
@@ -369,7 +370,6 @@ export const VirtualAvatar = forwardRef<VirtualAvatarRef, VirtualAvatarProps>(
                 // Update current emotion state
                 setCurrentEmotion(emotion);
 
-                // ... rest of the logic ...
                 // 将情绪映射到 TTS 情感
                 const emotionMap: Record<string, string> = {
                     neutral: 'gentle',
@@ -389,7 +389,7 @@ export const VirtualAvatar = forwardRef<VirtualAvatarRef, VirtualAvatarProps>(
 
                 try {
                     // 调用后端 TTS API 获取自然语音
-                    const response = await fetch('https://neurasense-m409.onrender.com/api/v1/tts', {
+                    const response = await fetch(`${API_BASE}/tts`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
