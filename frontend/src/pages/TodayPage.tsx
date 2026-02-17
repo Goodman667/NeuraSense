@@ -232,16 +232,30 @@ function RecommendationCards({
             <div className="space-y-2">
                 {recommendations.map((rec) => {
                     const tool = toolsMap[rec.id];
+                    // Construct a minimal ToolItem from recommendation if not in toolsMap
+                    const effectiveTool: ToolItem = tool || {
+                        id: rec.id,
+                        title: rec.name || rec.id,
+                        subtitle: rec.reason || '',
+                        category: rec.category || 'mindfulness',
+                        icon: rec.icon || '🧘',
+                        duration_min: 5,
+                        difficulty: 'easy',
+                        tags: [],
+                        sort_order: 0,
+                        steps: [],
+                        guidance: [],
+                    };
                     return (
                         <motion.button
                             key={rec.id}
                             whileTap={{ scale: 0.97 }}
-                            onClick={() => tool && onOpenTool(tool)}
+                            onClick={() => onOpenTool(effectiveTool)}
                             className="w-full text-left bg-white/80 backdrop-blur rounded-xl p-4 border border-warm-100/60 shadow-sm flex items-center gap-3 hover:shadow-md transition-shadow"
                         >
-                            <span className="text-3xl flex-shrink-0">{tool?.icon || '🧘'}</span>
+                            <span className="text-3xl flex-shrink-0">{effectiveTool.icon || '🧘'}</span>
                             <div className="flex-1 min-w-0">
-                                <div className="font-semibold text-warm-800 text-sm">{tool?.title || rec.id}</div>
+                                <div className="font-semibold text-warm-800 text-sm">{effectiveTool.title}</div>
                                 <div className="text-xs text-warm-500 mt-0.5 line-clamp-1">{rec.reason}</div>
                             </div>
                             <svg className="w-5 h-5 text-warm-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>

@@ -33,7 +33,18 @@ def _ensure_data():
     DATA_DIR.mkdir(exist_ok=True)
     if not PROGRAMS_FILE.exists():
         PROGRAMS_FILE.write_text(json.dumps(SEED_PROGRAMS, ensure_ascii=False, indent=2), encoding="utf-8")
-    if not PROGRAM_DAYS_FILE.exists():
+    # Always regenerate from JSON seed file to ensure all program days exist
+    if PROGRAM_DAYS_FILE.exists():
+        existing = json.loads(PROGRAM_DAYS_FILE.read_text(encoding="utf-8"))
+        existing_keys = {(d["program_id"], d["day_number"]) for d in existing}
+        added = 0
+        for sd in SEED_DAYS:
+            if (sd["program_id"], sd["day_number"]) not in existing_keys:
+                existing.append(sd)
+                added += 1
+        if added:
+            PROGRAM_DAYS_FILE.write_text(json.dumps(existing, ensure_ascii=False, indent=2), encoding="utf-8")
+    else:
         PROGRAM_DAYS_FILE.write_text(json.dumps(SEED_DAYS, ensure_ascii=False, indent=2), encoding="utf-8")
     if not PROGRAM_PROGRESS_FILE.exists():
         PROGRAM_PROGRESS_FILE.write_text("[]", encoding="utf-8")
