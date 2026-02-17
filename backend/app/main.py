@@ -60,8 +60,16 @@ def _sync_seed_data_to_supabase():
             existing_keys = {(r["program_id"], r["day_number"]) for r in (existing.data or [])}
             new_days = [d for d in all_days if (d["program_id"], d["day_number"]) not in existing_keys]
             if new_days:
-                sb.table("program_days").insert(new_days).execute()
-                print(f"[Sync] Inserted {len(new_days)} new program_days into Supabase")
+                try:
+                    # Try inserting with all fields (including video_url, video_title)
+                    sb.table("program_days").insert(new_days).execute()
+                    print(f"[Sync] Inserted {len(new_days)} new program_days into Supabase")
+                except Exception:
+                    # Fallback: strip fields not in Supabase schema
+                    safe_cols = {"program_id", "day_number", "title", "learn_text", "tool_id", "review_question", "tip"}
+                    safe_days = [{k: v for k, v in d.items() if k in safe_cols} for d in new_days]
+                    sb.table("program_days").insert(safe_days).execute()
+                    print(f"[Sync] Inserted {len(safe_days)} program_days (without video columns)")
             else:
                 print(f"[Sync] All {len(all_days)} program_days already in Supabase")
 
