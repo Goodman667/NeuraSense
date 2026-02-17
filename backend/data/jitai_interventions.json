@@ -1,0 +1,41 @@
+[
+  {
+    "id": "c9c5b400-b90d-4141-ae0c-df448ec5a2ce",
+    "user_id": "user_1771341295043",
+    "timestamp": "2026-02-17T23:14:55.715266",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "8d42c9d8-0713-4979-a1d1-e5bc477e515c",
+    "user_id": "user_1771341295043",
+    "timestamp": "2026-02-17T23:14:55.958433",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  },
+  {
+    "id": "dc9bf12f-dd4c-4d4d-829c-fc2da1ff106e",
+    "user_id": "user_1771341295043",
+    "timestamp": "2026-02-17T23:19:55.813104",
+    "vulnerability_score": 0.8000000000000002,
+    "risk_level": "high",
+    "intervention_type": "breathing",
+    "factors": [
+      "深夜时段"
+    ],
+    "accepted": null,
+    "post_mood": null
+  }
+]
