@@ -75,10 +75,11 @@ def _ensure_data():
         COMPLETIONS_FILE.write_text("[]", encoding="utf-8")
     if not FAVORITES_FILE.exists():
         FAVORITES_FILE.write_text("[]", encoding="utf-8")
-    # 如果本地工具文件不存在，从 v2 种子数据生成
-    if not TOOLS_FILE.exists():
+    # 每次启动都从 v2 种子数据重新生成，确保部署后工具列表始终最新
+    if TOOLS_V2_FILE.exists():
         seed = _load_seed_tools()
-        TOOLS_FILE.write_text(json.dumps(seed, ensure_ascii=False, indent=2), encoding="utf-8")
+        if seed:
+            TOOLS_FILE.write_text(json.dumps(seed, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def _read_json(path: Path) -> list:
