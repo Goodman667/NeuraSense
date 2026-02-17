@@ -73,6 +73,25 @@ def _sync_seed_data_to_supabase():
             else:
                 print(f"[Sync] All {len(all_days)} program_days already in Supabase")
 
+            # --- Update existing rows missing video_url ---
+            try:
+                seed_lookup = {(d["program_id"], d["day_number"]): d for d in all_days}
+                missing_video = sb.table("program_days").select("id,program_id,day_number,video_url").is_("video_url", "null").execute()
+                rows_to_update = missing_video.data or []
+                updated = 0
+                for row in rows_to_update:
+                    seed = seed_lookup.get((row["program_id"], row["day_number"]))
+                    if seed and seed.get("video_url"):
+                        sb.table("program_days").update({
+                            "video_url": seed["video_url"],
+                            "video_title": seed.get("video_title", ""),
+                        }).eq("id", row["id"]).execute()
+                        updated += 1
+                if updated:
+                    print(f"[Sync] Updated {updated} program_days with video_url/video_title")
+            except Exception as e:
+                print(f"[Sync] Video column update skipped: {e}")
+
         # --- Sync programs ---
         programs_file = data_dir / "programs.json"
         if programs_file.exists():
