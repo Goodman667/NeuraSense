@@ -11,6 +11,11 @@ from typing import AsyncGenerator
 from dotenv import load_dotenv
 load_dotenv()
 
+# Render uses ZHIPU_API_KEY; code uses LLM_API_KEY — bridge the gap
+import os
+if not os.getenv("LLM_API_KEY") and os.getenv("ZHIPU_API_KEY"):
+    os.environ["LLM_API_KEY"] = os.environ["ZHIPU_API_KEY"]
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
