@@ -41,19 +41,32 @@ import { API_BASE } from './config/api';
 // Layout & Pages
 import TabBar, { type TabId } from './layouts/TabBar';
 import { PageSkeleton, ChatSkeleton, ToolboxSkeleton, ProgramsSkeleton, MeSkeleton } from './components/PageSkeleton';
+import LazyErrorBoundary from './components/LazyErrorBoundary';
 import type { ToolItem } from './pages/ToolboxPage';
 
 // Lazy-loaded pages — 按需加载，减小首屏体积
-const TodayPage = lazy(() => import('./pages/TodayPage'));
-const ToolboxPage = lazy(() => import('./pages/ToolboxPage'));
-const ToolRunner = lazy(() => import('./pages/ToolRunner'));
-const ProgramsPage = lazy(() => import('./pages/ProgramsPage'));
-const AssessmentCenterPage = lazy(() => import('./pages/AssessmentCenterPage'));
-const MePage = lazy(() => import('./pages/MePage'));
-const SettingsPage = lazy(() => import('./pages/SettingsPage'));
-const MessageCenterPage = lazy(() => import('./pages/MessageCenterPage'));
-const LandingPage = lazy(() => import('./pages/LandingPage'));
-const OnboardingWizard = lazy(() => import('./pages/OnboardingWizard'));
+// lazyRetry: 动态导入失败时自动重试，避免快速切换Tab导致白屏
+function lazyRetry<T extends { default: React.ComponentType<any> }>(
+    importFn: () => Promise<T>,
+): React.LazyExoticComponent<T['default']> {
+    return lazy(() =>
+        importFn().catch(() =>
+            // 失败后等 100ms 重试一次（清除浏览器缓存的失败 promise）
+            new Promise<T>((resolve) => setTimeout(() => resolve(importFn()), 100))
+        )
+    );
+}
+
+const TodayPage = lazyRetry(() => import('./pages/TodayPage'));
+const ToolboxPage = lazyRetry(() => import('./pages/ToolboxPage'));
+const ToolRunner = lazyRetry(() => import('./pages/ToolRunner'));
+const ProgramsPage = lazyRetry(() => import('./pages/ProgramsPage'));
+const AssessmentCenterPage = lazyRetry(() => import('./pages/AssessmentCenterPage'));
+const MePage = lazyRetry(() => import('./pages/MePage'));
+const SettingsPage = lazyRetry(() => import('./pages/SettingsPage'));
+const MessageCenterPage = lazyRetry(() => import('./pages/MessageCenterPage'));
+const LandingPage = lazyRetry(() => import('./pages/LandingPage'));
+const OnboardingWizard = lazyRetry(() => import('./pages/OnboardingWizard'));
 
 // ====== INLINE STROOP TEST VIEW ======
 interface StroopTestViewProps {
@@ -474,32 +487,6 @@ function App() {
             } catch { localStorage.removeItem('user'); localStorage.removeItem('token'); }
         }
     }, [loadFromServer]);
-
-    // Mini Program token auto-login (via web-view URL param)
-    useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const urlToken = urlParams.get('token');
-        const from = urlParams.get('from');
-        if (urlToken) {
-            localStorage.setItem('token', urlToken);
-            // 清理 URL，避免 token 泄露到浏览历史
-            window.history.replaceState({}, document.title, window.location.pathname);
-            // 尝试获取用户信息
-            fetch(`${API_BASE}/auth/me?token=${urlToken}`)
-                .then(res => res.ok ? res.json() : null)
-                .then(data => {
-                    if (data?.user) {
-                        localStorage.setItem('user', JSON.stringify(data.user));
-                        setCurrentUser(data.user);
-                    }
-                })
-                .catch(() => {});
-            // 从小程序进来直接跳到主界面
-            if (from === 'miniprogram') {
-                setAppView('main');
-            }
-        }
-    }, []);
 
     // WeChat OAuth callback
     useEffect(() => {
@@ -925,7 +912,7 @@ function App() {
 
                 {/* ===== TAB PAGES (only show when no subView) ===== */}
                 {!subView && (
-                    <>
+                    <LazyErrorBoundary key={activeTab}>
                         {activeTab === 'today' && (
                             <Suspense fallback={<PageSkeleton />}>
                             <TodayPage
@@ -1002,7 +989,7 @@ function App() {
                             />
                             </Suspense>
                         )}
-                    </>
+                    </LazyErrorBoundary>
                 )}
             </main>
 

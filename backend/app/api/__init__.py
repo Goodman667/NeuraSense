@@ -48,8 +48,6 @@ from app.api.exercises_router import router as exercises_router
 from app.api.memory_router import router as memory_router
 # Import Notifications router
 from app.api.notifications_router import router as notifications_router
-# Import Mini Program auth router
-from app.api.miniprogram_auth import router as mp_auth_router
 
 router = APIRouter()
 
@@ -85,8 +83,6 @@ router.include_router(exercises_router)
 router.include_router(memory_router)
 # Include Notifications sub-router
 router.include_router(notifications_router)
-# Include Mini Program auth sub-router
-router.include_router(mp_auth_router)
 
 # Initialize services
 clock_scorer = ClockDrawingScorer()
