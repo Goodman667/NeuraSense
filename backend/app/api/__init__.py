@@ -32,6 +32,22 @@ from app.api.community_router import router as community_router
 from app.api.jitai_router import router as jitai_router
 # Import Phenotyping router
 from app.api.phenotyping_router import router as phenotyping_router
+# Import Profile router
+from app.api.profile_router import router as profile_router
+# Import Tools router
+from app.api.tools_router import router as tools_router
+# Import Checkin router
+from app.api.checkin_router import router as checkin_router
+# Import Programs router
+from app.api.programs_router import router as programs_router
+# Import Assessments Center router
+from app.api.assessments_router import router as assessments_center_router
+# Import Exercises router
+from app.api.exercises_router import router as exercises_router
+# Import Memory router
+from app.api.memory_router import router as memory_router
+# Import Notifications router
+from app.api.notifications_router import router as notifications_router
 
 router = APIRouter()
 
@@ -51,6 +67,22 @@ router.include_router(community_router)
 router.include_router(jitai_router)
 # Include Phenotyping sub-router
 router.include_router(phenotyping_router)
+# Include Profile sub-router
+router.include_router(profile_router)
+# Include Tools sub-router
+router.include_router(tools_router)
+# Include Checkin sub-router
+router.include_router(checkin_router)
+# Include Programs sub-router
+router.include_router(programs_router)
+# Include Assessments Center sub-router
+router.include_router(assessments_center_router)
+# Include Exercises sub-router
+router.include_router(exercises_router)
+# Include Memory sub-router
+router.include_router(memory_router)
+# Include Notifications sub-router
+router.include_router(notifications_router)
 
 # Initialize services
 clock_scorer = ClockDrawingScorer()
@@ -74,6 +106,9 @@ class ClockScoreResponse(BaseModel):
     numbers_score: int
     feedback: list[str]
     details: dict
+    ai_interpretation: Optional[str] = None
+    suggestions: Optional[list[str]] = None
+    scoring_method: str = "opencv"
 
 
 class VoiceFeaturesInput(BaseModel):
@@ -168,10 +203,13 @@ async def list_assessments() -> dict[str, list]:
 
 @router.post("/assessments/cdt/score", response_model=ClockScoreResponse)
 async def score_clock_drawing(request: ClockScoreRequest) -> ClockScoreResponse:
-    """评分画钟测验提交"""
+    """评分画钟测验提交 — 优先使用 AI 视觉模型，失败时回退到 OpenCV"""
     try:
-        result = clock_scorer.score_from_base64(request.image_base64)
-        
+        import asyncio
+        result = await asyncio.to_thread(
+            clock_scorer.ai_score_from_base64, request.image_base64
+        )
+
         return ClockScoreResponse(
             total_score=result.total_score,
             clock_face_score=result.clock_face_score,
@@ -182,7 +220,10 @@ async def score_clock_drawing(request: ClockScoreRequest) -> ClockScoreResponse:
                 "roundness": result.detected_roundness,
                 "hands_angle": result.detected_hands_angle,
                 "number_count": result.detected_number_count,
-            }
+            },
+            ai_interpretation=result.ai_interpretation,
+            suggestions=result.suggestions,
+            scoring_method=result.scoring_method,
         )
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"评分失败: {str(e)}")

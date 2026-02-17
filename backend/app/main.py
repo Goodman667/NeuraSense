@@ -7,6 +7,10 @@ Intelligent Psychological Assessment Platform
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
+# Load .env before any other imports that use env vars
+from dotenv import load_dotenv
+load_dotenv()
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -20,10 +24,10 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     Initialize database connections and other resources here.
     """
     # Startup: Initialize connections
-    print("🚀 PsyAntigravity Backend Starting...")
+    print("PsyAntigravity Backend Starting...")
     yield
     # Shutdown: Clean up resources
-    print("👋 PsyAntigravity Backend Shutting Down...")
+    print("PsyAntigravity Backend Shutting Down...")
 
 
 app = FastAPI(

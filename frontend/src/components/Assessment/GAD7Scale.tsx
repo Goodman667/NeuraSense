@@ -8,6 +8,7 @@
 import { useState, useCallback } from 'react';
 import { API_BASE } from '../../config/api';
 import { PDFDownloadButton } from './PDFDownloadButton';
+import { MarkdownText } from './MarkdownText';
 
 // GAD-7 问题定义
 const GAD7_QUESTIONS = [
@@ -78,20 +79,49 @@ export const GAD7Scale = ({ onComplete, onClose }: GAD7ScaleProps) => {
         setIsLoading(true);
 
         try {
-            // 调用后端 API 获取 AI 解读
-            const response = await fetch(`${API_BASE}/chat`, {
+            // 构建包含各维度得分的个性化 prompt
+            const labels = ['紧张焦虑', '控制担忧', '过度担忧', '难以放松', '坐立不安', '易烦躁', '恐惧预感'];
+            const dimensions = answers
+                .map((a, i) => `${labels[i]}=${a}/3`)
+                .join('，');
+            const highItems = labels.filter((_, i) => (answers[i] ?? 0) >= 2);
+
+            const detailedPrompt = `作为心理健康顾问，请根据以下 GAD-7 评估结果给出个性化建议。
+
+## 评估数据
+- 总分：${totalScore}/21（${severity.level}）
+- 各维度：${dimensions}
+${highItems.length > 0 ? `- 需重点关注：${highItems.join('、')}` : '- 各维度得分均较低，状态良好'}
+
+## 回复要求
+1. 直接给出建议，不要以"当然可以"、"好的"等寒暄开头
+2. 针对得分较高的维度给出具体的焦虑缓解建议
+3. 用以下结构回复：
+
+### 总体评估
+（1-2句话概括焦虑状态）
+
+### 重点建议
+（针对高分维度的 2-3 条具体可操作建议，每条用 - 开头）
+
+### 日常调节
+（呼吸、运动、睡眠、减少刺激物各 1 条简短建议，用 - 开头）
+
+${totalScore >= 10 ? '### 专业资源\n（推荐就医科室和心理援助热线 400-161-9995）' : ''}
+
+请保持温暖但简洁，总字数控制在 300 字以内。`;
+
+            const response = await fetch(`${API_BASE}/counselor/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    user_id: 'scale_user',
-                    message: `我完成了 GAD-7 焦虑量表测评，得分是 ${totalScore} 分（${severity.level}）。我最高分的维度包括：${GAD7_QUESTIONS.filter((_, i) => (answers[i] ?? 0) >= 2).join('、') || '无明显突出项'
-                        }。请根据这个结果给我一些针对焦虑的温暖建议和放松技巧。`,
+                    message: detailedPrompt,
                 }),
             });
 
             if (response.ok) {
                 const data = await response.json();
-                setAiInterpretation(data.reply_text || data.message);
+                setAiInterpretation(data.message || data.reply);
             }
         } catch (error) {
             console.error('Failed to get AI interpretation:', error);
@@ -316,8 +346,8 @@ export const GAD7Scale = ({ onComplete, onClose }: GAD7ScaleProps) => {
                                     <span className="text-2xl">💬</span>
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-lg mb-2">小心的专业建议</h3>
-                                    <p className="leading-relaxed opacity-95">{aiInterpretation}</p>
+                                    <h3 className="font-bold text-lg mb-3">小心的专业建议</h3>
+                                    <MarkdownText text={aiInterpretation} />
                                 </div>
                             </div>
                         </div>

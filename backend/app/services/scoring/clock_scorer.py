@@ -1,22 +1,41 @@
 """
 Clock Drawing Test Scorer
 
-Automatic scoring algorithm for Clock Drawing Test (CDT) using OpenCV.
-Implements simplified Rouleau scoring criteria (0-3 points).
+Scoring for Clock Drawing Test (CDT) with AI vision analysis (primary)
+and OpenCV-based fallback. Implements simplified Rouleau scoring criteria (0-3 points).
 
 Scoring Criteria:
-- Clock Face (1 point): Circular shape with roundness > 0.8
-- Clock Hands (1 point): Two lines from center, ~60° angle (11:10 position)
-- Numbers (1 point): Approximately 12 distinct number contours
+- Clock Face (1 point): Circular shape completeness
+- Clock Hands (1 point): Two hands pointing to ~11:10 position
+- Numbers (1 point): 1-12 present and reasonably distributed
 """
 
 import base64
+import json
 import math
+import os
+import re
 from dataclasses import dataclass, field
 from typing import Optional
 
 import cv2
 import numpy as np
+
+
+# AI analysis prompt for vision model
+CDT_ANALYSIS_PROMPT = """你是一位神经心理学专家，正在评估一幅画钟测验（Clock Drawing Test）的图像。
+被测者被要求画一个时钟，并将指针设置为 11:10。
+
+请根据以下三个维度评分（每项 0 或 1 分）：
+
+1. **表盘（clock_face）**：圆形是否大致完整闭合？
+2. **数字（numbers）**：1-12 的数字是否都有？位置是否大致均匀分布？
+3. **指针（hands）**：是否有两根指针？是否大致指向 11 和 2 的方向（表示 11:10）？
+
+评分宽松一些，这是手绘画板上用鼠标/手指画的，不要求完美。
+
+请严格用以下 JSON 格式回复，不要输出任何其他内容：
+{"clock_face_score":0,"clock_face_reason":"简要说明","numbers_score":0,"numbers_reason":"简要说明","clock_hands_score":0,"clock_hands_reason":"简要说明","total_score":0,"overall_assessment":"2-3句总体评价，用温和鼓励的语气","suggestions":["改进建议1","改进建议2"]}"""
 
 
 @dataclass
@@ -25,23 +44,28 @@ class ClockScoringResult:
     Result of clock drawing test scoring.
     包含画钟测验评分结果
     """
-    
+
     # Total score (0-3)
     total_score: int
-    
+
     # Individual scores
     clock_face_score: int  # 0 or 1
     clock_hands_score: int  # 0 or 1
     numbers_score: int  # 0 or 1
-    
+
     # Detailed feedback in Chinese
     feedback: list[str] = field(default_factory=list)
-    
-    # Debug info
+
+    # Debug info (OpenCV)
     detected_roundness: Optional[float] = None
     detected_hands_angle: Optional[float] = None
     detected_number_count: Optional[int] = None
-    
+
+    # AI analysis fields
+    ai_interpretation: Optional[str] = None
+    suggestions: Optional[list[str]] = None
+    scoring_method: str = "opencv"
+
     def to_dict(self) -> dict:
         """Convert to dictionary for JSON serialization."""
         return {
@@ -54,7 +78,10 @@ class ClockScoringResult:
                 "roundness": self.detected_roundness,
                 "hands_angle": self.detected_hands_angle,
                 "number_count": self.detected_number_count,
-            }
+            },
+            "ai_interpretation": self.ai_interpretation,
+            "suggestions": self.suggestions,
+            "scoring_method": self.scoring_method,
         }
 
 
@@ -74,6 +101,80 @@ class ClockDrawingScorer:
     def __init__(self):
         """Initialize the scorer."""
         pass
+
+    def ai_score_from_base64(self, image_base64: str) -> ClockScoringResult:
+        """
+        Score a clock drawing using ZhipuAI vision model.
+        使用智谱 AI 视觉模型评分画钟测验
+
+        Falls back to OpenCV scoring on failure.
+        """
+        try:
+            from zhipuai import ZhipuAI
+
+            api_key = os.getenv("LLM_API_KEY", "")
+            client = ZhipuAI(api_key=api_key)
+
+            # Strip data URL prefix for the API call
+            raw_b64 = image_base64
+            if "," in raw_b64:
+                raw_b64 = raw_b64.split(",", 1)[1]
+
+            response = client.chat.completions.create(
+                model="glm-4v-flash",
+                messages=[
+                    {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "image_url",
+                                "image_url": {
+                                    "url": f"data:image/png;base64,{raw_b64}"
+                                },
+                            },
+                            {"type": "text", "text": CDT_ANALYSIS_PROMPT},
+                        ],
+                    }
+                ],
+                temperature=0.3,
+                max_tokens=800,
+            )
+
+            reply = response.choices[0].message.content.strip()
+
+            # Extract JSON from response (handle markdown code blocks)
+            json_match = re.search(r"\{.*\}", reply, re.DOTALL)
+            if not json_match:
+                raise ValueError(f"No JSON found in AI response: {reply[:200]}")
+
+            data = json.loads(json_match.group())
+
+            face_score = int(data.get("clock_face_score", 0))
+            hands_score = int(data.get("clock_hands_score", 0))
+            numbers_score = int(data.get("numbers_score", 0))
+            total = face_score + hands_score + numbers_score
+
+            feedback = [
+                data.get("clock_face_reason", ""),
+                data.get("clock_hands_reason", ""),
+                data.get("numbers_reason", ""),
+            ]
+            feedback = [f for f in feedback if f]
+
+            return ClockScoringResult(
+                total_score=total,
+                clock_face_score=face_score,
+                clock_hands_score=hands_score,
+                numbers_score=numbers_score,
+                feedback=feedback,
+                ai_interpretation=data.get("overall_assessment"),
+                suggestions=data.get("suggestions"),
+                scoring_method="ai",
+            )
+
+        except Exception as e:
+            print(f"[CDT] AI scoring failed, falling back to OpenCV: {e}")
+            return self.score_from_base64(image_base64)
     
     def score_from_base64(self, image_base64: str) -> ClockScoringResult:
         """

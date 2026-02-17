@@ -13,6 +13,7 @@ POST /api/v1/chat
 from dataclasses import dataclass
 from typing import Optional
 import asyncio
+import time
 
 from pydantic import BaseModel, Field
 
@@ -53,6 +54,13 @@ class AvatarCommand(BaseModel):
     mirror_fatigue: bool = Field(default=False, description="是否镜像用户疲劳")
 
 
+class ExerciseAction(BaseModel):
+    """练习触发指令"""
+    type: str = Field(default="OPEN_EXERCISE", description="动作类型")
+    exercise: str = Field(..., description="练习类型: THOUGHT_RECORD | BEHAVIOR_ACTIVATION")
+    context: Optional[dict] = Field(default=None, description="从对话中提取的上下文")
+
+
 class UnifiedChatResponse(BaseModel):
     """统一对话响应"""
     reply_text: str = Field(..., description="AI 回复文本")
@@ -60,6 +68,7 @@ class UnifiedChatResponse(BaseModel):
     diagnosis_context: Optional[str] = Field(default=None, description="诊断上下文（调试用）")
     phq9_score: Optional[int] = Field(default=None, description="当前 PHQ-9 累积分数")
     risk_flag: bool = Field(default=False, description="危机标记")
+    action: Optional[ExerciseAction] = Field(default=None, description="练习触发指令")
 
 
 # =====================================================
@@ -78,12 +87,34 @@ class UnifiedChatService:
         from app.services.assessment import AssessmentManager
         from app.services.knowledge import ClinicalLogicEngine, SymptomRecord
         from app.services.llm import CounselorService
-        
+
         self.counselor = CounselorService()
         self.clinical_engine = ClinicalLogicEngine()
-        
+
         # 会话管理
         self._sessions: dict[str, AssessmentManager] = {}
+
+        # 练习触发追踪
+        self._last_exercise_suggestion: dict[str, float] = {}   # session_key -> timestamp
+        self._session_turn_counts: dict[str, int] = {}          # session_key -> turn count
+
+    # 练习触发关键词
+    THOUGHT_RECORD_TRIGGERS = [
+        "我总是", "我永远", "我不行", "我做不到", "没用", "失败",
+        "都怪我", "我不够好", "没有人", "太笨了", "活该", "注定",
+        "全都完了", "我真差", "一无是处", "什么都做不好",
+        "所有人都", "从来没有", "再也不会",
+    ]
+
+    BEHAVIOR_ACTIVATION_TRIGGERS = [
+        "不想动", "提不起劲", "不想出门", "逃避", "什么都不想做",
+        "没有动力", "懒得", "不想起床", "躺着", "没意思",
+        "不想见人", "害怕出门", "不想面对", "回避",
+        "一整天都", "宅在家", "什么都没做",
+    ]
+
+    EXERCISE_COOLDOWN_SECONDS = 600  # 10 分钟冷却
+    MIN_TURNS_BEFORE_TRIGGER = 3     # 至少 3 轮对话后才触发
     
     def _get_session(self, user_id: str, session_id: Optional[str] = None):
         """获取或创建评估会话"""
@@ -162,13 +193,24 @@ class UnifiedChatService:
             assessment_result,
             inference_result
         )
-        
+
+        # Step 6: 检测练习触发（危机模式下不触发）
+        action = None
+        if not risk_flag:
+            session_key = request.session_id or request.user_id
+            action = self._detect_exercise_trigger(
+                user_message=request.message,
+                conversation_history=history_dicts,
+                session_key=session_key,
+            )
+
         return UnifiedChatResponse(
             reply_text=reply_text,
             avatar_command=avatar_command,
             diagnosis_context=diagnosis_context,
             phq9_score=session.get_total_score() if session else None,
             risk_flag=risk_flag,
+            action=action,
         )
     
     async def _update_bio_signals(self, user_id: str, signals: BioSignals):
@@ -283,6 +325,68 @@ class UnifiedChatService:
             parts.append(f"[Graph] {inference_result.reasoning_summary}")
         
         return " | ".join(parts) if parts else "No diagnosis context available"
+
+    def _detect_exercise_trigger(
+        self,
+        user_message: str,
+        conversation_history: Optional[list[dict]],
+        session_key: str,
+    ) -> Optional[ExerciseAction]:
+        """
+        规则驱动的练习触发检测
+
+        规则:
+        1. 至少 3 轮对话后才触发
+        2. 10 分钟冷却期
+        3. 扫描当前消息 + 最近 3 条用户消息
+        4. 关键词匹配，选择匹配更多的练习类型
+        """
+        # 更新轮次计数
+        turn_count = self._session_turn_counts.get(session_key, 0) + 1
+        self._session_turn_counts[session_key] = turn_count
+
+        # 规则 1: 最少轮次
+        if turn_count < self.MIN_TURNS_BEFORE_TRIGGER:
+            return None
+
+        # 规则 2: 冷却期
+        last_suggestion = self._last_exercise_suggestion.get(session_key, 0)
+        if time.time() - last_suggestion < self.EXERCISE_COOLDOWN_SECONDS:
+            return None
+
+        # 构建文本语料: 当前消息 + 最近 3 条用户消息
+        text_corpus = user_message
+        if conversation_history:
+            recent_user_msgs = [
+                msg.get("content", "")
+                for msg in conversation_history[-6:]
+                if msg.get("role") == "user"
+            ]
+            text_corpus = " ".join(recent_user_msgs[-3:]) + " " + user_message
+
+        # 计算触发匹配分数
+        thought_score = sum(1 for kw in self.THOUGHT_RECORD_TRIGGERS if kw in text_corpus)
+        activation_score = sum(1 for kw in self.BEHAVIOR_ACTIVATION_TRIGGERS if kw in text_corpus)
+
+        # 至少需要 1 个关键词匹配
+        if thought_score == 0 and activation_score == 0:
+            return None
+
+        # 记录触发时间
+        self._last_exercise_suggestion[session_key] = time.time()
+
+        if thought_score >= activation_score:
+            return ExerciseAction(
+                type="OPEN_EXERCISE",
+                exercise="THOUGHT_RECORD",
+                context={"trigger_thought": user_message[:100]},
+            )
+        else:
+            return ExerciseAction(
+                type="OPEN_EXERCISE",
+                exercise="BEHAVIOR_ACTIVATION",
+                context={"trigger_context": user_message[:100]},
+            )
 
 
 # =====================================================

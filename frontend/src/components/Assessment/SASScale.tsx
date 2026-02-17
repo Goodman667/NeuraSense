@@ -9,6 +9,7 @@
 import { useState, useCallback } from 'react';
 import { API_BASE } from '../../config/api';
 import { PDFDownloadButton } from './PDFDownloadButton';
+import { MarkdownText } from './MarkdownText';
 
 // SAS 问题定义（20题）
 const SAS_QUESTIONS = [
@@ -107,23 +108,39 @@ export const SASScale = ({ onComplete, onClose }: SASScaleProps) => {
         setIsLoading(true);
 
         try {
-            // 获取 AI 解读（使用详细 prompt）
-            const detailedPrompt = `我完成了SAS焦虑自评量表，指数分是${indexScore}分（${severity.level}）。
+            // 构建包含维度信息的个性化 prompt
+            const highItems = SAS_QUESTIONS
+                .filter((_, i) => {
+                    const a = answers[i] ?? 1;
+                    const q = SAS_QUESTIONS[i];
+                    return q.reverse ? a <= 2 : a >= 3;
+                })
+                .map(q => q.text);
 
-请根据这个结果给我具体、可操作的焦虑缓解建议，包括：
-1. 如果需要专业帮助，请推荐具体的治疗方式（如认知行为疗法CBT、暴露疗法、药物治疗等）
-2. 提供心理援助热线号码（如400-161-9995、800-810-1117）
-3. 给出具体的焦虑缓解技巧：
-   - 呼吸法：具体步骤（如478呼吸法）
-   - 接地技术：具体操作方法
-   - 渐进式肌肉放松：如何做
-4. 给出生活调节建议：
-   - 运动：具体类型和时长
-   - 睡眠：几点睡、睡多久
-   - 饮食：避免什么、多吃什么
-5. 推荐相关App（如潮汐、Calm、Headspace）
+            const detailedPrompt = `作为心理健康顾问，请根据以下 SAS 焦虑自评量表结果给出个性化建议。
 
-请用分点列表的形式回复，使用emoji让建议更友好。`;
+## 评估数据
+- 指数分：${indexScore}（${severity.level}）
+- 原始分：${rawScore}
+${highItems.length > 0 ? `- 需重点关注的项目：${highItems.slice(0, 5).join('、')}` : '- 各项得分均较低，状态良好'}
+
+## 回复要求
+1. 直接给出建议，不要以"当然可以"、"好的"等寒暄开头
+2. 针对突出的焦虑症状给出具体缓解建议
+3. 用以下结构回复：
+
+### 总体评估
+（1-2句话概括焦虑状态）
+
+### 重点建议
+（针对突出症状的 2-3 条具体可操作建议，每条用 - 开头）
+
+### 日常调节
+（呼吸法、运动、睡眠、减少刺激物各 1 条简短建议，用 - 开头）
+
+${indexScore >= 60 ? '### 专业资源\n（推荐就医科室和心理援助热线 400-161-9995）' : ''}
+
+请保持温暖但简洁，总字数控制在 300 字以内。`;
 
             const response = await fetch(`${API_BASE}/counselor/chat`, {
                 method: 'POST',
@@ -135,7 +152,7 @@ export const SASScale = ({ onComplete, onClose }: SASScaleProps) => {
 
             if (response.ok) {
                 const data = await response.json();
-                setAiInterpretation(data.reply_text || data.message);
+                setAiInterpretation(data.message || data.reply);
             }
 
             // 保存到历史记录
@@ -307,8 +324,8 @@ export const SASScale = ({ onComplete, onClose }: SASScaleProps) => {
                                     <span className="text-2xl">💬</span>
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-lg mb-2">小心的专业建议</h3>
-                                    <p className="leading-relaxed opacity-95">{aiInterpretation}</p>
+                                    <h3 className="font-bold text-lg mb-3">小心的专业建议</h3>
+                                    <MarkdownText text={aiInterpretation} />
                                 </div>
                             </div>
                         </div>

@@ -1,11 +1,12 @@
 /**
  * ResultModal Component
- * 
- * Displays assessment results in a beautiful modal with Chinese text.
- * 用于显示评估结果的美观中文模态框
+ *
+ * Displays CDT assessment results with AI analysis.
+ * 用于显示画钟测验评估结果的模态框，支持 AI 智能解读
  */
 
 import { useEffect, useRef } from 'react';
+import { MarkdownText } from '../Assessment/MarkdownText';
 
 export interface AssessmentResult {
     total_score: number;
@@ -19,6 +20,9 @@ export interface AssessmentResult {
     clock_face_score?: number;
     clock_hands_score?: number;
     numbers_score?: number;
+    ai_interpretation?: string;
+    suggestions?: string[];
+    scoring_method?: string;
 }
 
 export interface ResultModalProps {
@@ -80,6 +84,13 @@ export const ResultModal = ({
         return '仍有提升空间';
     };
 
+    const isAI = result.scoring_method === 'ai';
+
+    // For AI scoring, feedback[0..2] are per-dimension reasons
+    const faceReason = isAI ? result.feedback[0] : undefined;
+    const handsReason = isAI ? result.feedback[1] : undefined;
+    const numbersReason = isAI ? result.feedback[2] : undefined;
+
     return (
         <div
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fadeIn"
@@ -87,17 +98,17 @@ export const ResultModal = ({
         >
             <div
                 ref={modalRef}
-                className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-slideUp"
+                className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-slideUp max-h-[90vh] flex flex-col"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header with gradient */}
-                <div className="bg-gradient-to-r from-primary-400 via-accent-400 to-warm-300 p-6 text-white">
+                <div className="bg-gradient-to-r from-primary-400 via-accent-400 to-warm-300 p-6 text-white flex-shrink-0">
                     <h2 className="text-2xl font-bold text-center">{title}</h2>
                     <p className="text-center text-white/80 mt-1">{getScoreDescription()}</p>
                 </div>
 
                 {/* Score Circle */}
-                <div className="flex justify-center -mt-10">
+                <div className="flex justify-center -mt-10 flex-shrink-0">
                     <div className="relative w-24 h-24 bg-white rounded-full shadow-lg flex items-center justify-center">
                         <div className={`text-3xl font-bold ${getScoreColor()}`}>
                             {result.total_score}
@@ -105,26 +116,14 @@ export const ResultModal = ({
                         </div>
                         {/* Circular progress */}
                         <svg className="absolute inset-0 w-full h-full -rotate-90">
+                            <circle cx="48" cy="48" r="44" fill="none" stroke="#f3f4f6" strokeWidth="6" />
                             <circle
-                                cx="48"
-                                cy="48"
-                                r="44"
-                                fill="none"
-                                stroke="#f3f4f6"
-                                strokeWidth="6"
-                            />
-                            <circle
-                                cx="48"
-                                cy="48"
-                                r="44"
-                                fill="none"
-                                stroke="url(#gradient)"
-                                strokeWidth="6"
-                                strokeLinecap="round"
+                                cx="48" cy="48" r="44" fill="none"
+                                stroke="url(#cdt-gradient)" strokeWidth="6" strokeLinecap="round"
                                 strokeDasharray={`${scorePercentage * 2.76} 276`}
                             />
                             <defs>
-                                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <linearGradient id="cdt-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
                                     <stop offset="0%" stopColor="#a78bfa" />
                                     <stop offset="100%" stopColor="#fbbf24" />
                                 </linearGradient>
@@ -133,78 +132,84 @@ export const ResultModal = ({
                     </div>
                 </div>
 
-                {/* Content */}
-                <div className="p-6 space-y-4">
-                    {/* Individual Scores */}
+                {/* Scrollable content area */}
+                <div className="overflow-y-auto flex-1 px-6 pt-4 pb-2 space-y-4">
+                    {/* Individual Scores with reasons */}
                     {(result.clock_face_score !== undefined) && (
-                        <div className="grid grid-cols-3 gap-3">
-                            <div className="text-center p-3 bg-warm-50 rounded-xl">
-                                <div className={`text-xl font-bold ${result.clock_face_score ? 'text-green-500' : 'text-warm-400'}`}>
-                                    {result.clock_face_score ? '✓' : '✗'}
+                        <div className="space-y-2">
+                            {[
+                                { label: '表盘', score: result.clock_face_score, reason: faceReason },
+                                { label: '指针', score: result.clock_hands_score, reason: handsReason },
+                                { label: '数字', score: result.numbers_score, reason: numbersReason },
+                            ].map((item) => (
+                                <div key={item.label} className="flex items-start gap-3 p-2.5 bg-warm-50/80 rounded-xl">
+                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                                        item.score ? 'bg-green-100 text-green-600' : 'bg-warm-100 text-warm-400'
+                                    }`}>
+                                        <span className="text-sm font-bold">{item.score ? '✓' : '✗'}</span>
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <span className="text-sm font-medium text-warm-700">{item.label}</span>
+                                        {item.reason && (
+                                            <p className="text-xs text-warm-500 mt-0.5 leading-relaxed">{item.reason}</p>
+                                        )}
+                                    </div>
                                 </div>
-                                <div className="text-sm text-warm-600 mt-1">表盘</div>
-                            </div>
-                            <div className="text-center p-3 bg-warm-50 rounded-xl">
-                                <div className={`text-xl font-bold ${result.clock_hands_score ? 'text-green-500' : 'text-warm-400'}`}>
-                                    {result.clock_hands_score ? '✓' : '✗'}
-                                </div>
-                                <div className="text-sm text-warm-600 mt-1">指针</div>
-                            </div>
-                            <div className="text-center p-3 bg-warm-50 rounded-xl">
-                                <div className={`text-xl font-bold ${result.numbers_score ? 'text-green-500' : 'text-warm-400'}`}>
-                                    {result.numbers_score ? '✓' : '✗'}
-                                </div>
-                                <div className="text-sm text-warm-600 mt-1">数字</div>
-                            </div>
+                            ))}
                         </div>
                     )}
 
-                    {/* Feedback */}
-                    <div className="space-y-2">
-                        <h3 className="text-sm font-medium text-warm-500 uppercase tracking-wide">详细反馈</h3>
-                        <ul className="space-y-2">
-                            {result.feedback.map((item, index) => (
-                                <li
-                                    key={index}
-                                    className="flex items-start space-x-2 text-warm-700 text-sm"
-                                >
-                                    <span className="text-primary-500 mt-0.5">•</span>
-                                    <span>{item}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                    {/* AI Interpretation */}
+                    {isAI && result.ai_interpretation && (
+                        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-4 border border-blue-100/60">
+                            <h3 className="text-sm font-semibold text-blue-700 mb-2 flex items-center gap-1.5">
+                                <span className="w-5 h-5 bg-blue-500 rounded-md flex items-center justify-center">
+                                    <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                                    </svg>
+                                </span>
+                                AI 智能解读
+                            </h3>
+                            <MarkdownText text={result.ai_interpretation} light className="[&_div]:text-warm-700" />
+                        </div>
+                    )}
 
-                    {/* Technical Details (if available) */}
-                    {result.details && (
-                        <div className="pt-3 border-t border-warm-100">
-                            <h3 className="text-xs font-medium text-warm-400 uppercase tracking-wide mb-2">技术指标</h3>
-                            <div className="grid grid-cols-3 gap-2 text-xs text-warm-500">
-                                {result.details.roundness != null && (
-                                    <div>
-                                        <span className="text-warm-400">圆度: </span>
-                                        <span className="font-medium">{(result.details.roundness * 100).toFixed(0)}%</span>
-                                    </div>
-                                )}
-                                {result.details.hands_angle != null && (
-                                    <div>
-                                        <span className="text-warm-400">夹角: </span>
-                                        <span className="font-medium">{result.details.hands_angle.toFixed(1)}°</span>
-                                    </div>
-                                )}
-                                {result.details.number_count != null && (
-                                    <div>
-                                        <span className="text-warm-400">数字: </span>
-                                        <span className="font-medium">{result.details.number_count}个</span>
-                                    </div>
-                                )}
-                            </div>
+                    {/* Suggestions */}
+                    {isAI && result.suggestions && result.suggestions.length > 0 && (
+                        <div className="bg-amber-50/80 rounded-2xl p-4 border border-amber-100/60">
+                            <h3 className="text-sm font-semibold text-amber-700 mb-2 flex items-center gap-1.5">
+                                <span className="text-base">💡</span>
+                                改进建议
+                            </h3>
+                            <ul className="space-y-1.5">
+                                {result.suggestions.map((s, i) => (
+                                    <li key={i} className="flex items-start gap-2 text-sm text-amber-800">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 flex-shrink-0" />
+                                        <span>{s}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    {/* Fallback: show old-style feedback for OpenCV scoring */}
+                    {!isAI && result.feedback.length > 0 && (
+                        <div className="space-y-2">
+                            <h3 className="text-sm font-medium text-warm-500">详细反馈</h3>
+                            <ul className="space-y-2">
+                                {result.feedback.map((item, index) => (
+                                    <li key={index} className="flex items-start space-x-2 text-warm-700 text-sm">
+                                        <span className="text-primary-500 mt-0.5">•</span>
+                                        <span>{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
                     )}
                 </div>
 
                 {/* Footer */}
-                <div className="px-6 pb-6">
+                <div className="px-6 py-4 flex-shrink-0">
                     <button
                         onClick={onClose}
                         className="w-full py-3 bg-gradient-to-r from-primary-500 to-accent-500 text-white rounded-xl font-medium hover:from-primary-600 hover:to-accent-600 transition-all transform hover:scale-[1.02] active:scale-[0.98]"

@@ -9,6 +9,11 @@
   --text-primary: 17 24 39;
   --text-secondary: 107 114 128;
   --border-color: 229 231 235;
+  /* 安全区变量 */
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
 }
 
 .dark {
@@ -23,12 +28,20 @@
 @layer base {
   html {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    /* 防止 iOS 弹性滚动导致背景露出 */
+    overscroll-behavior-y: none;
+    /* PWA standalone 模式下，禁止文本选择长按菜单 */
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
     @apply antialiased transition-colors duration-300;
     background-color: rgb(var(--bg-primary));
     color: rgb(var(--text-primary));
+    /* 安全区内边距 — 顶部 + 左右 */
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
   }
 }
 
@@ -88,4 +101,49 @@
   .animate-pulse-slow {
     animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
+
+  /* 安全区工具类 */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  /* 底部 Tab 高度占位（Tab 约 56px + safe-area） */
+  .pb-tab-bar {
+    padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* PWA Standalone: 键盘弹出时，避免底部 Tab 被顶上去 */
+@media (display-mode: standalone) {
+  /* iOS visual viewport 适配 */
+  html {
+    height: 100%;
+    overflow: hidden;
+  }
+  body {
+    height: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* 骨架屏动画 */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg,
+    rgb(var(--bg-secondary)) 25%,
+    rgb(var(--border-color) / 0.3) 50%,
+    rgb(var(--bg-secondary)) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 0.5rem;
 }

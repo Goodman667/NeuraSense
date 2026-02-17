@@ -8,6 +8,7 @@
 import { useState, useCallback } from 'react';
 import { API_BASE } from '../../config/api';
 import { PDFDownloadButton } from './PDFDownloadButton';
+import { MarkdownText } from './MarkdownText';
 
 const PSS_QUESTIONS = [
     { id: 1, text: "在过去一个月里，您有多少次因为发生了意想不到的事情而感到心烦意乱？", reverse: false },
@@ -87,18 +88,56 @@ export const PSSScale = ({ onComplete, onClose }: PSSScaleProps) => {
         setIsLoading(true);
 
         try {
-            const response = await fetch(`${API_BASE}/chat`, {
+            // 构建包含维度信息的个性化 prompt
+            const stressItems = PSS_QUESTIONS
+                .filter((q, i) => {
+                    const a = answers[i] ?? 0;
+                    return q.reverse ? a <= 1 : a >= 3;
+                })
+                .map(q => q.text.replace(/^在过去一个月里，您有多少次/, ''));
+            const copingItems = PSS_QUESTIONS
+                .filter((q, i) => {
+                    const a = answers[i] ?? 0;
+                    return q.reverse && a >= 3;
+                })
+                .map(q => q.text.replace(/^在过去一个月里，您有多少次/, ''));
+
+            const detailedPrompt = `作为心理健康顾问，请根据以下 PSS-10 压力感知量表结果给出个性化建议。
+
+## 评估数据
+- 总分：${totalScore}/40（${severity.level}）
+${stressItems.length > 0 ? `- 压力来源：${stressItems.slice(0, 3).join('、')}` : '- 压力水平较低'}
+${copingItems.length > 0 ? `- 应对能力较好的方面：${copingItems.slice(0, 2).join('、')}` : ''}
+
+## 回复要求
+1. 直接给出建议，不要以"当然可以"、"好的"等寒暄开头
+2. 针对主要压力来源给出具体建议
+3. 用以下结构回复：
+
+### 总体评估
+（1-2句话概括压力状态）
+
+### 重点建议
+（针对压力来源的 2-3 条具体可操作建议，每条用 - 开头）
+
+### 日常减压
+（运动、睡眠、时间管理、放松技巧各 1 条简短建议，用 - 开头）
+
+${totalScore >= 27 ? '### 专业资源\n（推荐就医和心理援助热线 400-161-9995）' : ''}
+
+请保持温暖但简洁，总字数控制在 300 字以内。`;
+
+            const response = await fetch(`${API_BASE}/counselor/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    user_id: 'scale_user',
-                    message: `我完成了PSS-10压力感知量表，得分是${totalScore}分（${severity.level}）。请给我一些压力管理和放松的建议。`,
+                    message: detailedPrompt,
                 }),
             });
 
             if (response.ok) {
                 const data = await response.json();
-                setAiInterpretation(data.reply_text || data.message);
+                setAiInterpretation(data.message || data.reply);
             }
 
             const token = localStorage.getItem('token');
@@ -205,8 +244,8 @@ export const PSSScale = ({ onComplete, onClose }: PSSScaleProps) => {
 
                     {aiInterpretation && (
                         <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-lg p-6 text-white">
-                            <h3 className="font-bold text-lg mb-2">💬 小心的建议</h3>
-                            <p className="leading-relaxed opacity-95">{aiInterpretation}</p>
+                            <h3 className="font-bold text-lg mb-3">💬 小心的建议</h3>
+                            <MarkdownText text={aiInterpretation} />
                         </div>
                     )}
 

@@ -42,7 +42,7 @@ class GraphRAGService:
     """
     
     # LLM API configuration
-    LLM_API_KEY = os.getenv("LLM_API_KEY", "b667b5eae22e4780816a8b38a1a32b0d.ZsMkH3UUfvgxyToT")
+    LLM_API_KEY = os.getenv("LLM_API_KEY", "")
     LLM_MODEL = "glm-4-flash"
     
     # Neo4j configuration

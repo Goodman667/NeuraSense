@@ -94,6 +94,42 @@ export const translations: Translations = {
     'settings.language': { zh: '语言', en: 'Language' },
     'settings.theme': { zh: '主题', en: 'Theme' },
     'settings.darkMode': { zh: '深色模式', en: 'Dark Mode' },
+    'settings.title': { zh: '设置', en: 'Settings' },
+    'settings.appearance': { zh: '外观', en: 'Appearance' },
+    'settings.reminders': { zh: '提醒设置', en: 'Reminders' },
+    'settings.reminderFreq': { zh: '提醒频率', en: 'Frequency' },
+    'settings.reminderTime': { zh: '提醒时间', en: 'Reminder Time' },
+    'settings.save': { zh: '保存提醒设置', en: 'Save Reminder Settings' },
+    'settings.data': { zh: '数据管理', en: 'Data' },
+    'settings.export': { zh: '导出我的数据', en: 'Export My Data' },
+    'settings.exportDesc': { zh: '下载 JSON 格式的全部数据', en: 'Download all data as JSON' },
+    'settings.about': { zh: '关于', en: 'About' },
+    'settings.version': { zh: '版本 1.0.0', en: 'Version 1.0.0' },
+    'settings.disclaimer': { zh: '本平台仅供参考，不能替代专业医疗诊断', en: 'For reference only, not a substitute for professional diagnosis' },
+
+    // Me Page
+    'me.loginPrompt': { zh: '登录后体验完整功能', en: 'Login for full access' },
+    'me.loginDesc': { zh: '保存评估记录、追踪成长轨迹', en: 'Save assessments & track progress' },
+    'me.loginBtn': { zh: '登录 / 注册', en: 'Login / Register' },
+    'me.dataCenter': { zh: '数据中心', en: 'Data Center' },
+    'me.assessments': { zh: '评估报告', en: 'Assessments' },
+    'me.journal': { zh: '心情日记', en: 'Mood Journal' },
+    'me.achievements': { zh: '我的成就', en: 'Achievements' },
+    'me.community': { zh: '温暖社区', en: 'Community' },
+    'me.appearance': { zh: '外观模式', en: 'Appearance' },
+    'me.moreSettings': { zh: '更多设置', en: 'More Settings' },
+    'me.moreSettingsDesc': { zh: '提醒、语言、数据导出', en: 'Reminders, language, export' },
+    'me.streak': { zh: '连续打卡', en: 'Streak' },
+    'me.points': { zh: '总积分', en: 'Points' },
+    'me.thisWeek': { zh: '本周练习', en: 'This Week' },
+    'me.logout': { zh: '退出登录', en: 'Logout' },
+
+    // Notifications / Messages
+    'messages.title': { zh: '消息中心', en: 'Messages' },
+    'messages.readAll': { zh: '全部已读', en: 'Read all' },
+    'messages.empty': { zh: '暂无消息', en: 'No messages' },
+    'messages.filterAll': { zh: '全部', en: 'All' },
+    'messages.filterUnread': { zh: '未读', en: 'Unread' },
 };
 
 interface I18nContextType {

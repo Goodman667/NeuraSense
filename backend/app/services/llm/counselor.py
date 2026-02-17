@@ -21,7 +21,7 @@ import os
 try:
     from ..memory.vector_store import vector_memory
     MEMORY_AVAILABLE = True
-except ImportError:
+except Exception:
     vector_memory = None
     MEMORY_AVAILABLE = False
 
@@ -77,7 +77,7 @@ class CounselorService:
     """
     
     # LLM API 配置 - 使用智谱 AI API Key
-    LLM_API_KEY = os.getenv("LLM_API_KEY", "b667b5eae22e4780816a8b38a1a32b0d.ZsMkH3UUfvgxyToT")
+    LLM_API_KEY = os.getenv("LLM_API_KEY", "")
     LLM_MODEL = os.getenv("LLM_MODEL", "glm-4-flash")
     LLM_PROVIDER = os.getenv("LLM_PROVIDER", "zhipuai")
     

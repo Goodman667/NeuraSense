@@ -8,6 +8,7 @@
 import { useState, useCallback } from 'react';
 import { API_BASE } from '../../config/api';
 import { PDFDownloadButton } from './PDFDownloadButton';
+import { MarkdownText } from './MarkdownText';
 
 // PHQ-9 问题定义
 const PHQ9_QUESTIONS = [
@@ -85,20 +86,37 @@ export const PHQ9Scale = ({ onComplete, onClose }: PHQ9ScaleProps) => {
         setIsLoading(true);
 
         try {
-            // 调用后端 API 获取 AI 解读（使用更详细的 prompt）
-            const detailedPrompt = `我完成了 PHQ-9 抑郁量表测评，得分是 ${totalScore} 分（${severity.level}）。
+            // 构建包含各维度得分的个性化 prompt
+            const labels = ['兴趣减退', '心情低落', '睡眠问题', '精力不足', '食欲变化', '自我评价低', '注意力不集中', '行动迟缓/烦躁', '自伤念头'];
+            const dimensions = answers
+                .map((a, i) => `${labels[i]}=${a}/3`)
+                .join('，');
+            const highItems = labels.filter((_, i) => (answers[i] ?? 0) >= 2);
 
-请根据这个结果给我具体、可操作的建议，包括：
-1. 如果需要专业帮助，请推荐具体的治疗方式（如认知行为疗法CBT、药物治疗等）
-2. 提供心理援助热线号码（如400-161-9995、800-810-1117）
-3. 给出具体的自我调节建议：
-   - 睡眠：具体睡多少小时、什么时间睡
-   - 运动：具体运动类型和时长
-   - 饮食：具体吃什么食物
-   - 社交：具体怎么做
-4. 推荐放松技巧和相关App（如潮汐、Headspace）
+            const detailedPrompt = `作为心理健康顾问，请根据以下 PHQ-9 评估结果给出个性化建议。
 
-请用分点列表的形式回复，使用emoji让建议更友好。`;
+## 评估数据
+- 总分：${totalScore}/27（${severity.level}）
+- 各维度：${dimensions}
+${highItems.length > 0 ? `- 需重点关注：${highItems.join('、')}` : '- 各维度得分均较低，状态良好'}
+
+## 回复要求
+1. 直接给出建议，不要以"当然可以"、"好的"等寒暄开头
+2. 针对得分较高的维度给出具体建议（而非泛泛而谈）
+3. 用以下结构回复：
+
+### 总体评估
+（1-2句话概括状态）
+
+### 重点建议
+（针对高分维度的 2-3 条具体可操作建议，每条用 - 开头）
+
+### 日常调节
+（睡眠、运动、饮食、社交各 1 条简短建议，用 - 开头）
+
+${totalScore >= 10 ? '### 专业资源\n（推荐就医科室和心理援助热线 400-161-9995）' : ''}
+
+请保持温暖但简洁，总字数控制在 300 字以内。`;
 
             const response = await fetch(`${API_BASE}/counselor/chat`, {
                 method: 'POST',
@@ -110,7 +128,7 @@ export const PHQ9Scale = ({ onComplete, onClose }: PHQ9ScaleProps) => {
 
             if (response.ok) {
                 const data = await response.json();
-                setAiInterpretation(data.reply || data.message);
+                setAiInterpretation(data.message || data.reply);
             }
         } catch (error) {
             console.error('Failed to get AI interpretation:', error);
@@ -354,8 +372,8 @@ export const PHQ9Scale = ({ onComplete, onClose }: PHQ9ScaleProps) => {
                                     <span className="text-2xl">💬</span>
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-lg mb-2">小心的专业建议</h3>
-                                    <p className="leading-relaxed opacity-95">{aiInterpretation}</p>
+                                    <h3 className="font-bold text-lg mb-3">小心的专业建议</h3>
+                                    <MarkdownText text={aiInterpretation} />
                                 </div>
                             </div>
                         </div>
