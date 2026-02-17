@@ -1,0 +1,19 @@
+<view class="container">
+  <view class="logo-area">
+    <view class="logo-circle">
+      <text class="logo-text">N</text>
+    </view>
+    <text class="app-name">NeuraSense</text>
+    <text class="app-desc">智能心理健康平台</text>
+  </view>
+
+  <view class="loading-area" wx:if="{{!error}}">
+    <view class="spinner"></view>
+    <text class="loading-text">{{statusText}}</text>
+  </view>
+
+  <view class="error-area" wx:if="{{error}}">
+    <text class="error-text">{{error}}</text>
+    <button class="retry-btn" bindtap="handleRetry">重试</button>
+  </view>
+</view>

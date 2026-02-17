@@ -475,6 +475,32 @@ function App() {
         }
     }, [loadFromServer]);
 
+    // Mini Program token auto-login (via web-view URL param)
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlToken = urlParams.get('token');
+        const from = urlParams.get('from');
+        if (urlToken) {
+            localStorage.setItem('token', urlToken);
+            // 清理 URL，避免 token 泄露到浏览历史
+            window.history.replaceState({}, document.title, window.location.pathname);
+            // 尝试获取用户信息
+            fetch(`${API_BASE}/auth/me?token=${urlToken}`)
+                .then(res => res.ok ? res.json() : null)
+                .then(data => {
+                    if (data?.user) {
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                        setCurrentUser(data.user);
+                    }
+                })
+                .catch(() => {});
+            // 从小程序进来直接跳到主界面
+            if (from === 'miniprogram') {
+                setAppView('main');
+            }
+        }
+    }, []);
+
     // WeChat OAuth callback
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
