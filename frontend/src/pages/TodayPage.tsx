@@ -9,7 +9,7 @@
  * 5. 近 7 天趋势折线图
  */
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -18,6 +18,80 @@ import {
 import { useCheckinStore, type CheckinData } from '../store/useCheckinStore';
 import { API_BASE } from '../config/api';
 import type { ToolItem } from './ToolboxPage';
+
+/* ============================================================
+   Inline SVG Icons
+   ============================================================ */
+
+/** Heart icon — mood / 心情 */
+const IconMood = ({ className = 'w-5 h-5' }: { className?: string }) => (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+    </svg>
+);
+
+/** Bolt / lightning icon — stress / 压力 */
+const IconStress = ({ className = 'w-5 h-5' }: { className?: string }) => (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M11.412 15.655L9.75 21.75l3.745-4.012M9.257 13.5H3.75l6.409-8.155A.75.75 0 0110.75 6v4.5h5.49a.75.75 0 01.575 1.238l-6.16 7.858" />
+    </svg>
+);
+
+/** Battery / zap icon — energy / 精力 */
+const IconEnergy = ({ className = 'w-5 h-5' }: { className?: string }) => (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5h1.5m0 0V9.75A2.25 2.25 0 017.5 7.5h9A2.25 2.25 0 0118.75 9.75v4.5a2.25 2.25 0 01-2.25 2.25h-9a2.25 2.25 0 01-2.25-2.25V13.5zm15-2.25h.75a.75.75 0 01.75.75v1.5a.75.75 0 01-.75.75h-.75m-12-3.75h6" />
+    </svg>
+);
+
+/** Moon icon — sleep / 睡眠 */
+const IconSleep = ({ className = 'w-5 h-5' }: { className?: string }) => (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+    </svg>
+);
+
+/** Pencil-square icon — journal / 签到 */
+const IconJournal = ({ className = 'w-5 h-5' }: { className?: string }) => (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+    </svg>
+);
+
+/** Sparkles icon — meditation / 冥想 */
+const IconMeditation = ({ className = 'w-5 h-5' }: { className?: string }) => (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+    </svg>
+);
+
+/** Chat bubble icon — 聊天 */
+const IconChat = ({ className = 'w-5 h-5' }: { className?: string }) => (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-11.883 5.01L3.72 20.1a.75.75 0 001.06.04l3.168-2.652A9.75 9.75 0 0012 18.75c5.385 0 9.75-3.806 9.75-8.25S17.385 2.25 12 2.25 2.25 6.056 2.25 10.5c0 2.098.846 4.023 2.267 5.51z" />
+    </svg>
+);
+
+/** Clipboard / assessment icon — 测评 */
+const IconAssessment = ({ className = 'w-5 h-5' }: { className?: string }) => (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15a2.25 2.25 0 012.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z" />
+    </svg>
+);
+
+/** Chart bar icon — 数据图表 */
+const IconChart = ({ className = 'w-5 h-5' }: { className?: string }) => (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+    </svg>
+);
+
+/** Party / celebration icon (sparkles variant for 签到成功) */
+const IconCelebration = ({ className = 'w-5 h-5' }: { className?: string }) => (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+    </svg>
+);
 
 /* ============================================================
    Props
@@ -61,11 +135,22 @@ function formatDateCN() {
     return `${d.getMonth() + 1}月${d.getDate()}日 周${weekNames[d.getDay()]}`;
 }
 
-const SLIDER_LABELS: Record<string, { low: string; high: string; emoji: string; color: string }> = {
-    mood:          { low: '低落', high: '开心', emoji: '😊', color: 'from-rose-400 to-orange-400' },
-    stress:        { low: '轻松', high: '紧张', emoji: '😤', color: 'from-red-400 to-rose-400' },
-    energy:        { low: '疲惫', high: '充沛', emoji: '⚡', color: 'from-amber-400 to-yellow-400' },
-    sleep_quality: { low: '很差', high: '很好', emoji: '🌙', color: 'from-indigo-400 to-violet-400' },
+/** Map slider key to its inline SVG icon node */
+function getSliderIcon(key: string, className = 'w-5 h-5 inline-block'): ReactNode {
+    switch (key) {
+        case 'mood':          return <IconMood className={className} />;
+        case 'stress':        return <IconStress className={className} />;
+        case 'energy':        return <IconEnergy className={className} />;
+        case 'sleep_quality': return <IconSleep className={className} />;
+        default:              return null;
+    }
+}
+
+const SLIDER_LABELS: Record<string, { low: string; high: string; color: string }> = {
+    mood:          { low: '低落', high: '开心', color: 'from-rose-400 to-orange-400' },
+    stress:        { low: '轻松', high: '紧张', color: 'from-red-400 to-rose-400' },
+    energy:        { low: '疲惫', high: '充沛', color: 'from-amber-400 to-yellow-400' },
+    sleep_quality: { low: '很差', high: '很好', color: 'from-indigo-400 to-violet-400' },
 };
 
 const SLIDER_KEYS = ['mood', 'stress', 'energy', 'sleep_quality'] as const;
@@ -107,8 +192,8 @@ function CheckinCard({ onDone }: { onDone: () => void }) {
                     return (
                         <div key={key}>
                             <div className="flex justify-between items-center mb-1.5">
-                                <span className="text-sm text-warm-700 font-medium">
-                                    {meta.emoji} {key === 'mood' ? '心情' : key === 'stress' ? '压力' : key === 'energy' ? '精力' : '睡眠质量'}
+                                <span className="text-sm text-warm-700 font-medium flex items-center gap-1">
+                                    {getSliderIcon(key, 'w-4 h-4 inline-block')} {key === 'mood' ? '心情' : key === 'stress' ? '压力' : key === 'energy' ? '精力' : '睡眠质量'}
                                 </span>
                                 <span className="text-xs font-bold text-warm-500">{val}</span>
                             </div>
@@ -163,7 +248,12 @@ function CheckinCard({ onDone }: { onDone: () => void }) {
 function CheckinSummary({ checkin }: { checkin: CheckinData }) {
     const labels = ['心情', '压力', '精力', '睡眠'];
     const keys: (keyof CheckinData)[] = ['mood', 'stress', 'energy', 'sleep_quality'];
-    const emojis = ['😊', '😤', '⚡', '🌙'];
+    const icons: ReactNode[] = [
+        <IconMood key="mood" className="w-5 h-5 text-orange-500" />,
+        <IconStress key="stress" className="w-5 h-5 text-rose-500" />,
+        <IconEnergy key="energy" className="w-5 h-5 text-amber-500" />,
+        <IconSleep key="sleep" className="w-5 h-5 text-violet-500" />,
+    ];
     const colors = ['text-orange-500', 'text-rose-500', 'text-amber-500', 'text-violet-500'];
 
     return (
@@ -180,8 +270,8 @@ function CheckinSummary({ checkin }: { checkin: CheckinData }) {
             </div>
             <div className="grid grid-cols-4 gap-2">
                 {keys.map((key, i) => (
-                    <div key={key} className="text-center">
-                        <span className="text-lg">{emojis[i]}</span>
+                    <div key={key} className="text-center flex flex-col items-center">
+                        <span className="mb-0.5">{icons[i]}</span>
                         <div className={`text-xl font-bold ${colors[i]}`}>{checkin[key] as number}</div>
                         <div className="text-[10px] text-warm-400">{labels[i]}</div>
                     </div>
@@ -282,29 +372,29 @@ function DailyTasks({
     // 简单的本地完成状态 (刷新后重置)
     const [doneTool, setDoneTool] = useState(false);
 
-    const tasks = [
+    const tasks: { label: string; done: boolean; icon: ReactNode; action: (() => void) | undefined }[] = [
         {
             label: '完成状态签到',
             done: hasCheckedIn,
-            icon: '📝',
+            icon: <IconJournal className="w-5 h-5" />,
             action: undefined,
         },
         {
             label: '完成 1 个练习工具',
             done: doneTool,
-            icon: '🧘',
+            icon: <IconMeditation className="w-5 h-5" />,
             action: undefined, // 完成工具后自动标记（通过 store 检测）
         },
         {
             label: '和 AI 聊一次',
             done: false,
-            icon: '💬',
+            icon: <IconChat className="w-5 h-5" />,
             action: onStartChat,
         },
         {
             label: '做 1 次测评',
             done: false,
-            icon: '📋',
+            icon: <IconAssessment className="w-5 h-5" />,
             action: () => onNavigate('scale'),
         },
     ];
@@ -348,7 +438,7 @@ function DailyTasks({
                                   : 'bg-white/80 border-warm-100/60'
                         }`}
                     >
-                        <span className="text-lg">{task.icon}</span>
+                        <span className="text-lg flex items-center">{task.icon}</span>
                         <span className={`flex-1 text-sm ${task.done ? 'text-emerald-600 line-through' : 'text-warm-700'}`}>
                             {task.label}
                         </span>
@@ -400,7 +490,7 @@ function TrendChart() {
     if (chartData.length < 2) {
         return (
             <div className="bg-white/80 backdrop-blur rounded-2xl p-5 border border-warm-100/60 text-center">
-                <span className="text-3xl mb-2 block">📊</span>
+                <span className="mb-2 block"><IconChart className="w-8 h-8 text-warm-400 mx-auto" /></span>
                 <p className="text-sm text-warm-500">签到满 2 天后显示趋势图</p>
             </div>
         );
@@ -495,7 +585,7 @@ export default function TodayPage({
                         className="text-center py-2"
                         onAnimationComplete={() => setTimeout(() => setJustCheckedIn(false), 1500)}
                     >
-                        <span className="text-2xl">🎉</span>
+                        <span className="inline-block"><IconCelebration className="w-7 h-7 text-emerald-500 mx-auto" /></span>
                         <p className="text-sm text-emerald-600 font-medium mt-1">签到成功!</p>
                     </motion.div>
                 )}

@@ -347,14 +347,14 @@ function ProgramDayView({
             {/* 学习卡片 */}
             <div className="bg-white/80 backdrop-blur rounded-2xl p-5 border border-warm-100/60 mb-4">
                 <h3 className="text-base font-bold text-warm-800 mb-3 flex items-center gap-2">
-                    <span className="text-lg">📖</span> 今日知识
+                    <span className="text-lg text-warm-700"><svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg></span> 今日知识
                 </h3>
                 <div className="text-sm text-warm-600 leading-relaxed whitespace-pre-line">
                     {day.learn_text}
                 </div>
                 {day.tip && (
                     <div className="mt-4 bg-amber-50/80 rounded-xl p-3 border border-amber-100/60">
-                        <p className="text-xs text-amber-700">💡 {day.tip}</p>
+                        <p className="text-xs text-amber-700 flex items-start gap-1"><svg className="w-4 h-4 flex-shrink-0 mt-px" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round"><path d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" /></svg><span>{day.tip}</span></p>
                     </div>
                 )}
             </div>
@@ -365,7 +365,7 @@ function ProgramDayView({
                 return embedUrl ? (
                     <div className="bg-white/80 backdrop-blur rounded-2xl p-5 border border-warm-100/60 mb-4">
                         <h3 className="text-base font-bold text-warm-800 mb-3 flex items-center gap-2">
-                            <span className="text-lg">🎬</span> 配套视频
+                            <span className="text-lg text-warm-700"><svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round"><path d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" /><path d="M3.75 21h16.5" /></svg></span> 配套视频
                         </h3>
                         {day.video_title && (
                             <p className="text-sm text-warm-500 mb-3">{day.video_title}</p>
@@ -396,7 +396,7 @@ function ProgramDayView({
             {day.tool_id && (
                 <div className="bg-white/80 backdrop-blur rounded-2xl p-5 border border-warm-100/60 mb-4">
                     <h3 className="text-base font-bold text-warm-800 mb-3 flex items-center gap-2">
-                        <span className="text-lg">🧘</span> 今日练习
+                        <span className="text-lg text-warm-700"><svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round"><path d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" /><path d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1.001A3.75 3.75 0 0012 18z" /></svg></span> 今日练习
                     </h3>
                     {toolCompleted || isDone ? (
                         <div className="flex items-center gap-2 py-3 px-4 bg-emerald-50 rounded-xl border border-emerald-200/60">
@@ -418,7 +418,7 @@ function ProgramDayView({
             {day.review_question && (
                 <div className="bg-white/80 backdrop-blur rounded-2xl p-5 border border-warm-100/60 mb-4">
                     <h3 className="text-base font-bold text-warm-800 mb-3 flex items-center gap-2">
-                        <span className="text-lg">💭</span> 今日复盘
+                        <span className="text-lg text-warm-700"><svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round"><path d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" /></svg></span> 今日复盘
                     </h3>
                     <p className="text-sm text-warm-600 mb-3">{day.review_question}</p>
 

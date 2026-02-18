@@ -42,6 +42,7 @@ import { API_BASE } from './config/api';
 import TabBar, { type TabId } from './layouts/TabBar';
 import { PageSkeleton, ChatSkeleton, ToolboxSkeleton, ProgramsSkeleton, MeSkeleton } from './components/PageSkeleton';
 import LazyErrorBoundary from './components/LazyErrorBoundary';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
 import type { ToolItem } from './pages/ToolboxPage';
 
 // Lazy-loaded pages — 按需加载，减小首屏体积
@@ -995,6 +996,9 @@ function App() {
 
             {/* ===== BOTTOM TAB BAR ===== */}
             {showTabBar && <TabBar activeTab={activeTab} onTabChange={handleTabChange} />}
+
+            {/* ===== PWA 安装引导 ===== */}
+            <PWAInstallPrompt />
         </div>
     );
 }
