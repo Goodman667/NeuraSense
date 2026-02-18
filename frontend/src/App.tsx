@@ -677,7 +677,7 @@ function App() {
     // ===== MAIN APP =====
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-warm-50 via-rose-50/30 to-primary-50/50">
+        <div className="min-h-screen bg-[#f5f5f7] dark:bg-gray-900">
             {/* Immersive Overlay */}
             {isPlayingImmersive && (
                 <div className="fixed inset-0 z-[100]">

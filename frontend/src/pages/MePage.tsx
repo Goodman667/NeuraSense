@@ -194,58 +194,54 @@ export default function MePage({
     ];
 
     return (
-        <div className="space-y-6">
-            {/* 用户信息卡片 */}
-            <div className="bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl p-6 text-white shadow-xl">
-                <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-2xl font-bold backdrop-blur-sm">
+        <div className="space-y-5">
+            {/* 用户信息卡片 — 深色主题风格 */}
+            <div className="relative overflow-hidden bg-gradient-to-br from-slate-800 via-indigo-900 to-slate-900 rounded-2xl p-6 text-white shadow-xl">
+                {/* 装饰性背景圆 */}
+                <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-2xl" />
+                <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-purple-500/15 rounded-full blur-2xl" />
+
+                <div className="relative flex items-center gap-4">
+                    <div className="w-16 h-16 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-2xl flex items-center justify-center text-2xl font-bold shadow-lg shadow-indigo-500/30">
                         {(currentUser.nickname || currentUser.username || '?')[0].toUpperCase()}
                     </div>
                     <div className="flex-1">
-                        <h3 className="text-xl font-bold">{currentUser.nickname || currentUser.username}</h3>
-                        <p className="text-white/70 text-sm mt-0.5">@{currentUser.username}</p>
+                        <h3 className="text-xl font-bold tracking-tight">{currentUser.nickname || currentUser.username}</h3>
+                        <p className="text-indigo-200/70 text-sm mt-0.5">@{currentUser.username}</p>
                     </div>
                 </div>
 
-                {/* 统计数据 */}
-                <div className="grid grid-cols-3 gap-4 mt-6 pt-5 border-t border-white/20">
-                    <div className="text-center">
-                        <div className="text-2xl font-bold">{streak}</div>
-                        <div className="text-white/60 text-xs mt-0.5">
-                            {lang === 'zh' ? '连续打卡' : 'Streak'}
+                {/* 统计数据 — 玻璃卡片风格 */}
+                <div className="relative grid grid-cols-3 gap-3 mt-5">
+                    {[
+                        { value: streak, label: lang === 'zh' ? '连续打卡' : 'Streak', color: 'from-amber-400/20 to-orange-400/10 border-amber-400/20' },
+                        { value: todayPoints, label: lang === 'zh' ? '总积分' : 'Points', color: 'from-emerald-400/20 to-green-400/10 border-emerald-400/20' },
+                        { value: toolCompletions7d, label: lang === 'zh' ? '本周练习' : 'This Week', color: 'from-sky-400/20 to-blue-400/10 border-sky-400/20' },
+                    ].map((stat) => (
+                        <div key={stat.label} className={`bg-gradient-to-b ${stat.color} border rounded-xl p-3 text-center backdrop-blur-sm`}>
+                            <div className="text-2xl font-bold">{stat.value}</div>
+                            <div className="text-white/50 text-xs mt-0.5">{stat.label}</div>
                         </div>
-                    </div>
-                    <div className="text-center">
-                        <div className="text-2xl font-bold">{todayPoints}</div>
-                        <div className="text-white/60 text-xs mt-0.5">
-                            {lang === 'zh' ? '总积分' : 'Points'}
-                        </div>
-                    </div>
-                    <div className="text-center">
-                        <div className="text-2xl font-bold">{toolCompletions7d}</div>
-                        <div className="text-white/60 text-xs mt-0.5">
-                            {lang === 'zh' ? '本周练习' : 'This Week'}
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </div>
 
             {/* 菜单分组 */}
             {menuSections.map((section) => (
                 <div key={section.title}>
-                    <h4 className="text-sm font-medium text-warm-400 dark:text-gray-500 mb-2 px-1">{section.title}</h4>
-                    <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-2xl border border-warm-200/50 dark:border-gray-700/50 overflow-hidden divide-y divide-warm-100/50 dark:divide-gray-700/50">
-                        {section.items.map((item) => (
+                    <h4 className="text-xs font-semibold text-warm-400 dark:text-gray-500 mb-2 px-1 uppercase tracking-wider">{section.title}</h4>
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-warm-100 dark:border-gray-700 overflow-hidden shadow-sm">
+                        {section.items.map((item, idx) => (
                             <button
                                 key={item.label}
                                 onClick={item.action}
-                                className="w-full flex items-center gap-4 p-4 hover:bg-warm-50/50 dark:hover:bg-gray-700/50 transition-colors active:bg-warm-100/50 dark:active:bg-gray-600/50"
+                                className={`w-full flex items-center gap-4 p-4 hover:bg-warm-50 dark:hover:bg-gray-700/50 transition-all duration-200 active:bg-warm-100 dark:active:bg-gray-600/50 cursor-pointer ${idx > 0 ? 'border-t border-warm-100/60 dark:border-gray-700/60' : ''}`}
                             >
                                 <div className={`w-10 h-10 ${item.color} ${item.darkColor} rounded-xl flex items-center justify-center flex-shrink-0`}>
                                     {item.icon}
                                 </div>
                                 <div className="flex-1 text-left">
-                                    <div className="font-medium text-warm-800 dark:text-gray-100">{item.label}</div>
+                                    <div className="font-medium text-warm-800 dark:text-gray-100 text-sm">{item.label}</div>
                                     <div className="text-warm-400 dark:text-gray-500 text-xs mt-0.5">{item.desc}</div>
                                 </div>
                                 <svg className="w-4 h-4 text-warm-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -260,7 +256,7 @@ export default function MePage({
             {/* 退出登录 */}
             <button
                 onClick={onLogout}
-                className="w-full py-3 text-center text-red-500 dark:text-red-400 bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-2xl border border-warm-200/50 dark:border-gray-700/50 font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                className="w-full py-3 text-center text-red-500 dark:text-red-400 bg-white dark:bg-gray-800 rounded-2xl border border-warm-100 dark:border-gray-700 font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors cursor-pointer shadow-sm"
             >
                 {lang === 'zh' ? '退出登录' : 'Logout'}
             </button>

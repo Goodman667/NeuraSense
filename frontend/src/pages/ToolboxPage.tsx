@@ -257,9 +257,9 @@ export default function ToolboxPage({ onNavigate, onStartImmersive, onOpenTool }
     return (
         <div className="space-y-6">
             {/* 标题 */}
-            <div>
-                <h2 className="text-2xl font-bold text-warm-800">工具箱</h2>
-                <p className="text-warm-500 mt-1">专业心理健康工具，随时随地使用</p>
+            <div className="bg-gradient-to-br from-slate-800 via-indigo-900 to-slate-900 rounded-2xl p-5 shadow-sm">
+                <h2 className="text-2xl font-bold text-white">工具箱</h2>
+                <p className="text-indigo-200 mt-1">专业心理健康工具，随时随地使用</p>
             </div>
 
             {/* 搜索 */}
@@ -272,7 +272,7 @@ export default function ToolboxPage({ onNavigate, onStartImmersive, onOpenTool }
                     placeholder="搜索工具..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-11 pr-4 py-3 rounded-xl bg-white/70 backdrop-blur border border-warm-200/60 text-warm-700 placeholder:text-warm-400 focus:outline-none focus:ring-2 focus:ring-primary-300/50 transition"
+                    className="w-full pl-11 pr-4 py-3 rounded-xl bg-white dark:bg-gray-800 border border-warm-100 dark:border-gray-700 text-warm-700 placeholder:text-warm-400 focus:outline-none focus:ring-2 focus:ring-primary-300/50 transition-all duration-200"
                 />
             </div>
 
@@ -280,10 +280,10 @@ export default function ToolboxPage({ onNavigate, onStartImmersive, onOpenTool }
             <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">
                 <button
                     onClick={() => setActiveCategory(null)}
-                    className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                    className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all duration-200 ${
                         !activeCategory
-                            ? 'bg-primary-500 text-white shadow-sm'
-                            : 'bg-white/70 text-warm-600 border border-warm-200/60'
+                            ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-sm'
+                            : 'bg-white dark:bg-gray-800 text-warm-600 border border-warm-100 dark:border-gray-700 shadow-sm hover:shadow-md'
                     }`}
                 >
                     全部
@@ -292,10 +292,10 @@ export default function ToolboxPage({ onNavigate, onStartImmersive, onOpenTool }
                     <button
                         key={cat}
                         onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
-                        className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                        className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all duration-200 ${
                             activeCategory === cat
-                                ? 'bg-primary-500 text-white shadow-sm'
-                                : 'bg-white/70 text-warm-600 border border-warm-200/60'
+                                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-sm'
+                                : 'bg-white dark:bg-gray-800 text-warm-600 border border-warm-100 dark:border-gray-700 shadow-sm hover:shadow-md'
                         }`}
                     >
                         {CATEGORY_META[cat].label}
@@ -309,7 +309,7 @@ export default function ToolboxPage({ onNavigate, onStartImmersive, onOpenTool }
                     <button
                         key={shortcut.id}
                         onClick={shortcut.action}
-                        className="flex flex-col items-center gap-1.5 py-3 bg-white/60 backdrop-blur rounded-xl border border-warm-200/40 hover:shadow-md transition-all active:scale-[0.97]"
+                        className="flex flex-col items-center gap-1.5 py-3 bg-white dark:bg-gray-800 rounded-xl border border-warm-100 dark:border-gray-700 shadow-sm hover:shadow-md cursor-pointer transition-all duration-200 active:scale-[0.97]"
                     >
                         <span className="text-warm-700">{shortcut.icon}</span>
                         <span className="text-xs text-warm-600 font-medium">{shortcut.label}</span>
@@ -349,7 +349,7 @@ export default function ToolboxPage({ onNavigate, onStartImmersive, onOpenTool }
                                             key={tool.id}
                                             whileTap={{ scale: 0.97 }}
                                             onClick={() => onOpenTool(tool)}
-                                            className="bg-white/80 backdrop-blur rounded-2xl p-4 border border-warm-100/60 shadow-sm hover:shadow-md transition-all cursor-pointer group"
+                                            className="bg-white dark:bg-gray-800 rounded-2xl p-4 border border-warm-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group"
                                         >
                                             <div className="flex items-start gap-3">
                                                 <div className={`w-11 h-11 bg-gradient-to-br ${CATEGORY_META[tool.category]?.gradient || 'from-warm-100 to-warm-200'} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>

@@ -82,14 +82,14 @@ interface LandingPageProps {
 
 export default function LandingPage({ onGetStarted, onLogin }: LandingPageProps) {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-warm-50 via-rose-50/40 to-primary-50/60 flex flex-col">
+        <div className="min-h-screen bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 flex flex-col">
             {/* Hero */}
-            <header className="flex-shrink-0 pt-12 pb-6 px-6 text-center max-w-2xl mx-auto">
+            <header className="flex-shrink-0 pt-14 pb-8 px-6 text-center max-w-2xl mx-auto">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ type: 'spring', stiffness: 200, damping: 18 }}
-                    className="w-20 h-20 mx-auto mb-5 rounded-3xl bg-gradient-to-br from-primary-500 to-accent-500 shadow-xl shadow-primary-200/40 flex items-center justify-center"
+                    className="w-20 h-20 mx-auto mb-5 rounded-3xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-xl shadow-indigo-500/30 flex items-center justify-center"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-10 h-10">
                         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -100,7 +100,7 @@ export default function LandingPage({ onGetStarted, onLogin }: LandingPageProps)
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
-                    className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent mb-3"
+                    className="text-3xl sm:text-4xl font-bold text-white mb-3 tracking-tight"
                 >
                     NeuraSense
                 </motion.h1>
@@ -109,7 +109,7 @@ export default function LandingPage({ onGetStarted, onLogin }: LandingPageProps)
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="text-warm-500 text-base sm:text-lg leading-relaxed"
+                    className="text-indigo-200/70 text-base sm:text-lg leading-relaxed"
                 >
                     AI 驱动的心理健康平台 — 评估 · 聊愈 · 训练 · 成长
                 </motion.p>
@@ -127,13 +127,13 @@ export default function LandingPage({ onGetStarted, onLogin }: LandingPageProps)
                         <motion.div
                             key={f.title}
                             variants={item}
-                            className="bg-white/70 backdrop-blur-md rounded-2xl p-4 border border-warm-100/60 shadow-sm hover:shadow-md transition-shadow"
+                            className="bg-white/[0.07] backdrop-blur-sm rounded-2xl p-4 border border-white/[0.08] hover:bg-white/[0.12] transition-all duration-200"
                         >
-                            <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${f.gradient} text-white flex items-center justify-center mb-3 shadow-sm`}>
+                            <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${f.gradient} text-white flex items-center justify-center mb-3 shadow-lg shadow-black/20`}>
                                 {f.icon}
                             </div>
-                            <h3 className="font-semibold text-warm-800 text-sm mb-1">{f.title}</h3>
-                            <p className="text-xs text-warm-500 leading-relaxed">{f.desc}</p>
+                            <h3 className="font-semibold text-white text-sm mb-1">{f.title}</h3>
+                            <p className="text-xs text-indigo-200/50 leading-relaxed">{f.desc}</p>
                         </motion.div>
                     ))}
                 </div>
@@ -144,21 +144,21 @@ export default function LandingPage({ onGetStarted, onLogin }: LandingPageProps)
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="flex-shrink-0 px-6 pt-6 pb-10 max-w-md mx-auto w-full space-y-3"
+                className="flex-shrink-0 px-6 pt-8 pb-10 max-w-md mx-auto w-full space-y-3"
             >
                 <button
                     onClick={onGetStarted}
-                    className="w-full py-4 rounded-2xl bg-gradient-to-r from-primary-500 to-accent-500 text-white font-bold text-lg shadow-lg shadow-primary-300/30 active:scale-[0.97] transition-transform"
+                    className="w-full py-4 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-lg shadow-lg shadow-indigo-500/30 active:scale-[0.97] transition-transform cursor-pointer"
                 >
                     开始使用
                 </button>
                 <button
                     onClick={onLogin}
-                    className="w-full py-3 rounded-2xl bg-white/70 backdrop-blur border border-warm-200/60 text-warm-600 font-medium active:scale-[0.97] transition-transform"
+                    className="w-full py-3 rounded-2xl bg-white/[0.08] backdrop-blur border border-white/[0.12] text-indigo-200 font-medium active:scale-[0.97] transition-transform cursor-pointer hover:bg-white/[0.15]"
                 >
                     已有账号？登录
                 </button>
-                <p className="text-center text-xs text-warm-400 pt-1">
+                <p className="text-center text-xs text-indigo-300/40 pt-1">
                     继续即表示您同意我们的服务条款和隐私政策
                 </p>
             </motion.footer>

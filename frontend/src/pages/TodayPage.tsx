@@ -178,7 +178,7 @@ function CheckinCard({ onDone }: { onDone: () => void }) {
         <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/80 backdrop-blur rounded-2xl p-5 border border-warm-100/60 shadow-sm"
+            className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-warm-100 dark:border-gray-700 shadow-sm"
         >
             <h3 className="text-base font-bold text-warm-800 mb-4 flex items-center gap-2">
                 <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-400 to-accent-400 flex items-center justify-center text-white text-sm">1'</span>
@@ -233,7 +233,7 @@ function CheckinCard({ onDone }: { onDone: () => void }) {
                 <button
                     onClick={handleSubmit}
                     disabled={submitting}
-                    className="w-full py-3 rounded-xl bg-gradient-to-r from-primary-500 to-accent-500 text-white font-bold shadow-lg shadow-primary-300/30 active:scale-[0.97] transition-transform disabled:opacity-50"
+                    className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold shadow-lg shadow-indigo-500/25 active:scale-[0.97] transition-transform disabled:opacity-50 cursor-pointer"
                 >
                     {submitting ? '提交中...' : '完成签到'}
                 </button>
@@ -260,7 +260,7 @@ function CheckinSummary({ checkin }: { checkin: CheckinData }) {
         <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white/80 backdrop-blur rounded-2xl p-5 border border-warm-100/60 shadow-sm"
+            className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-warm-100 dark:border-gray-700 shadow-sm"
         >
             <div className="flex items-center gap-2 mb-3">
                 <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-sm">
@@ -341,7 +341,7 @@ function RecommendationCards({
                             key={rec.id}
                             whileTap={{ scale: 0.97 }}
                             onClick={() => onOpenTool(effectiveTool)}
-                            className="w-full text-left bg-white/80 backdrop-blur rounded-xl p-4 border border-warm-100/60 shadow-sm flex items-center gap-3 hover:shadow-md transition-shadow"
+                            className="w-full text-left bg-white dark:bg-gray-800 rounded-xl p-4 border border-warm-100 dark:border-gray-700 shadow-sm flex items-center gap-3 hover:shadow-md transition-all duration-200 cursor-pointer"
                         >
                             <span className="text-3xl flex-shrink-0">{effectiveTool.icon || '🧘'}</span>
                             <div className="flex-1 min-w-0">
@@ -430,12 +430,12 @@ function DailyTasks({
                     <div
                         key={task.label}
                         onClick={task.action}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-xl border transition-all ${
+                        className={`flex items-center gap-3 px-4 py-3 rounded-xl border transition-all duration-200 ${
                             task.done
-                                ? 'bg-emerald-50/60 border-emerald-200/60'
+                                ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800/50'
                                 : task.action
-                                  ? 'bg-white/80 border-warm-100/60 cursor-pointer hover:shadow-sm active:scale-[0.98]'
-                                  : 'bg-white/80 border-warm-100/60'
+                                  ? 'bg-white dark:bg-gray-800 border-warm-100 dark:border-gray-700 cursor-pointer hover:shadow-sm active:scale-[0.98]'
+                                  : 'bg-white dark:bg-gray-800 border-warm-100 dark:border-gray-700'
                         }`}
                     >
                         <span className="text-lg flex items-center">{task.icon}</span>
@@ -555,14 +555,18 @@ export default function TodayPage({
 
     return (
         <div className="animate-fadeIn space-y-5">
-            {/* ===== 顶部：日期 + 每日一句 ===== */}
+            {/* ===== 顶部：问候横幅 ===== */}
             <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-center"
+                className="relative overflow-hidden bg-gradient-to-br from-slate-800 via-indigo-900 to-slate-900 rounded-2xl p-5 text-white"
             >
-                <p className="text-sm text-warm-400 mb-1">{formatDateCN()}</p>
-                <p className="text-base text-warm-600 italic leading-relaxed">"{getDailyQuote()}"</p>
+                <div className="absolute -top-8 -right-8 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl" />
+                <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-purple-500/15 rounded-full blur-xl" />
+                <div className="relative">
+                    <p className="text-indigo-200/60 text-xs mb-1">{formatDateCN()}</p>
+                    <p className="text-sm text-indigo-100 leading-relaxed">"{getDailyQuote()}"</p>
+                </div>
             </motion.div>
 
             {/* ===== 签到区域 ===== */}
